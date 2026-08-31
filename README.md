@@ -6,7 +6,7 @@ A lightweight, offline-first mobile web app for ASHA workers to track
 postpartum mothers and identify depression risk symptoms.
 
 ## Live Demo
-🔗 [https://YOUR_USERNAME.github.io/ppd-tracker-asha/](https://YOUR_USERNAME.github.io/ppd-tracker-asha/)
+🔗(https://lifecourseindia.github.io/lifecourse/)
 
 ## Features
 - Mother registration & profile management
