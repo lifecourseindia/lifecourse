@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0075EB">
+  <title>PPD Tracker — ASHA Worker App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0075EB;
+      --primary-dark: #0056B3;
+      --danger: #E53E3E;
+      --warning: #D69E2E;
+      --success: #38A169;
+      --bg: #F7FAFC;
+      --card: #FFFFFF;
+      --text: #1A202C;
+      --text-light: #718096;
+      --border: #E2E8F0;
+      --radius: 12px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); overscroll-behavior-y: none; }
+    .app { max-width: 420px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; }
+    .header { background: var(--primary); color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .header h1 { font-size: 18px; font-weight: 700; }
+    .header .badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .screen { display: none; padding: 16px; }
+    .screen.active { display: block; }
+    .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .card-title { font-size: 14px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .btn { display: block; width: 100%; padding: 16px; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.15s; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:active { background: var(--primary-dark); transform: scale(0.98); }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+    .btn-lg { padding: 20px; font-size: 18px; }
+    .fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,117,235,0.4); cursor: pointer; z-index: 20; }
+    .search-box { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 16px; margin-bottom: 12px; }
+    .search-box:focus { outline: none; border-color: var(--primary); }
+    .mother-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .mother-item:last-child { border-bottom: none; }
+    .mother-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .mother-info p { font-size: 13px; color: var(--text-light); }
+    .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .status-green { background: #C6F6D5; color: #22543D; }
+    .status-yellow { background: #FEFCBF; color: #744210; }
+    .status-red { background: #FED7D7; color: #742A2A; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-bottom: 6px; }
+    .form-input { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 16px; }
+    .form-input:focus { outline: none; border-color: var(--primary); }
+    .checkbox-group { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: var(--bg); border-radius: var(--radius); margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
+    .checkbox-group.selected { border-color: var(--primary); background: #EBF8FF; }
+    .checkbox-group input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--primary); }
+    .checkbox-group label { font-size: 15px; font-weight: 600; flex: 1; cursor: pointer; }
+    .checkbox-group .desc { font-size: 12px; color: var(--text-light); font-weight: 400; margin-top: 2px; }
+    .nav-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; }
+    .nav-tab { padding: 10px 18px; border-radius: 20px; border: none; background: var(--border); font-size: 13px; font-weight: 700; color: var(--text-light); white-space: nowrap; cursor: pointer; }
+    .nav-tab.active { background: var(--primary); color: white; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: var(--card); border-radius: var(--radius); padding: 16px; text-align: center; box-shadow: var(--shadow); }
+    .stat-number { font-size: 32px; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 12px; color: var(--text-light); font-weight: 600; margin-top: 4px; }
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .timeline-item { position: relative; margin-bottom: 20px; }
+    .timeline-dot { position: absolute; left: -28px; top: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); border: 3px solid white; box-shadow: 0 0 0 2px var(--primary); }
+    .timeline-dot.red { background: var(--danger); box-shadow: 0 0 0 2px var(--danger); }
+    .timeline-dot.yellow { background: var(--warning); box-shadow: 0 0 0 2px var(--warning); }
+    .timeline-content { background: var(--card); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .timeline-date { font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 4px; }
+    .empty-state { text-align: center; padding: 40px 20px; }
+    .empty-state h3 { font-size: 18px; color: var(--text-light); margin-bottom: 8px; }
+    .risk-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; margin-top: 8px; }
+    .risk-low { background: #C6F6D5; color: #22543D; }
+    .risk-moderate { background: #FEFCBF; color: #744210; }
+    .risk-high { background: #FED7D7; color: #742A2A; }
+    .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; max-width: 420px; margin: 0 auto; }
+    .action-bar .btn { flex: 1; }
+    .pb-20 { padding-bottom: 80px; }
+    .back-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; margin-right: 8px; }
+    select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+    @media (min-width: 421px) { body { background: #E2E8F0; } .app { box-shadow: 0 0 40px rgba(0,0,0,0.1); } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div style="display:flex;align-items:center;">
+        <button class="back-btn" id="backBtn" style="display:none;">←</button>
+        <h1 id="pageTitle">PPD Tracker</h1>
+      </div>
+      <span class="badge">ASHA</span>
+    </div>
+
+    <div class="screen active" id="screen-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total Mothers</div></div>
+        <div class="stat-card"><div class="stat-number" id="statHighRisk">0</div><div class="stat-label">High Risk</div></div>
+        <div class="stat-card"><div class="stat-number" id="statDue">0</div><div class="stat-label">Visits Due</div></div>
+        <div class="stat-card"><div class="stat-number" id="statThisWeek">0</div><div class="stat-label">This Week</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Today's Visits</div>
+        <div id="todayVisits">
+          <div class="empty-state"><p style="color:var(--text-light);font-size:14px;">No visits scheduled for today</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Quick Actions</div>
+        <button class="btn btn-primary btn-lg" style="margin-bottom:10px;" onclick="showScreen('screen-register')">+ Register New Mother</button>
+        <button class="btn btn-outline" onclick="showScreen('screen-mothers')">View All Mothers</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-mothers">
+      <input type="text" class="search-box" placeholder="Search by name or village..." id="searchInput" oninput="filterMothers()">
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="setFilter('all', this)">All</button>
+        <button class="nav-tab" onclick="setFilter('high', this)">High Risk</button>
+        <button class="nav-tab" onclick="setFilter('moderate', this)">Moderate</button>
+        <button class="nav-tab" onclick="setFilter('low', this)">Low Risk</button>
+      </div>
+      <div id="mothersList" class="pb-20"></div>
+      <button class="fab" onclick="showScreen('screen-register')">+</button>
+    </div>
+
+    <div class="screen" id="screen-register">
+      <div class="card">
+        <div class="card-title">Mother Details</div>
+        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" id="regName" placeholder="Enter mother's name"></div>
+        <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input" id="regAge" placeholder="Age in years"></div>
+        <div class="form-group"><label class="form-label">Village / Area</label><input type="text" class="form-input" id="regVillage" placeholder="Village name"></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" id="regPhone" placeholder="10-digit mobile number"></div>
+        <div class="form-group"><label class="form-label">Delivery Date</label><input type="date" class="form-input" id="regDeliveryDate"></div>
+        <div class="form-group"><label class="form-label">Delivery Type</label><select class="form-input" id="regDeliveryType"><option value="normal">Normal Delivery</option><option value="csection">C-Section</option><option value="assisted">Assisted (Forceps/Vacuum)</option><option value="home">Home Delivery</option></select></div>
+        <button class="btn btn-primary btn-lg" onclick="registerMother()">Save & Continue</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-detail">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div><h2 id="detailName" style="font-size:20px;margin-bottom:4px;">--</h2><p id="detailMeta" style="color:var(--text-light);font-size:14px;">--</p></div>
+          <span id="detailRisk" class="risk-badge">--</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px;">
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px;"><div style="font-size:18px;font-weight:800;color:var(--primary);" id="detailDays">--</div><div style="font-size:10px;color:var(--text-light);font-weight:700;">DAYS POST</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px;"><div style="font-size:18px;font-weight:800;color:var(--primary);" id="detailVisits">--</div><div style="font-size:10px;color:var(--text-light);font-weight:700;">VISITS</div></div>
+          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px;"><div style="font-size:18px;font-weight:800;color:var(--primary);" id="detailScore">--</div><div style="font-size:10px;color:var(--text-light);font-weight:700;">EPDS SCORE</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Visit History</div>
+        <div class="timeline" id="detailTimeline"></div>
+      </div>
+      <div style="padding-bottom:80px;">
+        <button class="btn btn-primary btn-lg" style="margin-bottom:10px;" onclick="showScreen('screen-symptom')">+ Record New Visit</button>
+        <button class="btn btn-outline" onclick="showScreen('screen-referral')" id="btnReferral" style="display:none;">🚨 Refer to Doctor</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-symptom">
+      <div class="card">
+        <div class="card-title">Postpartum Symptom Check</div>
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">Check all symptoms observed during today's visit. Tap to select.</p>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'mood')"><input type="checkbox" id="sym-mood"><label for="sym-mood">Persistent low mood / sadness<div class="desc">Mother seems sad, tearful, or hopeless most of the time</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'interest')"><input type="checkbox" id="sym-interest"><label for="sym-interest">Loss of interest in baby or activities<div class="desc">No joy in caring for baby or things she used to enjoy</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'sleep')"><input type="checkbox" id="sym-sleep"><label for="sym-sleep">Sleep problems (not baby-related)<div class="desc">Cannot sleep even when baby is sleeping, or sleeps too much</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'fatigue')"><input type="checkbox" id="sym-fatigue"><label for="sym-fatigue">Extreme fatigue or low energy<div class="desc">Unusual tiredness that rest does not help</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'appetite')"><input type="checkbox" id="sym-appetite"><label for="sym-appetite">Appetite changes<div class="desc">Significant weight loss/gain, not eating or overeating</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'guilt')"><input type="checkbox" id="sym-guilt"><label for="sym-guilt">Feelings of worthlessness or guilt<div class="desc">Says she is a "bad mother" or feels excessive guilt</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'concentration')"><input type="checkbox" id="sym-concentration"><label for="sym-concentration">Difficulty concentrating<div class="desc">Cannot focus, make decisions, or remember things</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'anxiety')"><input type="checkbox" id="sym-anxiety"><label for="sym-anxiety">Excessive anxiety or panic<div class="desc">Worries constantly about baby's health or her own</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'thoughts')"><input type="checkbox" id="sym-thoughts"><label for="sym-thoughts">Thoughts of self-harm or harming baby<div class="desc">⚠️ URGENT: Any mention of suicide or hurting the baby</div></label></div>
+        <div class="checkbox-group" onclick="toggleSymptom(this, 'support')"><input type="checkbox" id="sym-support"><label for="sym-support">Lack of family support<div class="desc">Family conflict, domestic issues, or no help at home</div></label></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Notes (Optional)</div>
+        <textarea class="form-input" id="visitNotes" rows="3" placeholder="Any additional observations..."></textarea>
+      </div>
+      <div style="padding-bottom:80px;"><button class="btn btn-primary btn-lg" onclick="saveVisit()">Save Visit Record</button></div>
+    </div>
+
+    <div class="screen" id="screen-referral">
+      <div class="card" style="border:2px solid var(--danger);">
+        <div style="text-align:center;padding:20px 0;">
+          <div style="font-size:48px;margin-bottom:12px;">🚨</div>
+          <h2 style="color:var(--danger);margin-bottom:8px;">Refer to Doctor</h2>
+          <p style="color:var(--text-light);font-size:14px;">This mother shows signs requiring immediate medical attention.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Referral Details</div>
+        <div class="form-group"><label class="form-label">Referral Reason</label><textarea class="form-input" id="referralReason" rows="3" placeholder="Why are you referring this mother?"></textarea></div>
+        <div class="form-group"><label class="form-label">Referred To</label><select class="form-input" id="referralTo"><option value="phc">Primary Health Centre (PHC)</option><option value="chc">Community Health Centre (CHC)</option><option value="district">District Hospital</option><option value="private">Private Hospital</option></select></div>
+        <div class="form-group"><label class="form-label">Urgency</label><select class="form-input" id="referralUrgency"><option value="routine">Routine (within 1 week)</option><option value="urgent">Urgent (within 24-48 hours)</option><option value="emergency">Emergency (same day)</option></select></div>
+      </div>
+      <div style="padding-bottom:80px;">
+        <button class="btn btn-danger btn-lg" onclick="saveReferral()">Confirm Referral</button>
+        <button class="btn btn-outline" style="margin-top:10px;" onclick="goBack()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-success">
+      <div style="text-align:center;padding:60px 20px;">
+        <div style="font-size:64px;margin-bottom:20px;">✅</div>
+        <h2 style="margin-bottom:12px;">Saved Successfully!</h2>
+        <p style="color:var(--text-light);margin-bottom:32px;" id="successMessage">Visit record has been saved.</p>
+        <button class="btn btn-primary btn-lg" onclick="showScreen('screen-dashboard')">Back to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let mothers = JSON.parse(localStorage.getItem('ppd_mothers') || '[]');
+    let currentMotherId = null;
+    let currentSymptoms = [];
+    let screenHistory = [];
+
+    if (mothers.length === 0) {
+      mothers = [
+        { id: '1', name: 'Sunita Devi', age: 26, village: 'Rampur', phone: '9876543210', deliveryDate: '2026-08-10', deliveryType: 'normal', risk: 'moderate', epdsScore: 11, visits: [
+          { date: '2026-08-12', symptoms: ['mood','fatigue'], notes: 'Seems tired, low mood', risk: 'moderate' },
+          { date: '2026-08-19', symptoms: ['mood','sleep','guilt'], notes: 'Not sleeping well, feels guilty', risk: 'moderate' }
+        ]},
+        { id: '2', name: 'Priya Sharma', age: 30, village: 'Bijapur', phone: '9876543211', deliveryDate: '2026-08-25', deliveryType: 'csection', risk: 'low', epdsScore: 5, visits: [
+          { date: '2026-08-27', symptoms: ['fatigue'], notes: 'Recovering from surgery', risk: 'low' }
+        ]},
+        { id: '3', name: 'Anita Yadav', age: 22, village: 'Rampur', phone: '9876543212', deliveryDate: '2026-07-15', deliveryType: 'home', risk: 'high', epdsScore: 16, visits: [
+          { date: '2026-07-20', symptoms: ['mood','interest','sleep','guilt'], notes: 'Very withdrawn', risk: 'high' },
+          { date: '2026-08-01', symptoms: ['mood','interest','sleep','guilt','anxiety'], notes: 'Anxiety worsening', risk: 'high' }
+        ]}
+      ];
+      saveData();
+    }
+
+    function saveData() { localStorage.setItem('ppd_mothers', JSON.stringify(mothers)); }
+
+    function showScreen(id) {
+      const current = document.querySelector('.screen.active');
+      if (current) screenHistory.push(current.id);
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.getElementById('backBtn').style.display = (id === 'screen-dashboard') ? 'none' : 'inline-block';
+      if (id === 'screen-dashboard') { document.getElementById('pageTitle').textContent = 'PPD Tracker'; updateDashboard(); screenHistory = []; }
+      else if (id === 'screen-mothers') { document.getElementById('pageTitle').textContent = 'All Mothers'; renderMothersList(); }
+      else if (id === 'screen-register') { document.getElementById('pageTitle').textContent = 'Register Mother'; }
+      else if (id === 'screen-detail') { document.getElementById('pageTitle').textContent = 'Mother Profile'; renderMotherDetail(); }
+      else if (id === 'screen-symptom') { document.getElementById('pageTitle').textContent = 'Symptom Check'; currentSymptoms = []; document.querySelectorAll('.checkbox-group').forEach(el => el.classList.remove('selected')); document.querySelectorAll('.checkbox-group input').forEach(el => el.checked = false); document.getElementById('visitNotes').value = ''; }
+      else if (id === 'screen-referral') { document.getElementById('pageTitle').textContent = 'Referral'; }
+    }
+
+    function goBack() {
+      const prev = screenHistory.pop() || 'screen-dashboard';
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(prev).classList.add('active');
+      document.getElementById('backBtn').style.display = (prev === 'screen-dashboard') ? 'none' : 'inline-block';
+      if (prev === 'screen-dashboard') { document.getElementById('pageTitle').textContent = 'PPD Tracker'; updateDashboard(); screenHistory = []; }
+      else if (prev === 'screen-mothers') { document.getElementById('pageTitle').textContent = 'All Mothers'; }
+      else if (prev === 'screen-detail') { document.getElementById('pageTitle').textContent = 'Mother Profile'; }
+    }
+
+    document.getElementById('backBtn').onclick = goBack;
+
+    function updateDashboard() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('statTotal').textContent = mothers.length;
+      document.getElementById('statHighRisk').textContent = mothers.filter(m => m.risk === 'high').length;
+      document.getElementById('statDue').textContent = mothers.filter(m => { if (m.visits.length === 0) return true; const lastVisit = m.visits[m.visits.length - 1].date; const daysSince = Math.floor((new Date(today) - new Date(lastVisit)) / (1000*60*60*24)); return daysSince >= 7; }).length;
+      document.getElementById('statThisWeek').textContent = mothers.filter(m => m.visits.some(v => { const vd = new Date(v.date); const now = new Date(); const diff = Math.floor((now - vd) / (1000*60*60*24)); return diff <= 7; })).length;
+      const dueMothers = mothers.filter(m => m.risk === 'high' || m.visits.length === 0 || Math.floor((new Date(today) - new Date(m.visits[m.visits.length-1].date)) / (1000*60*60*24)) >= 7);
+      const container = document.getElementById('todayVisits');
+      if (dueMothers.length === 0) { container.innerHTML = '<div class="empty-state"><p style="color:var(--text-light);font-size:14px;">No visits scheduled for today</p></div>'; }
+      else { container.innerHTML = dueMothers.slice(0,3).map(m => `<div class="mother-item" onclick="openMother('${m.id}')"><div class="mother-info"><h3>${m.name}</h3><p>${m.village} • ${getDaysPost(m.deliveryDate)} days postpartum</p></div><span class="status-pill status-${m.risk === 'high' ? 'red' : m.risk === 'moderate' ? 'yellow' : 'green'}">${m.risk}</span></div>`).join(''); }
+    }
+
+    let currentFilter = 'all';
+    function setFilter(filter, btn) { currentFilter = filter; document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); btn.classList.add('active'); renderMothersList(); }
+
+    function renderMothersList() {
+      const search = (document.getElementById('searchInput').value || '').toLowerCase();
+      let filtered = mothers.filter(m => { const matchesSearch = m.name.toLowerCase().includes(search) || m.village.toLowerCase().includes(search); const matchesFilter = currentFilter === 'all' || m.risk === currentFilter; return matchesSearch && matchesFilter; });
+      const container = document.getElementById('mothersList');
+      if (filtered.length === 0) { container.innerHTML = '<div class="empty-state"><h3>No mothers found</h3><p style="color:var(--text-light);font-size:14px;">Try a different search or filter</p></div>'; return; }
+      container.innerHTML = filtered.map(m => `<div class="mother-item" onclick="openMother('${m.id}')"><div class="mother-info"><h3>${m.name}</h3><p>${m.village} • Age ${m.age} • ${getDaysPost(m.deliveryDate)} days post</p></div><span class="status-pill status-${m.risk === 'high' ? 'red' : m.risk === 'moderate' ? 'yellow' : 'green'}">${m.risk}</span></div>`).join('');
+    }
+
+    function filterMothers() { renderMothersList(); }
+    function getDaysPost(deliveryDate) { return Math.floor((new Date() - new Date(deliveryDate)) / (1000*60*60*24)); }
+
+    function registerMother() {
+      const name = document.getElementById('regName').value.trim();
+      const age = document.getElementById('regAge').value;
+      const village = document.getElementById('regVillage').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const deliveryDate = document.getElementById('regDeliveryDate').value;
+      const deliveryType = document.getElementById('regDeliveryType').value;
+      if (!name || !age || !village || !deliveryDate) { alert('Please fill all required fields'); return; }
+      const newMother = { id: Date.now().toString(), name, age: parseInt(age), village, phone, deliveryDate, deliveryType, risk: 'low', epdsScore: 0, visits: [] };
+      mothers.push(newMother); saveData();
+      document.getElementById('regName').value = ''; document.getElementById('regAge').value = ''; document.getElementById('regVillage').value = ''; document.getElementById('regPhone').value = ''; document.getElementById('regDeliveryDate').value = '';
+      currentMotherId = newMother.id;
+      document.getElementById('successMessage').textContent = `${name} has been registered successfully.`;
+      showScreen('screen-success');
+    }
+
+    function openMother(id) { currentMotherId = id; showScreen('screen-detail'); }
+
+    function renderMotherDetail() {
+      const m = mothers.find(x => x.id === currentMotherId); if (!m) return;
+      document.getElementById('detailName').textContent = m.name;
+      document.getElementById('detailMeta').textContent = `${m.village} • Age ${m.age} • ${m.deliveryType === 'normal' ? 'Normal Delivery' : m.deliveryType === 'csection' ? 'C-Section' : m.deliveryType === 'assisted' ? 'Assisted' : 'Home Delivery'}`;
+      document.getElementById('detailRisk').textContent = m.risk.toUpperCase() + ' RISK';
+      document.getElementById('detailRisk').className = 'risk-badge risk-' + m.risk;
+      document.getElementById('detailDays').textContent = getDaysPost(m.deliveryDate);
+      document.getElementById('detailVisits').textContent = m.visits.length;
+      document.getElementById('detailScore').textContent = m.epdsScore || '--';
+      document.getElementById('btnReferral').style.display = (m.risk === 'high') ? 'block' : 'none';
+      const timeline = document.getElementById('detailTimeline');
+      if (m.visits.length === 0) { timeline.innerHTML = '<p style="color:var(--text-light);font-size:14px;">No visits recorded yet</p>'; }
+      else {
+        timeline.innerHTML = m.visits.slice().reverse().map(v => {
+          const symList = v.symptoms.map(s => ({ mood: 'Low mood', interest: 'Lost interest', sleep: 'Sleep issues', fatigue: 'Fatigue', appetite: 'Appetite change', guilt: 'Guilt', concentration: 'Poor focus', anxiety: 'Anxiety', thoughts: 'Harm thoughts', support: 'No support' })[s] || s).join(', ');
+          return `<div class="timeline-item"><div class="timeline-dot ${v.risk === 'high' ? 'red' : v.risk === 'moderate' ? 'yellow' : ''}"></div><div class="timeline-content"><div class="timeline-date">${formatDate(v.date)}</div><div style="font-size:14px;font-weight:600;margin-bottom:4px;">${symList}</div>${v.notes ? `<div style="font-size:12px;color:var(--text-light);">${v.notes}</div>` : ''}</div></div>`;
+        }).join('');
+      }
+    }
+
+    function formatDate(d) { const date = new Date(d); return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); }
+
+    function toggleSymptom(el, symptom) {
+      const cb = el.querySelector('input'); cb.checked = !cb.checked;
+      if (cb.checked) { el.classList.add('selected'); if (!currentSymptoms.includes(symptom)) currentSymptoms.push(symptom); }
+      else { el.classList.remove('selected'); currentSymptoms = currentSymptoms.filter(s => s !== symptom); }
+    }
+
+    function calculateRisk(symptoms) {
+      const score = symptoms.length;
+      if (symptoms.includes('thoughts')) return { risk: 'high', score: Math.max(score * 2, 16) };
+      if (score >= 6) return { risk: 'high', score: 14 + score };
+      if (score >= 3) return { risk: 'moderate', score: 8 + score };
+      return { risk: 'low', score: score };
+    }
+
+    function saveVisit() {
+      if (!currentMotherId) return;
+      const m = mothers.find(x => x.id === currentMotherId); if (!m) return;
+      const notes = document.getElementById('visitNotes').value.trim();
+      const result = calculateRisk(currentSymptoms);
+      const visit = { date: new Date().toISOString().split('T')[0], symptoms: [...currentSymptoms], notes, risk: result.risk };
+      m.visits.push(visit); m.risk = result.risk; m.epdsScore = result.score; saveData();
+      document.getElementById('successMessage').textContent = `Visit saved for ${m.name}. Risk level: ${result.risk.toUpperCase()}`;
+      showScreen('screen-success');
+    }
+
+    function saveReferral() {
+      if (!currentMotherId) return;
+      const m = mothers.find(x => x.id === currentMotherId); if (!m) return;
+      const reason = document.getElementById('referralReason').value.trim();
+      const to = document.getElementById('referralTo').value;
+      const urgency = document.getElementById('referralUrgency').value;
+      if (!reason) { alert('Please enter a referral reason'); return; }
+      const visit = { date: new Date().toISOString().split('T')[0], symptoms: ['referred'], notes: `REFERRED to ${to.toUpperCase()}. Urgency: ${urgency}. Reason: ${reason}`, risk: 'high' };
+      m.visits.push(visit); m.risk = 'high'; saveData();
+      document.getElementById('referralReason').value = '';
+      document.getElementById('successMessage').textContent = `Referral sent for ${m.name} to ${to.toUpperCase()}`;
+      showScreen('screen-success');
+    }
+
+    updateDashboard();
+  </script>
+</body>
+</html>
