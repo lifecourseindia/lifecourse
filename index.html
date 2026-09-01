@@ -1,379 +1,1175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0075EB">
-  <title>PPD Tracker — ASHA Worker App</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #0075EB;
-      --primary-dark: #0056B3;
-      --danger: #E53E3E;
-      --warning: #D69E2E;
-      --success: #38A169;
-      --bg: #F7FAFC;
-      --card: #FFFFFF;
-      --text: #1A202C;
-      --text-light: #718096;
-      --border: #E2E8F0;
-      --radius: 12px;
-      --shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); overscroll-behavior-y: none; }
-    .app { max-width: 420px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; }
-    .header { background: var(--primary); color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
-    .header h1 { font-size: 18px; font-weight: 700; }
-    .header .badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-    .screen { display: none; padding: 16px; }
-    .screen.active { display: block; }
-    .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-    .card-title { font-size: 14px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-    .btn { display: block; width: 100%; padding: 16px; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.15s; }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:active { background: var(--primary-dark); transform: scale(0.98); }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-success { background: var(--success); color: white; }
-    .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
-    .btn-lg { padding: 20px; font-size: 18px; }
-    .fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,117,235,0.4); cursor: pointer; z-index: 20; }
-    .search-box { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 16px; margin-bottom: 12px; }
-    .search-box:focus { outline: none; border-color: var(--primary); }
-    .mother-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-    .mother-item:last-child { border-bottom: none; }
-    .mother-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-    .mother-info p { font-size: 13px; color: var(--text-light); }
-    .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-    .status-green { background: #C6F6D5; color: #22543D; }
-    .status-yellow { background: #FEFCBF; color: #744210; }
-    .status-red { background: #FED7D7; color: #742A2A; }
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 13px; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-bottom: 6px; }
-    .form-input { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 16px; }
-    .form-input:focus { outline: none; border-color: var(--primary); }
-    .checkbox-group { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: var(--bg); border-radius: var(--radius); margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
-    .checkbox-group.selected { border-color: var(--primary); background: #EBF8FF; }
-    .checkbox-group input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--primary); }
-    .checkbox-group label { font-size: 15px; font-weight: 600; flex: 1; cursor: pointer; }
-    .checkbox-group .desc { font-size: 12px; color: var(--text-light); font-weight: 400; margin-top: 2px; }
-    .nav-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; }
-    .nav-tab { padding: 10px 18px; border-radius: 20px; border: none; background: var(--border); font-size: 13px; font-weight: 700; color: var(--text-light); white-space: nowrap; cursor: pointer; }
-    .nav-tab.active { background: var(--primary); color: white; }
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .stat-card { background: var(--card); border-radius: var(--radius); padding: 16px; text-align: center; box-shadow: var(--shadow); }
-    .stat-number { font-size: 32px; font-weight: 800; color: var(--primary); }
-    .stat-label { font-size: 12px; color: var(--text-light); font-weight: 600; margin-top: 4px; }
-    .timeline { position: relative; padding-left: 28px; }
-    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
-    .timeline-item { position: relative; margin-bottom: 20px; }
-    .timeline-dot { position: absolute; left: -28px; top: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); border: 3px solid white; box-shadow: 0 0 0 2px var(--primary); }
-    .timeline-dot.red { background: var(--danger); box-shadow: 0 0 0 2px var(--danger); }
-    .timeline-dot.yellow { background: var(--warning); box-shadow: 0 0 0 2px var(--warning); }
-    .timeline-content { background: var(--card); padding: 12px; border-radius: var(--radius); box-shadow: var(--shadow); }
-    .timeline-date { font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 4px; }
-    .empty-state { text-align: center; padding: 40px 20px; }
-    .empty-state h3 { font-size: 18px; color: var(--text-light); margin-bottom: 8px; }
-    .risk-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; margin-top: 8px; }
-    .risk-low { background: #C6F6D5; color: #22543D; }
-    .risk-moderate { background: #FEFCBF; color: #744210; }
-    .risk-high { background: #FED7D7; color: #742A2A; }
-    .action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; max-width: 420px; margin: 0 auto; }
-    .action-bar .btn { flex: 1; }
-    .pb-20 { padding-bottom: 80px; }
-    .back-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; margin-right: 8px; }
-    select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
-    @media (min-width: 421px) { body { background: #E2E8F0; } .app { box-shadow: 0 0 40px rgba(0,0,0,0.1); } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0F766E">
+<meta name="description" content="Postpartum Depression Tracker for ASHA Workers">
+<title>MatriCare | PPD Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal-900:#134E4A;--teal-800:#115E59;--teal-700:#0F766E;--teal-600:#0D9488;--teal-50:#F0FDFA;
+  --rose-600:#E11D48;--rose-50:#FFF1F2;
+  --amber-500:#F59E0B;--amber-50:#FFFBEB;
+  --emerald-600:#059669;--emerald-50:#ECFDF5;
+  --slate-900:#0F172A;--slate-800:#1E293B;--slate-700:#334155;--slate-600:#475569;--slate-500:#64748B;
+  --slate-400:#94A3B8;--slate-300:#CBD5E1;--slate-200:#E2E8F0;--slate-100:#F1F5F9;--slate-50:#F8FAFC;
+  --white:#FFFFFF;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;
+  --sh-sm:0 1px 2px rgba(15,23,42,0.05);
+  --sh-md:0 4px 6px -1px rgba(15,23,42,0.08),0 2px 4px -2px rgba(15,23,42,0.04);
+  --sh-lg:0 10px 15px -3px rgba(15,23,42,0.08),0 4px 6px -4px rgba(15,23,42,0.04);
+  --sh-xl:0 20px 25px -5px rgba(15,23,42,0.08),0 8px 10px -6px rgba(15,23,42,0.04);
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--slate-100);color:var(--slate-900);overscroll-behavior-y:none;-webkit-font-smoothing:antialiased}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInR{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInL{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--slate-100);position:relative;overflow-x:hidden}
+.screen{display:none}
+.screen.active{display:block;animation:fadeIn .25s ease-out}
+.screen.sr{animation:slideInR .25s ease-out}
+.screen.sl{animation:slideInL .25s ease-out}
+
+.header{background:linear-gradient(135deg,var(--teal-800)0%,var(--teal-700)100%);color:var(--white);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--sh-md)}
+.header-left{display:flex;align-items:center;gap:12px}
+.header h1{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.header .badge{background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(255,255,255,0.2)}
+.back-btn{background:rgba(255,255,255,0.1);border:none;color:white;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.back-btn:active{background:rgba(255,255,255,0.2)}
+
+.content{padding:16px;padding-bottom:100px}
+.content-compact{padding:0 16px 100px}
+
+.card{background:var(--white);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;box-shadow:var(--sh-sm);border:1px solid var(--slate-200);transition:box-shadow .2s}
+.card:active{box-shadow:var(--sh-md)}
+.card-flat{background:var(--white);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;border:1px solid var(--slate-200)}
+.card-title{font-size:11px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title svg{width:16px;height:16px}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-card{background:var(--white);border-radius:var(--r-lg);padding:20px 16px;text-align:center;box-shadow:var(--sh-sm);border:1px solid var(--slate-200);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal-600);border-radius:3px 3px 0 0}
+.stat-card.danger::before{background:var(--rose-600)}
+.stat-card.warning::before{background:var(--amber-500)}
+.stat-card.success::before{background:var(--emerald-600)}
+.stat-number{font-size:28px;font-weight:800;color:var(--slate-900);letter-spacing:-1px;line-height:1}
+.stat-label{font-size:11px;color:var(--slate-500);font-weight:600;margin-top:6px;text-transform:uppercase;letter-spacing:.5px}
+.stat-trend{font-size:11px;font-weight:600;margin-top:4px}
+.stat-trend.up{color:var(--rose-600)}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border:none;border-radius:var(--r-md);font-size:15px;font-weight:700;cursor:pointer;text-align:center;transition:all .15s;letter-spacing:-.2px}
+.btn-primary{background:linear-gradient(135deg,var(--teal-700)0%,var(--teal-600)100%);color:var(--white);box-shadow:0 4px 12px rgba(13,148,136,0.25)}
+.btn-primary:active{transform:translateY(1px);box-shadow:0 2px 6px rgba(13,148,136,0.2)}
+.btn-danger{background:linear-gradient(135deg,#BE123C 0%,var(--rose-600)100%);color:var(--white);box-shadow:0 4px 12px rgba(225,29,72,0.25)}
+.btn-danger:active{transform:translateY(1px)}
+.btn-ghost{background:var(--slate-100);color:var(--slate-700);border:1px solid var(--slate-200)}
+.btn-ghost:active{background:var(--slate-200)}
+.btn-outline{background:var(--white);color:var(--teal-700);border:2px solid var(--teal-600)}
+.btn-outline:active{background:var(--teal-50)}
+.btn-sm{padding:10px 16px;font-size:13px}
+.btn-lg{padding:18px;font-size:16px}
+.btn svg{width:18px;height:18px}
+
+.fab{position:fixed;bottom:24px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--teal-700)0%,var(--teal-600)100%);color:var(--white);border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(13,148,136,0.35);cursor:pointer;z-index:40;transition:transform .2s}
+.fab:active{transform:scale(0.92)}
+.fab svg{width:24px;height:24px}
+
+.search-wrapper{position:relative;margin-bottom:12px}
+.search-box{width:100%;padding:14px 16px 14px 44px;border:1.5px solid var(--slate-200);border-radius:var(--r-md);font-size:15px;background:var(--white);color:var(--slate-900);transition:all .15s}
+.search-box:focus{outline:none;border-color:var(--teal-600);box-shadow:0 0 0 3px rgba(13,148,136,0.1)}
+.search-box::placeholder{color:var(--slate-400)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--slate-400)}
+.search-icon svg{width:18px;height:18px}
+
+.nav-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:8px 16px;border-radius:20px;border:1.5px solid var(--slate-200);background:var(--white);font-size:13px;font-weight:600;color:var(--slate-600);white-space:nowrap;cursor:pointer;transition:all .15s}
+.nav-tab.active{background:var(--teal-700);color:var(--white);border-color:var(--teal-700);box-shadow:0 2px 8px rgba(13,148,136,0.2)}
+
+.mother-item{display:flex;align-items:center;gap:14px;padding:16px;background:var(--white);border-radius:var(--r-md);margin-bottom:10px;border:1px solid var(--slate-200);cursor:pointer;transition:all .15s;box-shadow:var(--sh-sm)}
+.mother-item:active{transform:scale(0.98);box-shadow:var(--sh-md)}
+.mother-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--teal-600)0%,var(--teal-700)100%);color:white;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.mother-avatar.high{background:linear-gradient(135deg,#BE123C 0%,var(--rose-600)100%)}
+.mother-avatar.moderate{background:linear-gradient(135deg,#D97706 0%,var(--amber-500)100%)}
+.mother-info{flex:1;min-width:0}
+.mother-info h3{font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mother-info p{font-size:12px;color:var(--slate-500);font-weight:500}
+.mother-meta{display:flex;align-items:center;gap:6px;margin-top:4px}
+.meta-dot{width:6px;height:6px;border-radius:50%}
+.meta-dot.high{background:var(--rose-600)}
+.meta-dot.moderate{background:var(--amber-500)}
+.meta-dot.low{background:var(--emerald-600)}
+.status-pill{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.status-low{background:var(--emerald-50);color:var(--emerald-600)}
+.status-moderate{background:var(--amber-50);color:#B45309}
+.status-high{background:var(--rose-50);color:var(--rose-600)}
+
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--slate-700);margin-bottom:6px;letter-spacing:-.2px}
+.form-label .optional{font-weight:500;color:var(--slate-400)}
+.form-input{width:100%;padding:14px 16px;border:1.5px solid var(--slate-200);border-radius:var(--r-md);font-size:15px;background:var(--white);color:var(--slate-900);transition:all .15s}
+.form-input:focus{outline:none;border-color:var(--teal-600);box-shadow:0 0 0 3px rgba(13,148,136,0.1)}
+.form-input.error{border-color:var(--rose-600);box-shadow:0 0 0 3px rgba(225,29,72,0.1);animation:shake .3s ease}
+.form-input::placeholder{color:var(--slate-400)}
+.form-hint{font-size:12px;color:var(--slate-500);margin-top:6px}
+.form-error{font-size:12px;color:var(--rose-600);margin-top:6px;font-weight:600;display:none}
+.form-error.show{display:block}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:42px}
+textarea.form-input{resize:vertical;min-height:80px}
+
+.symptom-list{display:flex;flex-direction:column;gap:10px}
+.symptom-item{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--white);border-radius:var(--r-md);border:1.5px solid var(--slate-200);cursor:pointer;transition:all .15s}
+.symptom-item:active{border-color:var(--slate-300)}
+.symptom-item.selected{border-color:var(--teal-600);background:var(--teal-50);box-shadow:0 0 0 1px var(--teal-600)}
+.symptom-item.urgent{border-color:var(--rose-600);background:var(--rose-50)}
+.symptom-item.urgent.selected{box-shadow:0 0 0 1px var(--rose-600)}
+.symptom-checkbox{width:22px;height:22px;border:2px solid var(--slate-300);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all .15s}
+.symptom-item.selected .symptom-checkbox{background:var(--teal-600);border-color:var(--teal-600)}
+.symptom-item.urgent.selected .symptom-checkbox{background:var(--rose-600);border-color:var(--rose-600)}
+.symptom-checkbox svg{width:14px;height:14px;color:white;opacity:0;transition:opacity .15s}
+.symptom-item.selected .symptom-checkbox svg{opacity:1}
+.symptom-text{flex:1}
+.symptom-text h4{font-size:14px;font-weight:700;color:var(--slate-900);margin-bottom:3px}
+.symptom-text p{font-size:12px;color:var(--slate-500);line-height:1.4}
+
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:10px;top:4px;bottom:4px;width:2px;background:var(--slate-200);border-radius:1px}
+.timeline-item{position:relative;margin-bottom:20px;animation:fadeIn .3s ease-out}
+.timeline-dot{position:absolute;left:-32px;top:2px;width:22px;height:22px;border-radius:50%;background:var(--white);border:3px solid var(--teal-600);display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-sm)}
+.timeline-dot svg{width:10px;height:10px;color:var(--teal-600)}
+.timeline-dot.high{border-color:var(--rose-600)}
+.timeline-dot.high svg{color:var(--rose-600)}
+.timeline-dot.moderate{border-color:var(--amber-500)}
+.timeline-dot.moderate svg{color:var(--amber-500)}
+.timeline-content{background:var(--white);padding:14px;border-radius:var(--r-md);box-shadow:var(--sh-sm);border:1px solid var(--slate-200)}
+.timeline-date{font-size:11px;color:var(--slate-500);font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.timeline-date svg{width:12px;height:12px}
+.timeline-symptoms{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.symptom-chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--slate-100);color:var(--slate-700)}
+.timeline-notes{font-size:13px;color:var(--slate-600);line-height:1.5;padding-top:8px;border-top:1px solid var(--slate-100)}
+
+.risk-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.risk-low{background:var(--emerald-50);color:var(--emerald-600);border:1px solid #A7F3D0}
+.risk-moderate{background:var(--amber-50);color:#B45309;border:1px solid #FDE68A}
+.risk-high{background:var(--rose-50);color:var(--rose-600);border:1px solid #FECDD3}
+
+.profile-header{background:linear-gradient(135deg,var(--teal-800)0%,var(--teal-700)100%);color:white;padding:24px 20px;margin:-16px -16px 16px;position:relative;overflow:hidden}
+.profile-header::after{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:rgba(255,255,255,0.05);border-radius:50%}
+.profile-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.profile-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.2);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;border:2px solid rgba(255,255,255,0.3);flex-shrink:0}
+.profile-name h2{font-size:20px;font-weight:800;margin-bottom:4px;letter-spacing:-.5px}
+.profile-name p{font-size:13px;opacity:0.85;font-weight:500}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.profile-stat{background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);border-radius:var(--r-md);padding:12px;text-align:center;border:1px solid rgba(255,255,255,0.15)}
+.profile-stat .value{font-size:22px;font-weight:800;line-height:1}
+.profile-stat .label{font-size:10px;opacity:0.8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+
+.empty-state{text-align:center;padding:48px 24px}
+.empty-state-icon{width:72px;height:72px;margin:0 auto 20px;background:var(--slate-100);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.empty-state-icon svg{width:32px;height:32px;color:var(--slate-400)}
+.empty-state h3{font-size:16px;font-weight:700;color:var(--slate-700);margin-bottom:6px}
+.empty-state p{font-size:14px;color:var(--slate-500);line-height:1.5;max-width:260px;margin:0 auto}
+
+.toast-container{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:8px;width:calc(100% - 32px);max-width:400px;pointer-events:none}
+.toast{background:var(--slate-900);color:white;padding:14px 18px;border-radius:var(--r-md);font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:var(--sh-xl);animation:scaleIn .2s ease-out;pointer-events:auto}
+.toast svg{width:18px;height:18px;flex-shrink:0}
+.toast.success{background:var(--emerald-600)}
+.toast.error{background:var(--rose-600)}
+.toast.warning{background:var(--amber-500);color:var(--slate-900)}
+
+.referral-alert{background:linear-gradient(135deg,#BE123C 0%,var(--rose-600)100%);color:white;padding:24px;border-radius:var(--r-lg);margin-bottom:16px;text-align:center;position:relative;overflow:hidden}
+.referral-alert::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,0.08);border-radius:50%}
+.referral-alert-icon{width:56px;height:56px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;backdrop-filter:blur(4px)}
+.referral-alert-icon svg{width:28px;height:28px}
+.referral-alert h2{font-size:20px;font-weight:800;margin-bottom:6px}
+.referral-alert p{font-size:14px;opacity:0.9;line-height:1.5}
+
+.section-divider{display:flex;align-items:center;gap:12px;margin:24px 0 16px}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--slate-200)}
+.section-divider span{font-size:11px;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:1px}
+
+.action-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);padding:12px 16px;border-top:1px solid var(--slate-200);display:flex;gap:10px;max-width:430px;margin:0 auto;z-index:30;box-shadow:0 -4px 12px rgba(15,23,42,0.04)}
+.action-bar .btn{flex:1}
+
+.sort-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sort-bar span{font-size:13px;font-weight:600;color:var(--slate-600)}
+.sort-select{padding:6px 12px;border:1.5px solid var(--slate-200);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--slate-700);background:var(--white);cursor:pointer}
+
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.quick-item{background:var(--white);border:1.5px solid var(--slate-200);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;transition:all .15s}
+.quick-item:active{transform:scale(0.96);border-color:var(--teal-600);background:var(--teal-50)}
+.quick-item-icon{width:40px;height:40px;border-radius:10px;background:var(--teal-50);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.quick-item-icon svg{width:20px;height:20px;color:var(--teal-700)}
+.quick-item h4{font-size:13px;font-weight:700;color:var(--slate-900);margin-bottom:2px}
+.quick-item p{font-size:11px;color:var(--slate-500)}
+
+.info-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--slate-100)}
+.info-row:last-child{border-bottom:none}
+.info-row-label{font-size:13px;color:var(--slate-500);font-weight:500}
+.info-row-value{font-size:14px;font-weight:700;color:var(--slate-900)}
+
+.splash{position:fixed;inset:0;background:linear-gradient(135deg,var(--teal-800)0%,var(--teal-700)100%);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;transition:opacity .5s,visibility .5s}
+.splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash-logo{width:80px;height:80px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border-radius:var(--r-xl);display:flex;align-items:center;justify-content:center;margin-bottom:24px;border:1px solid rgba(255,255,255,0.2)}
+.splash-logo svg{width:40px;height:40px}
+.splash h1{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+.splash p{font-size:15px;opacity:0.8;font-weight:500}
+.splash-loader{width:40px;height:3px;background:rgba(255,255,255,0.2);border-radius:2px;margin-top:32px;overflow:hidden}
+.splash-loader::after{content:'';display:block;width:50%;height:100%;background:white;border-radius:2px;animation:pulse 1s infinite}
+
+.onboarding{text-align:center;padding:40px 24px}
+.onboarding-icon{width:80px;height:80px;background:var(--teal-50);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+.onboarding-icon svg{width:36px;height:36px;color:var(--teal-700)}
+.onboarding h2{font-size:22px;font-weight:800;color:var(--slate-900);margin-bottom:12px;letter-spacing:-.5px}
+.onboarding p{font-size:15px;color:var(--slate-600);line-height:1.6;margin-bottom:32px}
+.feature-list{text-align:left;margin-bottom:32px}
+.feature-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--slate-100)}
+.feature-item:last-child{border-bottom:none}
+.feature-icon{width:36px;height:36px;border-radius:10px;background:var(--teal-50);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feature-icon svg{width:18px;height:18px;color:var(--teal-700)}
+.feature-text h4{font-size:14px;font-weight:700;color:var(--slate-900);margin-bottom:2px}
+.feature-text p{font-size:13px;color:var(--slate-500);margin:0;line-height:1.4}
+
+.help-card{background:var(--white);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;border:1px solid var(--slate-200)}
+.help-card h3{font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.help-card h3 svg{width:18px;height:18px;color:var(--teal-600)}
+.help-card p{font-size:13px;color:var(--slate-600);line-height:1.6;margin-bottom:12px}
+.help-card ul{margin-left:18px;margin-bottom:12px}
+.help-card li{font-size:13px;color:var(--slate-600);line-height:1.8}
+
+@media(min-width:431px){
+  body{background:var(--slate-200);padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .app{max-height:90vh;overflow-y:auto;border-radius:var(--r-xl);box-shadow:0 25px 50px -12px rgba(15,23,42,0.25)}
+  .app::-webkit-scrollbar{width:6px}
+  .app::-webkit-scrollbar-thumb{background:var(--slate-300);border-radius:3px}
+}
+</style>
+<base target="_blank">
 </head>
 <body>
-  <div class="app">
-    <div class="header">
-      <div style="display:flex;align-items:center;">
-        <button class="back-btn" id="backBtn" style="display:none;">←</button>
-        <h1 id="pageTitle">PPD Tracker</h1>
-      </div>
-      <span class="badge">ASHA</span>
-    </div>
 
-    <div class="screen active" id="screen-dashboard">
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total Mothers</div></div>
-        <div class="stat-card"><div class="stat-number" id="statHighRisk">0</div><div class="stat-label">High Risk</div></div>
-        <div class="stat-card"><div class="stat-number" id="statDue">0</div><div class="stat-label">Visits Due</div></div>
-        <div class="stat-card"><div class="stat-number" id="statThisWeek">0</div><div class="stat-label">This Week</div></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Today's Visits</div>
-        <div id="todayVisits">
-          <div class="empty-state"><p style="color:var(--text-light);font-size:14px;">No visits scheduled for today</p></div>
+<!-- Splash Screen -->
+<div class="splash" id="splash">
+  <div class="splash-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+  </div>
+  <h1>MatriCare</h1>
+  <p>Postpartum Depression Tracker</p>
+  <div class="splash-loader"></div>
+</div>
+
+<div class="app" id="app">
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Header -->
+  <div class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="back-btn" id="backBtn" style="display:none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+      </button>
+      <h1 id="pageTitle">Dashboard</h1>
+    </div>
+    <span class="badge">ASHA Worker</span>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div class="screen active" id="screen-onboarding">
+    <div class="content">
+      <div class="onboarding">
+        <div class="onboarding-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Quick Actions</div>
-        <button class="btn btn-primary btn-lg" style="margin-bottom:10px;" onclick="showScreen('screen-register')">+ Register New Mother</button>
-        <button class="btn btn-outline" onclick="showScreen('screen-mothers')">View All Mothers</button>
-      </div>
-    </div>
-
-    <div class="screen" id="screen-mothers">
-      <input type="text" class="search-box" placeholder="Search by name or village..." id="searchInput" oninput="filterMothers()">
-      <div class="nav-tabs">
-        <button class="nav-tab active" onclick="setFilter('all', this)">All</button>
-        <button class="nav-tab" onclick="setFilter('high', this)">High Risk</button>
-        <button class="nav-tab" onclick="setFilter('moderate', this)">Moderate</button>
-        <button class="nav-tab" onclick="setFilter('low', this)">Low Risk</button>
-      </div>
-      <div id="mothersList" class="pb-20"></div>
-      <button class="fab" onclick="showScreen('screen-register')">+</button>
-    </div>
-
-    <div class="screen" id="screen-register">
-      <div class="card">
-        <div class="card-title">Mother Details</div>
-        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" id="regName" placeholder="Enter mother's name"></div>
-        <div class="form-group"><label class="form-label">Age</label><input type="number" class="form-input" id="regAge" placeholder="Age in years"></div>
-        <div class="form-group"><label class="form-label">Village / Area</label><input type="text" class="form-input" id="regVillage" placeholder="Village name"></div>
-        <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" id="regPhone" placeholder="10-digit mobile number"></div>
-        <div class="form-group"><label class="form-label">Delivery Date</label><input type="date" class="form-input" id="regDeliveryDate"></div>
-        <div class="form-group"><label class="form-label">Delivery Type</label><select class="form-input" id="regDeliveryType"><option value="normal">Normal Delivery</option><option value="csection">C-Section</option><option value="assisted">Assisted (Forceps/Vacuum)</option><option value="home">Home Delivery</option></select></div>
-        <button class="btn btn-primary btn-lg" onclick="registerMother()">Save & Continue</button>
-      </div>
-    </div>
-
-    <div class="screen" id="screen-detail">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div><h2 id="detailName" style="font-size:20px;margin-bottom:4px;">--</h2><p id="detailMeta" style="color:var(--text-light);font-size:14px;">--</p></div>
-          <span id="detailRisk" class="risk-badge">--</span>
+        <h2>Welcome to MatriCare</h2>
+        <p>A simple tool to help you track postpartum mothers, identify depression symptoms early, and save lives.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+            <div class="feature-text"><h4>Register Mothers</h4><p>Keep a digital record of every postpartum mother in your area</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+            <div class="feature-text"><h4>Track Symptoms</h4><p>Record symptoms during home visits with automatic risk scoring</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+            <div class="feature-text"><h4>Refer When Needed</h4><p>One-tap referrals to PHC, CHC, or District Hospital</p></div>
+          </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px;">
-          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px;"><div style="font-size:18px;font-weight:800;color:var(--primary);" id="detailDays">--</div><div style="font-size:10px;color:var(--text-light);font-weight:700;">DAYS POST</div></div>
-          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px;"><div style="font-size:18px;font-weight:800;color:var(--primary);" id="detailVisits">--</div><div style="font-size:10px;color:var(--text-light);font-weight:700;">VISITS</div></div>
-          <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px;"><div style="font-size:18px;font-weight:800;color:var(--primary);" id="detailScore">--</div><div style="font-size:10px;color:var(--text-light);font-weight:700;">EPDS SCORE</div></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Visit History</div>
-        <div class="timeline" id="detailTimeline"></div>
-      </div>
-      <div style="padding-bottom:80px;">
-        <button class="btn btn-primary btn-lg" style="margin-bottom:10px;" onclick="showScreen('screen-symptom')">+ Record New Visit</button>
-        <button class="btn btn-outline" onclick="showScreen('screen-referral')" id="btnReferral" style="display:none;">🚨 Refer to Doctor</button>
-      </div>
-    </div>
-
-    <div class="screen" id="screen-symptom">
-      <div class="card">
-        <div class="card-title">Postpartum Symptom Check</div>
-        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">Check all symptoms observed during today's visit. Tap to select.</p>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'mood')"><input type="checkbox" id="sym-mood"><label for="sym-mood">Persistent low mood / sadness<div class="desc">Mother seems sad, tearful, or hopeless most of the time</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'interest')"><input type="checkbox" id="sym-interest"><label for="sym-interest">Loss of interest in baby or activities<div class="desc">No joy in caring for baby or things she used to enjoy</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'sleep')"><input type="checkbox" id="sym-sleep"><label for="sym-sleep">Sleep problems (not baby-related)<div class="desc">Cannot sleep even when baby is sleeping, or sleeps too much</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'fatigue')"><input type="checkbox" id="sym-fatigue"><label for="sym-fatigue">Extreme fatigue or low energy<div class="desc">Unusual tiredness that rest does not help</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'appetite')"><input type="checkbox" id="sym-appetite"><label for="sym-appetite">Appetite changes<div class="desc">Significant weight loss/gain, not eating or overeating</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'guilt')"><input type="checkbox" id="sym-guilt"><label for="sym-guilt">Feelings of worthlessness or guilt<div class="desc">Says she is a "bad mother" or feels excessive guilt</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'concentration')"><input type="checkbox" id="sym-concentration"><label for="sym-concentration">Difficulty concentrating<div class="desc">Cannot focus, make decisions, or remember things</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'anxiety')"><input type="checkbox" id="sym-anxiety"><label for="sym-anxiety">Excessive anxiety or panic<div class="desc">Worries constantly about baby's health or her own</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'thoughts')"><input type="checkbox" id="sym-thoughts"><label for="sym-thoughts">Thoughts of self-harm or harming baby<div class="desc">⚠️ URGENT: Any mention of suicide or hurting the baby</div></label></div>
-        <div class="checkbox-group" onclick="toggleSymptom(this, 'support')"><input type="checkbox" id="sym-support"><label for="sym-support">Lack of family support<div class="desc">Family conflict, domestic issues, or no help at home</div></label></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Notes (Optional)</div>
-        <textarea class="form-input" id="visitNotes" rows="3" placeholder="Any additional observations..."></textarea>
-      </div>
-      <div style="padding-bottom:80px;"><button class="btn btn-primary btn-lg" onclick="saveVisit()">Save Visit Record</button></div>
-    </div>
-
-    <div class="screen" id="screen-referral">
-      <div class="card" style="border:2px solid var(--danger);">
-        <div style="text-align:center;padding:20px 0;">
-          <div style="font-size:48px;margin-bottom:12px;">🚨</div>
-          <h2 style="color:var(--danger);margin-bottom:8px;">Refer to Doctor</h2>
-          <p style="color:var(--text-light);font-size:14px;">This mother shows signs requiring immediate medical attention.</p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Referral Details</div>
-        <div class="form-group"><label class="form-label">Referral Reason</label><textarea class="form-input" id="referralReason" rows="3" placeholder="Why are you referring this mother?"></textarea></div>
-        <div class="form-group"><label class="form-label">Referred To</label><select class="form-input" id="referralTo"><option value="phc">Primary Health Centre (PHC)</option><option value="chc">Community Health Centre (CHC)</option><option value="district">District Hospital</option><option value="private">Private Hospital</option></select></div>
-        <div class="form-group"><label class="form-label">Urgency</label><select class="form-input" id="referralUrgency"><option value="routine">Routine (within 1 week)</option><option value="urgent">Urgent (within 24-48 hours)</option><option value="emergency">Emergency (same day)</option></select></div>
-      </div>
-      <div style="padding-bottom:80px;">
-        <button class="btn btn-danger btn-lg" onclick="saveReferral()">Confirm Referral</button>
-        <button class="btn btn-outline" style="margin-top:10px;" onclick="goBack()">Cancel</button>
-      </div>
-    </div>
-
-    <div class="screen" id="screen-success">
-      <div style="text-align:center;padding:60px 20px;">
-        <div style="font-size:64px;margin-bottom:20px;">✅</div>
-        <h2 style="margin-bottom:12px;">Saved Successfully!</h2>
-        <p style="color:var(--text-light);margin-bottom:32px;" id="successMessage">Visit record has been saved.</p>
-        <button class="btn btn-primary btn-lg" onclick="showScreen('screen-dashboard')">Back to Dashboard</button>
+        <button class="btn btn-primary btn-lg" onclick="completeOnboarding()">Get Started</button>
       </div>
     </div>
   </div>
 
-  <script>
-    let mothers = JSON.parse(localStorage.getItem('ppd_mothers') || '[]');
-    let currentMotherId = null;
-    let currentSymptoms = [];
-    let screenHistory = [];
+  <!-- DASHBOARD -->
+  <div class="screen" id="screen-dashboard">
+    <div class="content">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="statTotal">0</div>
+          <div class="stat-label">Total Mothers</div>
+        </div>
+        <div class="stat-card danger">
+          <div class="stat-number" id="statHighRisk">0</div>
+          <div class="stat-label">High Risk</div>
+          <div class="stat-trend up" id="statHighTrend">Needs attention</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-number" id="statDue">0</div>
+          <div class="stat-label">Visits Due</div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-number" id="statThisWeek">0</div>
+          <div class="stat-label">This Week</div>
+        </div>
+      </div>
 
-    if (mothers.length === 0) {
-      mothers = [
-        { id: '1', name: 'Sunita Devi', age: 26, village: 'Rampur', phone: '9876543210', deliveryDate: '2026-08-10', deliveryType: 'normal', risk: 'moderate', epdsScore: 11, visits: [
-          { date: '2026-08-12', symptoms: ['mood','fatigue'], notes: 'Seems tired, low mood', risk: 'moderate' },
-          { date: '2026-08-19', symptoms: ['mood','sleep','guilt'], notes: 'Not sleeping well, feels guilty', risk: 'moderate' }
-        ]},
-        { id: '2', name: 'Priya Sharma', age: 30, village: 'Bijapur', phone: '9876543211', deliveryDate: '2026-08-25', deliveryType: 'csection', risk: 'low', epdsScore: 5, visits: [
-          { date: '2026-08-27', symptoms: ['fatigue'], notes: 'Recovering from surgery', risk: 'low' }
-        ]},
-        { id: '3', name: 'Anita Yadav', age: 22, village: 'Rampur', phone: '9876543212', deliveryDate: '2026-07-15', deliveryType: 'home', risk: 'high', epdsScore: 16, visits: [
-          { date: '2026-07-20', symptoms: ['mood','interest','sleep','guilt'], notes: 'Very withdrawn', risk: 'high' },
-          { date: '2026-08-01', symptoms: ['mood','interest','sleep','guilt','anxiety'], notes: 'Anxiety worsening', risk: 'high' }
-        ]}
-      ];
-      saveData();
+      <div class="quick-grid">
+        <div class="quick-item" onclick="showScreen('screen-register')">
+          <div class="quick-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg></div>
+          <h4>Register</h4><p>New mother</p>
+        </div>
+        <div class="quick-item" onclick="showScreen('screen-mothers')">
+          <div class="quick-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <h4>All Mothers</h4><p>View list</p>
+        </div>
+        <div class="quick-item" onclick="exportData()">
+          <div class="quick-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
+          <h4>Export</h4><p>Download CSV</p>
+        </div>
+        <div class="quick-item" onclick="showScreen('screen-help')">
+          <div class="quick-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+          <h4>Help</h4><p>How to use</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Priority Visits Today
+        </div>
+        <div id="todayVisits"></div>
+      </div>
+
+      <div class="card-flat" style="background:linear-gradient(135deg,var(--teal-50)0%,#E0F2FE 100%);border-color:#BAE6FD;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:var(--teal-600);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:var(--teal-900);margin-bottom:2px;">Remember</h4>
+            <p style="font-size:13px;color:var(--teal-800);line-height:1.4;">Visit high-risk mothers at least twice a week. Moderate-risk mothers once a week.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOTHERS LIST -->
+  <div class="screen" id="screen-mothers">
+    <div class="content">
+      <div class="search-wrapper">
+        <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+        <input type="text" class="search-box" placeholder="Search by name or village..." id="searchInput" oninput="filterMothers()">
+      </div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="setFilter('all',this)">All</button>
+        <button class="nav-tab" onclick="setFilter('high',this)">High Risk</button>
+        <button class="nav-tab" onclick="setFilter('moderate',this)">Moderate</button>
+        <button class="nav-tab" onclick="setFilter('low',this)">Low Risk</button>
+      </div>
+      <div class="sort-bar">
+        <span id="resultCount">0 mothers</span>
+        <select class="sort-select" id="sortSelect" onchange="renderMothersList()">
+          <option value="recent">Most Recent</option>
+          <option value="risk">Risk Level</option>
+          <option value="name">Name A-Z</option>
+          <option value="days">Days Postpartum</option>
+        </select>
+      </div>
+      <div id="mothersList"></div>
+    </div>
+    <button class="fab" onclick="showScreen('screen-register')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="screen" id="screen-register">
+    <div class="content">
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+          Mother Registration
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-input" id="regName" placeholder="e.g. Sunita Devi">
+          <div class="form-error" id="errName">Please enter the mother's name</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age *</label>
+          <input type="number" class="form-input" id="regAge" placeholder="e.g. 26" min="12" max="60">
+          <div class="form-error" id="errAge">Please enter a valid age (12-60)</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Village / Area *</label>
+          <input type="text" class="form-input" id="regVillage" placeholder="e.g. Rampur">
+          <div class="form-error" id="errVillage">Please enter the village name</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number <span class="optional">(optional)</span></label>
+          <input type="tel" class="form-input" id="regPhone" placeholder="10-digit mobile number" maxlength="10">
+          <div class="form-hint">Used to coordinate follow-up visits</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Delivery Date *</label>
+          <input type="date" class="form-input" id="regDeliveryDate">
+          <div class="form-error" id="errDate">Please select the delivery date</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Delivery Type *</label>
+          <select class="form-input" id="regDeliveryType">
+            <option value="">Select delivery type</option>
+            <option value="normal">Normal Delivery</option>
+            <option value="csection">C-Section</option>
+            <option value="assisted">Assisted (Forceps/Vacuum)</option>
+            <option value="home">Home Delivery</option>
+          </select>
+          <div class="form-error" id="errType">Please select delivery type</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Initial Notes <span class="optional">(optional)</span></label>
+          <textarea class="form-input" id="regNotes" rows="2" placeholder="Any initial observations..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-ghost" onclick="goBack()">Cancel</button>
+      <button class="btn btn-primary" onclick="registerMother()">Save & Register</button>
+    </div>
+  </div>
+
+  <!-- MOTHER DETAIL -->
+  <div class="screen" id="screen-detail">
+    <div class="content-compact">
+      <div class="profile-header" id="profileHeader">
+        <div class="profile-top">
+          <div class="profile-avatar" id="profileAvatar">--</div>
+          <div class="profile-name">
+            <h2 id="detailName">--</h2>
+            <p id="detailMeta">--</p>
+            <div style="margin-top:8px;" id="detailRiskContainer"></div>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stat"><div class="value" id="detailDays">--</div><div class="label">Days Post</div></div>
+          <div class="profile-stat"><div class="value" id="detailVisits">--</div><div class="label">Visits</div></div>
+          <div class="profile-stat"><div class="value" id="detailScore">--</div><div class="label">Risk Score</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:0;">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Personal Information
+        </div>
+        <div class="info-row"><span class="info-row-label">Phone</span><span class="info-row-value" id="detailPhone">--</span></div>
+        <div class="info-row"><span class="info-row-label">Village</span><span class="info-row-value" id="detailVillage">--</span></div>
+        <div class="info-row"><span class="info-row-label">Age</span><span class="info-row-value" id="detailAge">--</span></div>
+        <div class="info-row"><span class="info-row-label">Delivery</span><span class="info-row-value" id="detailDelivery">--</span></div>
+      </div>
+
+      <div class="section-divider"><span>Visit History</span></div>
+      <div id="detailTimeline"></div>
+
+      <div id="detailActions" style="padding:8px 0 80px;">
+        <button class="btn btn-primary btn-lg" style="margin-bottom:10px;" onclick="showScreen('screen-symptom')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Record New Visit
+        </button>
+        <button class="btn btn-outline" onclick="showScreen('screen-referral')" id="btnReferral" style="display:none;border-color:var(--rose-600);color:var(--rose-600);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Refer to Doctor
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYMPTOM CHECK -->
+  <div class="screen" id="screen-symptom">
+    <div class="content">
+      <div class="card" style="background:var(--teal-50);border-color:#99F6E4;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span style="font-size:13px;font-weight:700;color:var(--teal-900);">How to assess</span>
+        </div>
+        <p style="font-size:13px;color:var(--teal-800);line-height:1.5;">Observe the mother carefully during your visit. Tap all symptoms you notice. The app will calculate her risk level automatically.</p>
+      </div>
+
+      <div class="section-divider"><span>Symptoms Observed</span></div>
+
+      <div class="symptom-list">
+        <div class="symptom-item" onclick="toggleSymptom(this,'mood')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Persistent low mood or sadness</h4><p>Mother seems sad, tearful, or hopeless most of the time</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'interest')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Loss of interest in baby or activities</h4><p>No joy in caring for baby or things she used to enjoy</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'sleep')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Sleep problems (not baby-related)</h4><p>Cannot sleep even when baby sleeps, or sleeps too much</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'fatigue')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Extreme fatigue or low energy</h4><p>Unusual tiredness that rest does not help</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'appetite')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Appetite changes</h4><p>Significant weight loss/gain, not eating or overeating</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'guilt')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Feelings of worthlessness or guilt</h4><p>Says she is a "bad mother" or feels excessive guilt</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'concentration')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Difficulty concentrating</h4><p>Cannot focus, make decisions, or remember things</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'anxiety')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Excessive anxiety or panic</h4><p>Worries constantly about baby's health or her own</p></div>
+        </div>
+        <div class="symptom-item urgent" onclick="toggleSymptom(this,'thoughts')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Thoughts of self-harm or harming baby</h4><p style="color:var(--rose-600);font-weight:600;">URGENT: Any mention of suicide or hurting the baby — select immediately</p></div>
+        </div>
+        <div class="symptom-item" onclick="toggleSymptom(this,'support')">
+          <div class="symptom-checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div class="symptom-text"><h4>Lack of family support</h4><p>Family conflict, domestic issues, or no help at home</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          Visit Notes <span style="text-transform:none;font-weight:500;color:var(--slate-400);">(optional)</span>
+        </div>
+        <textarea class="form-input" id="visitNotes" rows="3" placeholder="Any additional observations about the mother's condition, home environment, or family dynamics..."></textarea>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-ghost" onclick="goBack()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveVisit()">Save Visit</button>
+    </div>
+  </div>
+
+  <!-- REFERRAL -->
+  <div class="screen" id="screen-referral">
+    <div class="content">
+      <div class="referral-alert">
+        <div class="referral-alert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </div>
+        <h2>Refer to Doctor</h2>
+        <p>This mother shows signs requiring immediate medical attention. Please complete the referral details below.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Referral Details
+        </div>
+        <div class="form-group">
+          <label class="form-label">Referral Reason *</label>
+          <textarea class="form-input" id="referralReason" rows="3" placeholder="Describe why this mother needs medical attention..."></textarea>
+          <div class="form-error" id="errReferral">Please enter a referral reason</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Referred To *</label>
+          <select class="form-input" id="referralTo">
+            <option value="">Select facility</option>
+            <option value="phc">Primary Health Centre (PHC)</option>
+            <option value="chc">Community Health Centre (CHC)</option>
+            <option value="district">District Hospital</option>
+            <option value="private">Private Hospital</option>
+          </select>
+          <div class="form-error" id="errReferralTo">Please select a facility</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Urgency Level *</label>
+          <select class="form-input" id="referralUrgency">
+            <option value="">Select urgency</option>
+            <option value="routine">Routine — within 1 week</option>
+            <option value="urgent">Urgent — within 24-48 hours</option>
+            <option value="emergency">Emergency — same day</option>
+          </select>
+          <div class="form-error" id="errUrgency">Please select urgency level</div>
+        </div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-ghost" onclick="goBack()">Cancel</button>
+      <button class="btn btn-danger" onclick="saveReferral()">Confirm Referral</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="screen" id="screen-success">
+    <div style="text-align:center;padding:80px 24px;">
+      <div style="width:80px;height:80px;background:var(--emerald-50);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      </div>
+      <h2 style="font-size:22px;font-weight:800;color:var(--slate-900);margin-bottom:8px;letter-spacing:-.5px;">Saved Successfully!</h2>
+      <p style="color:var(--slate-500);font-size:15px;line-height:1.6;margin-bottom:40px;max-width:280px;margin-left:auto;margin-right:auto;" id="successMessage">Visit record has been saved.</p>
+      <button class="btn btn-primary btn-lg" onclick="showScreen('screen-dashboard')">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <!-- HELP -->
+  <div class="screen" id="screen-help">
+    <div class="content">
+      <div class="help-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>About MatriCare</h3>
+        <p>MatriCare helps ASHA workers track postpartum mothers and identify signs of postpartum depression (PPD) early. Early detection saves lives.</p>
+      </div>
+
+      <div class="help-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>How to Register a Mother</h3>
+        <ul>
+          <li>Tap "Register New Mother" on the dashboard</li>
+          <li>Fill in her name, age, village, and delivery details</li>
+          <li>Tap "Save & Register"</li>
+          <li>The mother will appear in your list immediately</li>
+        </ul>
+      </div>
+
+      <div class="help-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>How to Record a Visit</h3>
+        <ul>
+          <li>Open the mother's profile from the list</li>
+          <li>Tap "Record New Visit"</li>
+          <li>Select all symptoms you observed</li>
+          <li>Add any notes about the visit</li>
+          <li>Tap "Save Visit" — the app calculates risk automatically</li>
+        </ul>
+      </div>
+
+      <div class="help-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>Understanding Risk Levels</h3>
+        <ul>
+          <li><strong style="color:var(--emerald-600)">Low Risk (0-2 symptoms):</strong> Normal follow-up schedule</li>
+          <li><strong style="color:#B45309">Moderate Risk (3-5 symptoms):</strong> Visit weekly, monitor closely</li>
+          <li><strong style="color:var(--rose-600)">High Risk (6+ symptoms or harm thoughts):</strong> Refer to doctor immediately</li>
+        </ul>
+      </div>
+
+      <div class="help-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Exporting Data</h3>
+        <p>Tap "Export" on the dashboard to download all mother records as a CSV file. This can be shared with your supervisor or uploaded to the health management system.</p>
+      </div>
+
+      <div class="card-flat" style="background:var(--teal-50);border-color:#99F6E4;margin-top:20px;">
+        <p style="font-size:13px;color:var(--teal-800);line-height:1.6;text-align:center;"><strong>Remember:</strong> This app is a screening tool, not a diagnosis. Always refer high-risk mothers to a qualified doctor.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== DATA STORE =====================
+let mothers = JSON.parse(localStorage.getItem('ppd_mothers') || '[]');
+let currentMotherId = null;
+let currentSymptoms = [];
+let screenHistory = [];
+let currentFilter = 'all';
+
+// Demo data
+if (mothers.length === 0) {
+  const today = new Date().toISOString().split('T')[0];
+  const d = new Date();
+  const daysAgo = (n) => { const x = new Date(d); x.setDate(x.getDate() - n); return x.toISOString().split('T')[0]; };
+  mothers = [
+    {
+      id: '1', name: 'Sunita Devi', age: 26, village: 'Rampur', phone: '9876543210',
+      deliveryDate: daysAgo(22), deliveryType: 'normal', risk: 'moderate', epdsScore: 11,
+      visits: [
+        { date: daysAgo(20), symptoms: ['mood','fatigue'], notes: 'Seems very tired, speaks very little', risk: 'moderate' },
+        { date: daysAgo(13), symptoms: ['mood','sleep','guilt'], notes: 'Not sleeping even when baby sleeps. Says she is a bad mother.', risk: 'moderate' },
+        { date: daysAgo(6), symptoms: ['mood','sleep','guilt','anxiety'], notes: 'Anxiety increasing. Worried about baby constantly.', risk: 'moderate' }
+      ]
+    },
+    {
+      id: '2', name: 'Priya Sharma', age: 30, village: 'Bijapur', phone: '9876543211',
+      deliveryDate: daysAgo(7), deliveryType: 'csection', risk: 'low', epdsScore: 4,
+      visits: [
+        { date: daysAgo(5), symptoms: ['fatigue'], notes: 'Recovering well from surgery. Family very supportive.', risk: 'low' }
+      ]
+    },
+    {
+      id: '3', name: 'Anita Yadav', age: 22, village: 'Rampur', phone: '9876543212',
+      deliveryDate: daysAgo(48), deliveryType: 'home', risk: 'high', epdsScore: 18,
+      visits: [
+        { date: daysAgo(45), symptoms: ['mood','interest','sleep','guilt'], notes: 'Very withdrawn. Does not hold baby. Cries often.', risk: 'high' },
+        { date: daysAgo(38), symptoms: ['mood','interest','sleep','guilt','anxiety'], notes: 'Anxiety worsening. Refuses to eat.', risk: 'high' },
+        { date: daysAgo(31), symptoms: ['mood','interest','sleep','guilt','anxiety','concentration'], notes: 'Cannot remember things. Confused. Husband reports she shouted at baby.', risk: 'high' },
+        { date: daysAgo(24), symptoms: ['mood','interest','sleep','guilt','anxiety','concentration','thoughts'], notes: '⚠️ Mentioned she wishes she had never given birth. Referred to CHC.', risk: 'high' }
+      ]
+    },
+    {
+      id: '4', name: 'Meena Kumari', age: 28, village: 'Nandpur', phone: '9876543213',
+      deliveryDate: daysAgo(35), deliveryType: 'normal', risk: 'low', epdsScore: 3,
+      visits: [
+        { date: daysAgo(33), symptoms: [], notes: 'Doing well. Mother-in-law helping. Breastfeeding normally.', risk: 'low' },
+        { date: daysAgo(26), symptoms: [], notes: 'Happy and active. Baby gaining weight.', risk: 'low' }
+      ]
+    },
+    {
+      id: '5', name: 'Lakshmi Bai', age: 34, village: 'Bijapur', phone: '9876543214',
+      deliveryDate: daysAgo(15), deliveryType: 'csection', risk: 'moderate', epdsScore: 9,
+      visits: [
+        { date: daysAgo(13), symptoms: ['fatigue','sleep','appetite'], notes: 'Not eating properly. Says she has no appetite.', risk: 'moderate' },
+        { date: daysAgo(6), symptoms: ['fatigue','sleep','appetite','support'], notes: 'Husband works away. No family support. Looking very weak.', risk: 'moderate' }
+      ]
     }
+  ];
+  saveData();
+}
 
-    function saveData() { localStorage.setItem('ppd_mothers', JSON.stringify(mothers)); }
+function saveData() { localStorage.setItem('ppd_mothers', JSON.stringify(mothers)); }
 
-    function showScreen(id) {
-      const current = document.querySelector('.screen.active');
-      if (current) screenHistory.push(current.id);
+// ===================== NAVIGATION =====================
+function showScreen(id, direction) {
+  const current = document.querySelector('.screen.active');
+  if (current) screenHistory.push(current.id);
+  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active','sr','sl'); });
+  const next = document.getElementById(id);
+  next.classList.add('active');
+  if (direction === 'right') next.classList.add('sr');
+  if (direction === 'left') next.classList.add('sl');
+
+  const backBtn = document.getElementById('backBtn');
+  backBtn.style.display = (id === 'screen-dashboard' || id === 'screen-onboarding') ? 'none' : 'flex';
+
+  const titles = {
+    'screen-dashboard': 'Dashboard',
+    'screen-mothers': 'All Mothers',
+    'screen-register': 'Register Mother',
+    'screen-detail': 'Mother Profile',
+    'screen-symptom': 'Symptom Check',
+    'screen-referral': 'Refer to Doctor',
+    'screen-success': 'Success',
+    'screen-help': 'Help & Guide'
+  };
+  document.getElementById('pageTitle').textContent = titles[id] || 'MatriCare';
+
+  if (id === 'screen-dashboard') { updateDashboard(); screenHistory = []; }
+  else if (id === 'screen-mothers') { renderMothersList(); }
+  else if (id === 'screen-detail') { renderMotherDetail(); }
+  else if (id === 'screen-symptom') {
+    currentSymptoms = [];
+    document.querySelectorAll('.symptom-item').forEach(el => el.classList.remove('selected'));
+    document.querySelectorAll('.symptom-item input').forEach(el => el.checked = false);
+    document.getElementById('visitNotes').value = '';
+  }
+}
+
+function goBack() {
+  const prev = screenHistory.pop() || 'screen-dashboard';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active','sr','sl'));
+  document.getElementById(prev).classList.add('active');
+  document.getElementById('backBtn').style.display = (prev === 'screen-dashboard' || prev === 'screen-onboarding') ? 'none' : 'flex';
+  const titles = {
+    'screen-dashboard': 'Dashboard',
+    'screen-mothers': 'All Mothers',
+    'screen-register': 'Register Mother',
+    'screen-detail': 'Mother Profile',
+    'screen-symptom': 'Symptom Check',
+    'screen-referral': 'Refer to Doctor',
+    'screen-success': 'Success',
+    'screen-help': 'Help & Guide'
+  };
+  document.getElementById('pageTitle').textContent = titles[prev] || 'MatriCare';
+  if (prev === 'screen-dashboard') { updateDashboard(); screenHistory = []; }
+  else if (prev === 'screen-mothers') { renderMothersList(); }
+  else if (prev === 'screen-detail') { renderMotherDetail(); }
+}
+
+document.getElementById('backBtn').onclick = goBack;
+
+// ===================== ONBOARDING =====================
+function completeOnboarding() {
+  localStorage.setItem('ppd_onboarded', 'true');
+  showScreen('screen-dashboard');
+}
+
+// ===================== TOASTS =====================
+function showToast(message, type) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + (type || '');
+  const icons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+    warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>'
+  };
+  toast.innerHTML = (icons[type] || icons.success) + '<span>' + message + '</span>';
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(-10px)'; setTimeout(() => toast.remove(), 300); }, 3000);
+}
+
+// ===================== DASHBOARD =====================
+function updateDashboard() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('statTotal').textContent = mothers.length;
+  const highRisk = mothers.filter(m => m.risk === 'high').length;
+  document.getElementById('statHighRisk').textContent = highRisk;
+  document.getElementById('statHighTrend').textContent = highRisk > 0 ? highRisk + ' need urgent care' : 'All clear';
+  document.getElementById('statHighTrend').className = 'stat-trend ' + (highRisk > 0 ? 'up' : 'down');
+
+  const dueCount = mothers.filter(m => {
+    if (m.visits.length === 0) return true;
+    const lastVisit = m.visits[m.visits.length - 1].date;
+    const daysSince = Math.floor((new Date(today) - new Date(lastVisit)) / (1000*60*60*24));
+    return daysSince >= 7;
+  }).length;
+  document.getElementById('statDue').textContent = dueCount;
+
+  const thisWeek = mothers.filter(m => m.visits.some(v => {
+    const vd = new Date(v.date);
+    const now = new Date();
+    const diff = Math.floor((now - vd) / (1000*60*60*24));
+    return diff <= 7;
+  })).length;
+  document.getElementById('statThisWeek').textContent = thisWeek;
+
+  const dueMothers = mothers.filter(m => m.risk === 'high' || m.visits.length === 0 ||
+    Math.floor((new Date(today) - new Date(m.visits[m.visits.length-1].date)) / (1000*60*60*24)) >= 7)
+    .sort((a,b) => { const ra = a.risk==='high'?3:a.risk==='moderate'?2:1; const rb = b.risk==='high'?3:b.risk==='moderate'?2:1; return rb - ra; });
+
+  const container = document.getElementById('todayVisits');
+  if (dueMothers.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div><h3>No visits due</h3><p>All mothers are up to date with their check-ups</p></div>';
+  } else {
+    container.innerHTML = dueMothers.slice(0,5).map(m => `
+      <div class="mother-item" onclick="openMother('${m.id}')">
+        <div class="mother-avatar ${m.risk}">${m.name.charAt(0)}</div>
+        <div class="mother-info">
+          <h3>${m.name}</h3>
+          <p>${m.village} &bull; ${getDaysPost(m.deliveryDate)} days postpartum</p>
+          <div class="mother-meta"><div class="meta-dot ${m.risk}"></div><span style="font-size:11px;color:var(--slate-500);font-weight:600;">${m.risk==='high'?'Urgent visit needed':m.risk==='moderate'?'Weekly visit due':'Routine check'}</span></div>
+        </div>
+        <span class="status-pill status-${m.risk}">${m.risk}</span>
+      </div>
+    `).join('');
+  }
+}
+
+// ===================== MOTHERS LIST =====================
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderMothersList();
+}
+
+function renderMothersList() {
+  const search = (document.getElementById('searchInput').value || '').toLowerCase();
+  const sort = document.getElementById('sortSelect').value;
+  let filtered = mothers.filter(m => {
+    const matchesSearch = m.name.toLowerCase().includes(search) || m.village.toLowerCase().includes(search);
+    const matchesFilter = currentFilter === 'all' || m.risk === currentFilter;
+    return matchesSearch && matchesFilter;
+  });
+
+  if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sort === 'risk') filtered.sort((a,b) => { const ra = a.risk==='high'?3:a.risk==='moderate'?2:1; const rb = b.risk==='high'?3:b.risk==='moderate'?2:1; return rb - ra; });
+  else if (sort === 'days') filtered.sort((a,b) => getDaysPost(b.deliveryDate) - getDaysPost(a.deliveryDate));
+  else filtered.sort((a,b) => new Date(b.deliveryDate) - new Date(a.deliveryDate));
+
+  document.getElementById('resultCount').textContent = filtered.length + ' mother' + (filtered.length !== 1 ? 's' : '');
+
+  const container = document.getElementById('mothersList');
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div><h3>No mothers found</h3><p>Try a different search term or filter</p></div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(m => `
+    <div class="mother-item" onclick="openMother('${m.id}')">
+      <div class="mother-avatar ${m.risk}">${m.name.charAt(0)}</div>
+      <div class="mother-info">
+        <h3>${m.name}</h3>
+        <p>${m.village} &bull; Age ${m.age} &bull; ${getDaysPost(m.deliveryDate)} days post</p>
+      </div>
+      <span class="status-pill status-${m.risk}">${m.risk}</span>
+    </div>
+  `).join('');
+}
+
+function filterMothers() { renderMothersList(); }
+function getDaysPost(deliveryDate) { return Math.floor((new Date() - new Date(deliveryDate)) / (1000*60*60*24)); }
+
+// ===================== REGISTRATION =====================
+function registerMother() {
+  let valid = true;
+  const fields = [
+    { id: 'regName', err: 'errName', msg: 'Please enter the mother's name' },
+    { id: 'regAge', err: 'errAge', msg: 'Please enter a valid age', validate: v => v && v >= 12 && v <= 60 },
+    { id: 'regVillage', err: 'errVillage', msg: 'Please enter the village name' },
+    { id: 'regDeliveryDate', err: 'errDate', msg: 'Please select the delivery date' },
+    { id: 'regDeliveryType', err: 'errType', msg: 'Please select delivery type' }
+  ];
+
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    const err = document.getElementById(f.err);
+    const val = el.value.trim();
+    const isValid = f.validate ? f.validate(val) : val !== '';
+    if (!isValid) {
+      el.classList.add('error');
+      err.textContent = f.msg;
+      err.classList.add('show');
+      valid = false;
+      setTimeout(() => el.classList.remove('error'), 3000);
+    } else {
+      el.classList.remove('error');
+      err.classList.remove('show');
+    }
+  });
+
+  if (!valid) return;
+
+  const newMother = {
+    id: Date.now().toString(),
+    name: document.getElementById('regName').value.trim(),
+    age: parseInt(document.getElementById('regAge').value),
+    village: document.getElementById('regVillage').value.trim(),
+    phone: document.getElementById('regPhone').value.trim(),
+    deliveryDate: document.getElementById('regDeliveryDate').value,
+    deliveryType: document.getElementById('regDeliveryType').value,
+    risk: 'low', epdsScore: 0, visits: []
+  };
+
+  const notes = document.getElementById('regNotes').value.trim();
+  if (notes) {
+    newMother.visits.push({
+      date: new Date().toISOString().split('T')[0],
+      symptoms: [],
+      notes: 'Initial registration: ' + notes,
+      risk: 'low'
+    });
+  }
+
+  mothers.push(newMother);
+  saveData();
+
+  // Clear form
+  ['regName','regAge','regVillage','regPhone','regDeliveryDate','regDeliveryType','regNotes'].forEach(id => document.getElementById(id).value = '');
+
+  currentMotherId = newMother.id;
+  document.getElementById('successMessage').textContent = newMother.name + ' has been registered successfully.';
+  showToast('Mother registered successfully', 'success');
+  showScreen('screen-success');
+}
+
+function openMother(id) {
+  currentMotherId = id;
+  showScreen('screen-detail', 'right');
+}
+
+// ===================== MOTHER DETAIL =====================
+function renderMotherDetail() {
+  const m = mothers.find(x => x.id === currentMotherId);
+  if (!m) return;
+
+  document.getElementById('detailName').textContent = m.name;
+  document.getElementById('detailMeta').textContent = m.village + ' • Age ' + m.age;
+  document.getElementById('profileAvatar').textContent = m.name.charAt(0);
+
+  const riskContainer = document.getElementById('detailRiskContainer');
+  riskContainer.innerHTML = '<span class="risk-badge risk-' + m.risk + '">' + m.risk.toUpperCase() + ' RISK</span>';
+
+  document.getElementById('detailDays').textContent = getDaysPost(m.deliveryDate);
+  document.getElementById('detailVisits').textContent = m.visits.length;
+  document.getElementById('detailScore').textContent = m.epdsScore || '--';
+
+  document.getElementById('detailPhone').textContent = m.phone || 'Not provided';
+  document.getElementById('detailVillage').textContent = m.village;
+  document.getElementById('detailAge').textContent = m.age + ' years';
+  const dType = { normal: 'Normal Delivery', csection: 'C-Section', assisted: 'Assisted Delivery', home: 'Home Delivery' };
+  document.getElementById('detailDelivery').textContent = dType[m.deliveryType] || m.deliveryType;
+
+  document.getElementById('btnReferral').style.display = (m.risk === 'high') ? 'flex' : 'none';
+
+  const timeline = document.getElementById('detailTimeline');
+  if (m.visits.length === 0) {
+    timeline.innerHTML = '<div class="empty-state" style="padding:24px;"><p style="color:var(--slate-500);font-size:14px;">No visits recorded yet. Tap "Record New Visit" to begin.</p></div>';
+  } else {
+    timeline.innerHTML = m.visits.slice().reverse().map(v => {
+      const symMap = { mood: 'Low mood', interest: 'Lost interest', sleep: 'Sleep issues', fatigue: 'Fatigue', appetite: 'Appetite change', guilt: 'Guilt', concentration: 'Poor focus', anxiety: 'Anxiety', thoughts: 'Harm thoughts', support: 'No support', referred: 'Referred' };
+      const symList = v.symptoms.map(s => symMap[s] || s).join(', ');
+      const isReferral = v.symptoms.includes('referred');
+      return `
+        <div class="timeline-item">
+          <div class="timeline-dot ${v.risk}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${isReferral ? '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>' : '<polyline points="20 6 9 17 4 12"></polyline>'}</svg>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-date">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              ${formatDate(v.date)}
+            </div>
+            ${symList ? '<div class="timeline-symptoms">' + v.symptoms.map(s => '<span class="symptom-chip">' + (symMap[s] || s) + '</span>').join('') + '</div>' : ''}
+            ${v.notes ? '<div class="timeline-notes">' + v.notes + '</div>' : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+function formatDate(d) {
+  const date = new Date(d);
+  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// ===================== SYMPTOM CHECK =====================
+function toggleSymptom(el, symptom) {
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+  if (cb.checked) {
+    el.classList.add('selected');
+    if (!currentSymptoms.includes(symptom)) currentSymptoms.push(symptom);
+  } else {
+    el.classList.remove('selected');
+    currentSymptoms = currentSymptoms.filter(s => s !== symptom);
+  }
+}
+
+function calculateRisk(symptoms) {
+  if (symptoms.includes('thoughts')) return { risk: 'high', score: 20 };
+  const count = symptoms.length;
+  if (count >= 6) return { risk: 'high', score: 14 + count };
+  if (count >= 3) return { risk: 'moderate', score: 7 + count };
+  return { risk: 'low', score: count };
+}
+
+function saveVisit() {
+  if (!currentMotherId) return;
+  const m = mothers.find(x => x.id === currentMotherId);
+  if (!m) return;
+
+  const notes = document.getElementById('visitNotes').value.trim();
+  const result = calculateRisk(currentSymptoms);
+
+  const visit = {
+    date: new Date().toISOString().split('T')[0],
+    symptoms: [...currentSymptoms],
+    notes: notes,
+    risk: result.risk
+  };
+
+  m.visits.push(visit);
+  m.risk = result.risk;
+  m.epdsScore = result.score;
+  saveData();
+
+  const msg = 'Visit saved for ' + m.name + '. Risk: ' + result.risk.toUpperCase();
+  document.getElementById('successMessage').textContent = msg;
+  showToast(msg, result.risk === 'high' ? 'warning' : 'success');
+  showScreen('screen-success');
+}
+
+// ===================== REFERRAL =====================
+function saveReferral() {
+  if (!currentMotherId) return;
+  const m = mothers.find(x => x.id === currentMotherId);
+  if (!m) return;
+
+  const reason = document.getElementById('referralReason').value.trim();
+  const to = document.getElementById('referralTo').value;
+  const urgency = document.getElementById('referralUrgency').value;
+
+  let valid = true;
+  if (!reason) { document.getElementById('referralReason').classList.add('error'); document.getElementById('errReferral').classList.add('show'); valid = false; setTimeout(() => document.getElementById('referralReason').classList.remove('error'), 3000); }
+  else { document.getElementById('referralReason').classList.remove('error'); document.getElementById('errReferral').classList.remove('show'); }
+
+  if (!to) { document.getElementById('referralTo').classList.add('error'); document.getElementById('errReferralTo').classList.add('show'); valid = false; setTimeout(() => document.getElementById('referralTo').classList.remove('error'), 3000); }
+  else { document.getElementById('referralTo').classList.remove('error'); document.getElementById('errReferralTo').classList.remove('show'); }
+
+  if (!urgency) { document.getElementById('referralUrgency').classList.add('error'); document.getElementById('errUrgency').classList.add('show'); valid = false; setTimeout(() => document.getElementById('referralUrgency').classList.remove('error'), 3000); }
+  else { document.getElementById('referralUrgency').classList.remove('error'); document.getElementById('errUrgency').classList.remove('show'); }
+
+  if (!valid) return;
+
+  const facility = { phc: 'Primary Health Centre', chc: 'Community Health Centre', district: 'District Hospital', private: 'Private Hospital' };
+  const urgencyText = { routine: 'Routine (1 week)', urgent: 'Urgent (24-48 hrs)', emergency: 'Emergency (same day)' };
+
+  const visit = {
+    date: new Date().toISOString().split('T')[0],
+    symptoms: ['referred'],
+    notes: 'REFERRED to ' + facility[to] + '. Urgency: ' + urgencyText[urgency] + '. Reason: ' + reason,
+    risk: 'high'
+  };
+  m.visits.push(visit);
+  m.risk = 'high';
+  saveData();
+
+  document.getElementById('referralReason').value = '';
+  document.getElementById('referralTo').value = '';
+  document.getElementById('referralUrgency').value = '';
+
+  const msg = 'Referral sent for ' + m.name + ' to ' + facility[to];
+  document.getElementById('successMessage').textContent = msg;
+  showToast(msg, 'success');
+  showScreen('screen-success');
+}
+
+// ===================== EXPORT =====================
+function exportData() {
+  if (mothers.length === 0) { showToast('No data to export', 'warning'); return; }
+  const headers = ['ID','Name','Age','Village','Phone','Delivery Date','Delivery Type','Current Risk','Risk Score','Total Visits','Last Visit Date'];
+  const rows = mothers.map(m => [
+    m.id, m.name, m.age, m.village, m.phone || '', m.deliveryDate, m.deliveryType,
+    m.risk, m.epdsScore, m.visits.length,
+    m.visits.length > 0 ? m.visits[m.visits.length-1].date : ''
+  ]);
+  const csv = [headers.join(','), ...rows.map(r => r.map(x => '"' + String(x).replace(/"/g,'""') + '"').join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'matricare_mothers_' + new Date().toISOString().split('T')[0] + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Data exported successfully', 'success');
+}
+
+// ===================== INIT =====================
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hidden');
+    const onboarded = localStorage.getItem('ppd_onboarded');
+    if (onboarded) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.getElementById('backBtn').style.display = (id === 'screen-dashboard') ? 'none' : 'inline-block';
-      if (id === 'screen-dashboard') { document.getElementById('pageTitle').textContent = 'PPD Tracker'; updateDashboard(); screenHistory = []; }
-      else if (id === 'screen-mothers') { document.getElementById('pageTitle').textContent = 'All Mothers'; renderMothersList(); }
-      else if (id === 'screen-register') { document.getElementById('pageTitle').textContent = 'Register Mother'; }
-      else if (id === 'screen-detail') { document.getElementById('pageTitle').textContent = 'Mother Profile'; renderMotherDetail(); }
-      else if (id === 'screen-symptom') { document.getElementById('pageTitle').textContent = 'Symptom Check'; currentSymptoms = []; document.querySelectorAll('.checkbox-group').forEach(el => el.classList.remove('selected')); document.querySelectorAll('.checkbox-group input').forEach(el => el.checked = false); document.getElementById('visitNotes').value = ''; }
-      else if (id === 'screen-referral') { document.getElementById('pageTitle').textContent = 'Referral'; }
+      document.getElementById('screen-dashboard').classList.add('active');
+      updateDashboard();
     }
-
-    function goBack() {
-      const prev = screenHistory.pop() || 'screen-dashboard';
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(prev).classList.add('active');
-      document.getElementById('backBtn').style.display = (prev === 'screen-dashboard') ? 'none' : 'inline-block';
-      if (prev === 'screen-dashboard') { document.getElementById('pageTitle').textContent = 'PPD Tracker'; updateDashboard(); screenHistory = []; }
-      else if (prev === 'screen-mothers') { document.getElementById('pageTitle').textContent = 'All Mothers'; }
-      else if (prev === 'screen-detail') { document.getElementById('pageTitle').textContent = 'Mother Profile'; }
-    }
-
-    document.getElementById('backBtn').onclick = goBack;
-
-    function updateDashboard() {
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('statTotal').textContent = mothers.length;
-      document.getElementById('statHighRisk').textContent = mothers.filter(m => m.risk === 'high').length;
-      document.getElementById('statDue').textContent = mothers.filter(m => { if (m.visits.length === 0) return true; const lastVisit = m.visits[m.visits.length - 1].date; const daysSince = Math.floor((new Date(today) - new Date(lastVisit)) / (1000*60*60*24)); return daysSince >= 7; }).length;
-      document.getElementById('statThisWeek').textContent = mothers.filter(m => m.visits.some(v => { const vd = new Date(v.date); const now = new Date(); const diff = Math.floor((now - vd) / (1000*60*60*24)); return diff <= 7; })).length;
-      const dueMothers = mothers.filter(m => m.risk === 'high' || m.visits.length === 0 || Math.floor((new Date(today) - new Date(m.visits[m.visits.length-1].date)) / (1000*60*60*24)) >= 7);
-      const container = document.getElementById('todayVisits');
-      if (dueMothers.length === 0) { container.innerHTML = '<div class="empty-state"><p style="color:var(--text-light);font-size:14px;">No visits scheduled for today</p></div>'; }
-      else { container.innerHTML = dueMothers.slice(0,3).map(m => `<div class="mother-item" onclick="openMother('${m.id}')"><div class="mother-info"><h3>${m.name}</h3><p>${m.village} • ${getDaysPost(m.deliveryDate)} days postpartum</p></div><span class="status-pill status-${m.risk === 'high' ? 'red' : m.risk === 'moderate' ? 'yellow' : 'green'}">${m.risk}</span></div>`).join(''); }
-    }
-
-    let currentFilter = 'all';
-    function setFilter(filter, btn) { currentFilter = filter; document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); btn.classList.add('active'); renderMothersList(); }
-
-    function renderMothersList() {
-      const search = (document.getElementById('searchInput').value || '').toLowerCase();
-      let filtered = mothers.filter(m => { const matchesSearch = m.name.toLowerCase().includes(search) || m.village.toLowerCase().includes(search); const matchesFilter = currentFilter === 'all' || m.risk === currentFilter; return matchesSearch && matchesFilter; });
-      const container = document.getElementById('mothersList');
-      if (filtered.length === 0) { container.innerHTML = '<div class="empty-state"><h3>No mothers found</h3><p style="color:var(--text-light);font-size:14px;">Try a different search or filter</p></div>'; return; }
-      container.innerHTML = filtered.map(m => `<div class="mother-item" onclick="openMother('${m.id}')"><div class="mother-info"><h3>${m.name}</h3><p>${m.village} • Age ${m.age} • ${getDaysPost(m.deliveryDate)} days post</p></div><span class="status-pill status-${m.risk === 'high' ? 'red' : m.risk === 'moderate' ? 'yellow' : 'green'}">${m.risk}</span></div>`).join('');
-    }
-
-    function filterMothers() { renderMothersList(); }
-    function getDaysPost(deliveryDate) { return Math.floor((new Date() - new Date(deliveryDate)) / (1000*60*60*24)); }
-
-    function registerMother() {
-      const name = document.getElementById('regName').value.trim();
-      const age = document.getElementById('regAge').value;
-      const village = document.getElementById('regVillage').value.trim();
-      const phone = document.getElementById('regPhone').value.trim();
-      const deliveryDate = document.getElementById('regDeliveryDate').value;
-      const deliveryType = document.getElementById('regDeliveryType').value;
-      if (!name || !age || !village || !deliveryDate) { alert('Please fill all required fields'); return; }
-      const newMother = { id: Date.now().toString(), name, age: parseInt(age), village, phone, deliveryDate, deliveryType, risk: 'low', epdsScore: 0, visits: [] };
-      mothers.push(newMother); saveData();
-      document.getElementById('regName').value = ''; document.getElementById('regAge').value = ''; document.getElementById('regVillage').value = ''; document.getElementById('regPhone').value = ''; document.getElementById('regDeliveryDate').value = '';
-      currentMotherId = newMother.id;
-      document.getElementById('successMessage').textContent = `${name} has been registered successfully.`;
-      showScreen('screen-success');
-    }
-
-    function openMother(id) { currentMotherId = id; showScreen('screen-detail'); }
-
-    function renderMotherDetail() {
-      const m = mothers.find(x => x.id === currentMotherId); if (!m) return;
-      document.getElementById('detailName').textContent = m.name;
-      document.getElementById('detailMeta').textContent = `${m.village} • Age ${m.age} • ${m.deliveryType === 'normal' ? 'Normal Delivery' : m.deliveryType === 'csection' ? 'C-Section' : m.deliveryType === 'assisted' ? 'Assisted' : 'Home Delivery'}`;
-      document.getElementById('detailRisk').textContent = m.risk.toUpperCase() + ' RISK';
-      document.getElementById('detailRisk').className = 'risk-badge risk-' + m.risk;
-      document.getElementById('detailDays').textContent = getDaysPost(m.deliveryDate);
-      document.getElementById('detailVisits').textContent = m.visits.length;
-      document.getElementById('detailScore').textContent = m.epdsScore || '--';
-      document.getElementById('btnReferral').style.display = (m.risk === 'high') ? 'block' : 'none';
-      const timeline = document.getElementById('detailTimeline');
-      if (m.visits.length === 0) { timeline.innerHTML = '<p style="color:var(--text-light);font-size:14px;">No visits recorded yet</p>'; }
-      else {
-        timeline.innerHTML = m.visits.slice().reverse().map(v => {
-          const symList = v.symptoms.map(s => ({ mood: 'Low mood', interest: 'Lost interest', sleep: 'Sleep issues', fatigue: 'Fatigue', appetite: 'Appetite change', guilt: 'Guilt', concentration: 'Poor focus', anxiety: 'Anxiety', thoughts: 'Harm thoughts', support: 'No support' })[s] || s).join(', ');
-          return `<div class="timeline-item"><div class="timeline-dot ${v.risk === 'high' ? 'red' : v.risk === 'moderate' ? 'yellow' : ''}"></div><div class="timeline-content"><div class="timeline-date">${formatDate(v.date)}</div><div style="font-size:14px;font-weight:600;margin-bottom:4px;">${symList}</div>${v.notes ? `<div style="font-size:12px;color:var(--text-light);">${v.notes}</div>` : ''}</div></div>`;
-        }).join('');
-      }
-    }
-
-    function formatDate(d) { const date = new Date(d); return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); }
-
-    function toggleSymptom(el, symptom) {
-      const cb = el.querySelector('input'); cb.checked = !cb.checked;
-      if (cb.checked) { el.classList.add('selected'); if (!currentSymptoms.includes(symptom)) currentSymptoms.push(symptom); }
-      else { el.classList.remove('selected'); currentSymptoms = currentSymptoms.filter(s => s !== symptom); }
-    }
-
-    function calculateRisk(symptoms) {
-      const score = symptoms.length;
-      if (symptoms.includes('thoughts')) return { risk: 'high', score: Math.max(score * 2, 16) };
-      if (score >= 6) return { risk: 'high', score: 14 + score };
-      if (score >= 3) return { risk: 'moderate', score: 8 + score };
-      return { risk: 'low', score: score };
-    }
-
-    function saveVisit() {
-      if (!currentMotherId) return;
-      const m = mothers.find(x => x.id === currentMotherId); if (!m) return;
-      const notes = document.getElementById('visitNotes').value.trim();
-      const result = calculateRisk(currentSymptoms);
-      const visit = { date: new Date().toISOString().split('T')[0], symptoms: [...currentSymptoms], notes, risk: result.risk };
-      m.visits.push(visit); m.risk = result.risk; m.epdsScore = result.score; saveData();
-      document.getElementById('successMessage').textContent = `Visit saved for ${m.name}. Risk level: ${result.risk.toUpperCase()}`;
-      showScreen('screen-success');
-    }
-
-    function saveReferral() {
-      if (!currentMotherId) return;
-      const m = mothers.find(x => x.id === currentMotherId); if (!m) return;
-      const reason = document.getElementById('referralReason').value.trim();
-      const to = document.getElementById('referralTo').value;
-      const urgency = document.getElementById('referralUrgency').value;
-      if (!reason) { alert('Please enter a referral reason'); return; }
-      const visit = { date: new Date().toISOString().split('T')[0], symptoms: ['referred'], notes: `REFERRED to ${to.toUpperCase()}. Urgency: ${urgency}. Reason: ${reason}`, risk: 'high' };
-      m.visits.push(visit); m.risk = 'high'; saveData();
-      document.getElementById('referralReason').value = '';
-      document.getElementById('successMessage').textContent = `Referral sent for ${m.name} to ${to.toUpperCase()}`;
-      showScreen('screen-success');
-    }
-
-    updateDashboard();
-  </script>
+  }, 1800);
+});
+</script>
 </body>
 </html>
