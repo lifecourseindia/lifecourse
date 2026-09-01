@@ -1,672 +1,4770 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 
-  <title>LifeCourse | Postpartum Care</title>
+<title>LifeCourse | Postpartum Care</title>
 
-  <link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#0b6b57">
+<meta name="description" content="Postpartum follow-up prototype for ASHA and community health workers">
 
-  <meta name="theme-color" content="#0b6b57">
+<style>
 
-  <link rel="manifest" href="manifest.json">
+/* =========================================================
+   LIFECOURSE POSTPARTUM TRACKER
+   Single-file GitHub Pages prototype
+   ========================================================= */
+
+:root {
+  --primary: #0b6b57;
+  --primary-dark: #075142;
+  --primary-light: #e7f4f0;
+
+  --bg: #f4f7f6;
+  --surface: #ffffff;
+  --surface-soft: #f8faf9;
+
+  --text: #17221f;
+  --muted: #68756f;
+  --border: #dfe7e3;
+
+  --red: #c83e3e;
+  --red-bg: #fff0f0;
+
+  --yellow: #b87800;
+  --yellow-bg: #fff8e8;
+
+  --green: #158052;
+  --green-bg: #eaf8f0;
+
+  --purple: #6658c8;
+  --purple-bg: #f0eeff;
+
+  --shadow: 0 8px 30px rgba(18, 45, 36, 0.08);
+
+  --radius: 16px;
+  --radius-small: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 760px;
+  min-height: 100vh;
+  margin: auto;
+  background: var(--surface);
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  min-height: 74px;
+
+  padding:
+    calc(14px + env(safe-area-inset-top))
+    20px
+    14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  color: white;
+  background: var(--primary);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 13px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(255,255,255,0.16);
+
+  font-size: 20px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+}
+
+.brand p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  opacity: 0.82;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button,
+.language-button {
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  background: rgba(255,255,255,0.1);
+
+  border-radius: 10px;
+
+  min-width: 40px;
+  height: 40px;
+
+  padding: 0 11px;
+
+  display: grid;
+  place-items: center;
+}
+
+.language-button {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SCREENS
+   ========================================================= */
+
+.screen {
+  display: none;
+  padding: 22px 18px 100px;
+}
+
+.screen.active {
+  display: block;
+}
+
+.page-title {
+  margin-bottom: 22px;
+}
+
+.page-title h2 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: -0.7px;
+}
+
+.page-title p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.greeting {
+  margin-bottom: 22px;
+}
+
+.greeting h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+.greeting p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.date-chip {
+  display: inline-flex;
+  margin-top: 10px;
+
+  padding: 7px 11px;
+
+  border-radius: 100px;
+
+  background: var(--primary-light);
+  color: var(--primary-dark);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  min-height: 110px;
+
+  padding: 14px 10px;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+
+  background: var(--surface);
+
+  text-align: center;
+
+  box-shadow: 0 2px 8px rgba(20, 40, 32, 0.03);
+}
+
+.summary-card span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.summary-card strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-size: 30px;
+}
+
+.summary-card small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.summary-card.urgent {
+  border-bottom: 4px solid var(--red);
+}
+
+.summary-card.today {
+  border-bottom: 4px solid var(--yellow);
+}
+
+.summary-card.overdue {
+  border-bottom: 4px solid var(--purple);
+}
+
+
+/* =========================================================
+   SEARCH AND FILTERS
+   ========================================================= */
+
+.search-box {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.search-box span {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+
+  transform: translateY(-50%);
+
+  opacity: 0.55;
+}
+
+.search-box input {
+  width: 100%;
+
+  padding: 16px 16px 16px 44px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  outline: none;
+
+  background: var(--surface-soft);
+
+  font-size: 15px;
+}
+
+.search-box input:focus {
+  border-color: var(--primary);
+  background: white;
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+
+  overflow-x: auto;
+
+  padding-bottom: 5px;
+  margin-bottom: 18px;
+
+  scrollbar-width: none;
+}
+
+.filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-button {
+  white-space: nowrap;
+
+  padding: 9px 13px;
+
+  border: 1px solid var(--border);
+  border-radius: 100px;
+
+  background: white;
+  color: var(--muted);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.filter-button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 18px 0 12px;
+}
+
+.section-heading h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.section-heading span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mother-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mother-card {
+  width: 100%;
+
+  padding: 15px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  text-align: left;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: white;
+}
+
+.mother-card:hover {
+  border-color: #b9cbc4;
+}
+
+.mother-card:active {
+  transform: scale(0.99);
+}
+
+.avatar {
+  flex-shrink: 0;
+
+  width: 46px;
+  height: 46px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--primary-light);
+  color: var(--primary);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mother-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.mother-details h4 {
+  margin: 0 0 4px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 15px;
+}
+
+.mother-details p {
+  margin: 0 0 4px;
+
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mother-details small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.risk-badge {
+  flex-shrink: 0;
+
+  padding: 6px 8px;
+
+  border-radius: 6px;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+}
+
+.risk-red {
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.risk-yellow {
+  background: var(--yellow-bg);
+  color: var(--yellow);
+}
+
+.risk-green {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.risk-purple {
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.primary-button {
+  width: 100%;
+  min-height: 54px;
+
+  margin-top: 22px;
+
+  border: none;
+  border-radius: 12px;
+
+  color: white;
+  background: var(--primary);
+
+  font-weight: 800;
+  font-size: 15px;
+
+  box-shadow: 0 8px 18px rgba(11,107,87,0.16);
+}
+
+.primary-button:hover {
+  background: var(--primary-dark);
+}
+
+.secondary-button {
+  width: 100%;
+  min-height: 50px;
+
+  margin-top: 10px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  color: var(--text);
+  background: white;
+
+  font-weight: 700;
+}
+
+.danger-button {
+  width: 100%;
+  min-height: 52px;
+
+  margin-top: 12px;
+
+  border: none;
+  border-radius: 12px;
+
+  color: white;
+  background: var(--red);
+
+  font-weight: 800;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-bottom: 18px;
+  padding: 0;
+
+  border: none;
+  background: transparent;
+
+  color: var(--primary);
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.profile-hero {
+  padding: 18px;
+
+  border-radius: var(--radius);
+
+  background: linear-gradient(
+    135deg,
+    var(--primary-light),
+    #f4faf8
+  );
+
+  margin-bottom: 18px;
+}
+
+.profile-top {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--primary);
+  color: white;
+
+  font-weight: 900;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.profile-info p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.day-status {
+  margin-top: 18px;
+
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.day-status strong {
+  font-size: 28px;
+}
+
+.day-status span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   INFORMATION CARDS
+   ========================================================= */
+
+.info-card {
+  padding: 18px;
+
+  margin-bottom: 14px;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  background: white;
+}
+
+.info-card h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+
+  padding: 12px 0;
+
+  border-top: 1px solid #edf1ef;
+}
+
+.info-row:first-of-type {
+  border-top: none;
+}
+
+.info-row span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.info-row strong {
+  text-align: right;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+.timeline {
+  position: relative;
+
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: "";
+
+  position: absolute;
+
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+
+  width: 2px;
+
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+
+  padding-bottom: 21px;
+}
+
+.timeline-dot {
+  position: absolute;
+
+  left: -30px;
+  top: 0;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background: #e8edeb;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.timeline-item.completed .timeline-dot {
+  background: var(--primary);
+  color: white;
+}
+
+.timeline-item.current .timeline-dot {
+  background: var(--yellow);
+  color: white;
+}
+
+.timeline-item.overdue .timeline-dot {
+  background: var(--red);
+  color: white;
+}
+
+.timeline-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.timeline-content strong {
+  display: block;
+  font-size: 14px;
+}
+
+.timeline-content p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+.form-card {
+  padding: 18px;
+
+  margin-bottom: 15px;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  background: white;
+}
+
+.form-card h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.form-card > p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  min-height: 48px;
+
+  padding: 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  outline: none;
+
+  color: var(--text);
+  background: white;
+}
+
+.form-group textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+}
+
+
+/* =========================================================
+   SYMPTOMS
+   ========================================================= */
+
+.symptom-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.symptom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 15px 0;
+
+  border-top: 1px solid #edf1ef;
+}
+
+.symptom-row:first-child {
+  border-top: none;
+}
+
+.symptom-text strong {
+  display: block;
+  font-size: 13px;
+}
+
+.symptom-text small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.toggle {
+  position: relative;
+
+  flex-shrink: 0;
+
+  width: 48px;
+  height: 28px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle span {
+  position: absolute;
+  inset: 0;
+
+  border-radius: 30px;
+
+  background: #dfe6e3;
+
+  transition: 0.2s;
+}
+
+.toggle span::before {
+  content: "";
+
+  position: absolute;
+
+  width: 20px;
+  height: 20px;
+
+  left: 4px;
+  top: 4px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  transition: 0.2s;
+
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+}
+
+.toggle input:checked + span {
+  background: var(--red);
+}
+
+.toggle input:checked + span::before {
+  transform: translateX(20px);
+}
+
+
+/* =========================================================
+   SEGMENT CONTROL
+   ========================================================= */
+
+.segment-control {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  padding: 4px;
+
+  border-radius: 11px;
+
+  background: #edf2f0;
+}
+
+.segment-control button {
+  min-height: 40px;
+
+  border: none;
+  border-radius: 8px;
+
+  color: var(--muted);
+  background: transparent;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.segment-control button.active {
+  color: var(--primary);
+  background: white;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+  padding: 35px 20px;
+
+  text-align: center;
+
+  color: var(--muted);
+}
+
+.empty-icon {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+.result-hero {
+  margin-top: 30px;
+
+  padding: 30px 22px;
+
+  border-radius: 20px;
+
+  text-align: center;
+}
+
+.result-icon {
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 15px;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(255,255,255,0.75);
+
+  font-size: 30px;
+}
+
+.result-hero h2 {
+  margin: 0;
+}
+
+.result-hero p {
+  margin: 10px 0 0;
+  line-height: 1.55;
+}
+
+.result-hero.red {
+  color: #8e2424;
+  background: var(--red-bg);
+}
+
+.result-hero.yellow {
+  color: #805500;
+  background: var(--yellow-bg);
+}
+
+.result-hero.green {
+  color: #11633e;
+  background: var(--green-bg);
+}
+
+.result-details {
+  margin-top: 20px;
+}
+
+
+/* =========================================================
+   BOTTOM NAVIGATION
+   ========================================================= */
+
+.bottom-nav {
+  position: fixed;
+
+  left: 50%;
+  bottom: 0;
+
+  transform: translateX(-50%);
+
+  width: 100%;
+  max-width: 760px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  padding:
+    8px
+    8px
+    calc(8px + env(safe-area-inset-bottom));
+
+  border-top: 1px solid var(--border);
+
+  background: rgba(255,255,255,0.96);
+
+  backdrop-filter: blur(12px);
+}
+
+.nav-button {
+  min-height: 52px;
+
+  border: none;
+  border-radius: 10px;
+
+  color: var(--muted);
+  background: transparent;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nav-button span {
+  display: block;
+  font-size: 19px;
+  margin-bottom: 2px;
+}
+
+.nav-button.active {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast {
+  position: fixed;
+
+  left: 50%;
+  bottom: 85px;
+
+  transform: translateX(-50%) translateY(20px);
+
+  z-index: 100;
+
+  min-width: 220px;
+  max-width: 85%;
+
+  padding: 13px 16px;
+
+  border-radius: 10px;
+
+  color: white;
+  background: #25312d;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: 0.25s;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 120;
+
+  display: none;
+  align-items: flex-end;
+
+  background: rgba(10,20,16,0.45);
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal {
+  width: 100%;
+  max-width: 760px;
+
+  margin: auto;
+
+  max-height: 90vh;
+  overflow-y: auto;
+
+  padding: 22px 18px
+           calc(22px + env(safe-area-inset-bottom));
+
+  border-radius: 22px 22px 0 0;
+
+  background: white;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (min-width: 700px) {
+
+  .screen {
+    padding: 28px 28px 105px;
+  }
+
+  .topbar {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .summary-card {
+    padding: 18px;
+  }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
-  <div class="app">
+<div class="app-shell">
 
-    <!-- HEADER -->
 
-    <header class="topbar">
+<!-- ======================================================
+     HEADER
+     ====================================================== -->
 
-      <div>
+<header class="topbar">
 
-        <h1>LifeCourse</h1>
+  <div class="brand">
 
-        <p>Postpartum Follow-up</p>
+    <div class="brand-mark">♥</div>
 
-      </div>
+    <div>
 
-      <button class="language-btn">
-        தமிழ்
-      </button>
+      <h1>LifeCourse</h1>
 
-    </header>
-
-
-    <!-- DASHBOARD -->
-
-    <main id="dashboard">
-
-      <section class="welcome">
-
-        <h2>Good morning 👋</h2>
-
-        <p>ASHA Worker Dashboard</p>
-
-      </section>
-
-
-      <!-- SUMMARY -->
-
-      <section class="summary-grid">
-
-        <div class="summary-card urgent">
-
-          <span>URGENT</span>
-
-          <strong id="urgentCount">2</strong>
-
-          <small>Need attention</small>
-
-        </div>
-
-
-        <div class="summary-card today">
-
-          <span>TODAY</span>
-
-          <strong id="todayCount">6</strong>
-
-          <small>Follow-ups</small>
-
-        </div>
-
-
-        <div class="summary-card overdue">
-
-          <span>OVERDUE</span>
-
-          <strong id="overdueCount">3</strong>
-
-          <small>Visits</small>
-
-        </div>
-
-      </section>
-
-
-      <!-- SEARCH -->
-
-      <section class="search-section">
-
-        <input
-          type="text"
-          id="searchMother"
-          placeholder="Search mother by name or ID"
-        >
-
-      </section>
-
-
-      <!-- MOTHER LIST -->
-
-      <section>
-
-        <div class="section-header">
-
-          <h2>Today's Mothers</h2>
-
-          <span>Priority list</span>
-
-        </div>
-
-
-        <div id="motherList">
-
-
-          <div class="mother-card urgent-card"
-               onclick="openMother('M001')">
-
-            <div class="avatar">
-              RK
-            </div>
-
-            <div class="mother-info">
-
-              <h3>R Kavitha</h3>
-
-              <p>
-                Day 7 postpartum
-              </p>
-
-              <small>
-                C-section • Fever reported
-              </small>
-
-            </div>
-
-            <div class="risk-badge red">
-
-              URGENT
-
-            </div>
-
-          </div>
-
-
-
-          <div class="mother-card"
-               onclick="openMother('M002')">
-
-            <div class="avatar">
-
-              SM
-
-            </div>
-
-            <div class="mother-info">
-
-              <h3>S Meena</h3>
-
-              <p>
-                Day 14 postpartum
-              </p>
-
-              <small>
-                Normal delivery
-              </small>
-
-            </div>
-
-            <div class="risk-badge yellow">
-
-              FOLLOW-UP
-
-            </div>
-
-          </div>
-
-
-
-          <div class="mother-card"
-               onclick="openMother('M003')">
-
-            <div class="avatar">
-
-              PV
-
-            </div>
-
-            <div class="mother-info">
-
-              <h3>P Vidhya</h3>
-
-              <p>
-                Day 28 postpartum
-              </p>
-
-              <small>
-                Routine visit
-              </small>
-
-            </div>
-
-            <div class="risk-badge green">
-
-              STABLE
-
-            </div>
-
-          </div>
-
-
-        </div>
-
-      </section>
-
-
-      <!-- ADD MOTHER -->
-
-      <button
-        class="primary-btn"
-        onclick="showRegister()">
-
-        + Register New Mother
-
-      </button>
-
-
-    </main>
-
-
-
-    <!-- MOTHER PROFILE -->
-
-    <main id="motherProfile"
-          class="hidden">
-
-      <button
-        class="back-btn"
-        onclick="goDashboard()">
-
-        ← Back
-
-      </button>
-
-
-      <section class="profile-header">
-
-        <div class="profile-avatar">
-
-          RK
-
-        </div>
-
-
-        <div>
-
-          <h2 id="motherName">
-
-            R Kavitha
-
-          </h2>
-
-
-          <p>
-
-            Mother ID: M001
-
-          </p>
-
-
-          <p>
-
-            Day 7 postpartum
-
-          </p>
-
-        </div>
-
-      </section>
-
-
-
-      <!-- DELIVERY INFORMATION -->
-
-      <section class="info-card">
-
-        <h3>Delivery Information</h3>
-
-
-        <div class="info-row">
-
-          <span>Delivery</span>
-
-          <strong>C-section</strong>
-
-        </div>
-
-
-        <div class="info-row">
-
-          <span>Delivery Date</span>
-
-          <strong>25 Aug 2026</strong>
-
-        </div>
-
-
-        <div class="info-row">
-
-          <span>Hospital</span>
-
-          <strong>Government Hospital</strong>
-
-        </div>
-
-
-      </section>
-
-
-
-      <!-- FOLLOW UP -->
-
-      <section>
-
-        <h3>Postpartum Follow-up</h3>
-
-
-        <div class="timeline">
-
-
-          <div class="timeline-item completed">
-
-            <span>✓</span>
-
-            <div>
-
-              <strong>Day 1</strong>
-
-              <p>Completed</p>
-
-            </div>
-
-          </div>
-
-
-          <div class="timeline-item completed">
-
-            <span>✓</span>
-
-            <div>
-
-              <strong>Day 3</strong>
-
-              <p>Completed</p>
-
-            </div>
-
-          </div>
-
-
-          <div class="timeline-item active">
-
-            <span>7</span>
-
-            <div>
-
-              <strong>Day 7</strong>
-
-              <p>Due today</p>
-
-            </div>
-
-          </div>
-
-
-          <div class="timeline-item">
-
-            <span>14</span>
-
-            <div>
-
-              <strong>Day 14</strong>
-
-              <p>Upcoming</p>
-
-            </div>
-
-          </div>
-
-
-        </div>
-
-      </section>
-
-
-
-      <button
-        class="primary-btn"
-        onclick="startVisit()">
-
-        Start Follow-up Visit
-
-      </button>
-
-
-    </main>
-
-
-
-    <!-- ASSESSMENT -->
-
-    <main id="assessment"
-          class="hidden">
-
-      <button
-        class="back-btn"
-        onclick="openMother('M001')">
-
-        ← Mother Profile
-
-      </button>
-
-
-      <h2>Postpartum Assessment</h2>
-
-      <p class="subtitle">
-
-        Complete the quick assessment
-
+      <p data-i18n="postpartumCare">
+        Postpartum Care
       </p>
 
-
-
-      <!-- VITALS -->
-
-      <section class="form-section">
-
-        <h3>Vitals</h3>
-
-
-        <label>
-
-          Blood Pressure
-
-          <input
-            type="text"
-            id="bp"
-            placeholder="Example: 120/80"
-          >
-
-        </label>
-
-
-        <label>
-
-          Temperature
-
-          <input
-            type="number"
-            id="temperature"
-            placeholder="°C"
-          >
-
-        </label>
-
-
-      </section>
-
-
-
-      <!-- DANGER SIGNS -->
-
-      <section class="form-section">
-
-        <h3>Danger Signs</h3>
-
-
-        <div class="symptom-option">
-
-          <span>Heavy vaginal bleeding</span>
-
-          <input
-            type="checkbox"
-            class="danger"
-          >
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Fever</span>
-
-          <input
-            type="checkbox"
-            class="danger"
-          >
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Severe headache</span>
-
-          <input
-            type="checkbox"
-            class="danger"
-          >
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Blurred vision</span>
-
-          <input
-            type="checkbox"
-            class="danger"
-          >
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Breathlessness</span>
-
-          <input
-            type="checkbox"
-            class="danger"
-          >
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Severe abdominal pain</span>
-
-          <input
-            type="checkbox"
-            class="danger"
-          >
-
-        </div>
-
-
-      </section>
-
-
-
-      <!-- C SECTION -->
-
-      <section class="form-section">
-
-        <h3>C-section / Wound</h3>
-
-
-        <div class="symptom-option">
-
-          <span>Wound pain increasing</span>
-
-          <input type="checkbox"
-                 class="danger">
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Redness or swelling</span>
-
-          <input type="checkbox"
-                 class="danger">
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Discharge from wound</span>
-
-          <input type="checkbox"
-                 class="danger">
-
-        </div>
-
-
-      </section>
-
-
-
-      <!-- MENTAL WELLBEING -->
-
-      <section class="form-section">
-
-        <h3>Mother's Wellbeing</h3>
-
-
-        <div class="symptom-option">
-
-          <span>Feeling persistently sad</span>
-
-          <input type="checkbox"
-                 class="concern">
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Extreme anxiety</span>
-
-          <input type="checkbox"
-                 class="concern">
-
-        </div>
-
-
-        <div class="symptom-option">
-
-          <span>Difficulty caring for self or baby</span>
-
-          <input type="checkbox"
-                 class="concern">
-
-        </div>
-
-
-      </section>
-
-
-
-      <button
-        class="primary-btn"
-        onclick="completeAssessment()">
-
-        Complete Assessment
-
-      </button>
-
-
-    </main>
-
-
-
-    <!-- RESULT -->
-
-    <main id="result"
-          class="hidden">
-
-      <div id="resultContent"></div>
-
-    </main>
-
+    </div>
 
   </div>
 
 
-  <script src="app.js"></script>
+  <div class="header-actions">
+
+    <button
+      class="language-button"
+      onclick="toggleLanguage()"
+      id="languageButton">
+
+      தமிழ்
+
+    </button>
+
+
+    <button
+      class="icon-button"
+      onclick="exportCSV()"
+      title="Export data">
+
+      ↓
+
+    </button>
+
+  </div>
+
+</header>
+
+
+
+<!-- ======================================================
+     DASHBOARD
+     ====================================================== -->
+
+<main
+  id="dashboard"
+  class="screen active">
+
+  <section class="greeting">
+
+    <h2 data-i18n="goodMorning">
+      Good morning
+    </h2>
+
+    <p data-i18n="dashboardSubtitle">
+      Postpartum mothers needing your attention
+    </p>
+
+    <div
+      class="date-chip"
+      id="todayDate">
+    </div>
+
+  </section>
+
+
+
+  <section class="summary-grid">
+
+    <button
+      class="summary-card urgent"
+      onclick="setFilter('urgent')">
+
+      <span data-i18n="urgent">
+        URGENT
+      </span>
+
+      <strong id="urgentCount">0</strong>
+
+      <small data-i18n="needAttention">
+        Need attention
+      </small>
+
+    </button>
+
+
+    <button
+      class="summary-card today"
+      onclick="setFilter('today')">
+
+      <span data-i18n="today">
+        TODAY
+      </span>
+
+      <strong id="todayCount">0</strong>
+
+      <small data-i18n="followUps">
+        Follow-ups
+      </small>
+
+    </button>
+
+
+    <button
+      class="summary-card overdue"
+      onclick="setFilter('overdue')">
+
+      <span data-i18n="overdue">
+        OVERDUE
+      </span>
+
+      <strong id="overdueCount">0</strong>
+
+      <small data-i18n="visits">
+        Visits
+      </small>
+
+    </button>
+
+  </section>
+
+
+
+  <div class="search-box">
+
+    <span>⌕</span>
+
+    <input
+      type="text"
+      id="searchInput"
+      data-i18n-placeholder="searchPlaceholder"
+      placeholder="Search mother by name or ID"
+      oninput="renderMotherList()">
+
+  </div>
+
+
+
+  <div class="filter-row">
+
+    <button
+      class="filter-button active"
+      data-filter="all"
+      onclick="setFilter('all')">
+
+      All
+
+    </button>
+
+
+    <button
+      class="filter-button"
+      data-filter="urgent"
+      onclick="setFilter('urgent')">
+
+      Urgent
+
+    </button>
+
+
+    <button
+      class="filter-button"
+      data-filter="today"
+      onclick="setFilter('today')">
+
+      Today
+
+    </button>
+
+
+    <button
+      class="filter-button"
+      data-filter="overdue"
+      onclick="setFilter('overdue')">
+
+      Overdue
+
+    </button>
+
+
+    <button
+      class="filter-button"
+      data-filter="stable"
+      onclick="setFilter('stable')">
+
+      Stable
+
+    </button>
+
+  </div>
+
+
+
+  <div class="section-heading">
+
+    <h3 data-i18n="mothers">
+      Mothers
+    </h3>
+
+    <span id="listCount"></span>
+
+  </div>
+
+
+
+  <div
+    id="motherList"
+    class="mother-list">
+  </div>
+
+
+
+  <button
+    class="primary-button"
+    onclick="openRegistration()"
+    data-i18n="registerMother">
+
+    + Register New Mother
+
+  </button>
+
+</main>
+
+
+
+<!-- ======================================================
+     PROFILE
+     ====================================================== -->
+
+<main
+  id="profileScreen"
+  class="screen">
+
+  <button
+    class="back-button"
+    onclick="showScreen('dashboard')">
+
+    ← <span data-i18n="backToDashboard">
+      Dashboard
+    </span>
+
+  </button>
+
+
+  <div id="profileContent"></div>
+
+</main>
+
+
+
+<!-- ======================================================
+     ASSESSMENT
+     ====================================================== -->
+
+<main
+  id="assessmentScreen"
+  class="screen">
+
+  <button
+    class="back-button"
+    onclick="returnToProfile()">
+
+    ← <span data-i18n="backToMother">
+      Mother Profile
+    </span>
+
+  </button>
+
+
+  <div class="page-title">
+
+    <h2 data-i18n="assessment">
+      Postpartum Assessment
+    </h2>
+
+    <p data-i18n="assessmentSubtitle">
+      Record today's follow-up visit
+    </p>
+
+  </div>
+
+
+
+  <div class="form-card">
+
+    <h3 data-i18n="vitals">
+      Vitals
+    </h3>
+
+    <p>
+      Optional measurements available during the visit.
+    </p>
+
+
+    <div class="form-group">
+
+      <label data-i18n="bloodPressure">
+        Blood Pressure
+      </label>
+
+      <input
+        type="text"
+        id="visitBP"
+        placeholder="120/80">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label data-i18n="temperature">
+        Temperature
+      </label>
+
+      <input
+        type="number"
+        step="0.1"
+        id="visitTemperature"
+        placeholder="°C">
+
+    </div>
+
+  </div>
+
+
+
+  <div class="form-card">
+
+    <h3 data-i18n="dangerSigns">
+      Danger Signs
+    </h3>
+
+    <p data-i18n="dangerSignsSubtitle">
+      Select symptoms reported or observed.
+    </p>
+
+
+    <div class="symptom-list" id="dangerSymptomList"></div>
+
+  </div>
+
+
+
+  <div class="form-card">
+
+    <h3 data-i18n="woundCare">
+      C-section / Wound Care
+    </h3>
+
+    <p>
+      Complete where relevant.
+    </p>
+
+
+    <div class="symptom-list" id="woundSymptomList"></div>
+
+  </div>
+
+
+
+  <div class="form-card">
+
+    <h3 data-i18n="mentalWellbeing">
+      Mother's Wellbeing
+    </h3>
+
+    <p>
+      Ask sensitively and record concerns.
+    </p>
+
+
+    <div class="symptom-list" id="mentalSymptomList"></div>
+
+  </div>
+
+
+
+  <div class="form-card">
+
+    <h3 data-i18n="generalNotes">
+      General Notes
+    </h3>
+
+    <div class="form-group">
+
+      <textarea
+        id="visitNotes"
+        placeholder="Add observations from today's visit..."></textarea>
+
+    </div>
+
+  </div>
+
+
+
+  <button
+    class="primary-button"
+    onclick="completeAssessment()"
+    data-i18n="completeAssessment">
+
+    Complete Assessment
+
+  </button>
+
+</main>
+
+
+
+<!-- ======================================================
+     RESULT
+     ====================================================== -->
+
+<main
+  id="resultScreen"
+  class="screen">
+
+  <div id="resultContent"></div>
+
+</main>
+
+
+
+<!-- ======================================================
+     MOTHERS SCREEN
+     ====================================================== -->
+
+<main
+  id="mothersScreen"
+  class="screen">
+
+  <div class="page-title">
+
+    <h2 data-i18n="allMothers">
+      All Mothers
+    </h2>
+
+    <p data-i18n="allMothersSubtitle">
+      Registered postpartum follow-up records
+    </p>
+
+  </div>
+
+
+  <div
+    id="allMotherList"
+    class="mother-list">
+  </div>
+
+</main>
+
+
+
+<!-- ======================================================
+     SETTINGS
+     ====================================================== -->
+
+<main
+  id="settingsScreen"
+  class="screen">
+
+  <div class="page-title">
+
+    <h2 data-i18n="settings">
+      Settings
+    </h2>
+
+    <p>
+      Prototype data and application controls
+    </p>
+
+  </div>
+
+
+  <div class="info-card">
+
+    <h3>Data Storage</h3>
+
+    <p style="color: var(--muted); font-size: 13px; line-height: 1.5;">
+
+      This prototype stores data locally in this browser using
+      LocalStorage. It is not suitable for real identifiable patient data.
+
+    </p>
+
+  </div>
+
+
+  <div class="info-card">
+
+    <h3>Demo Data</h3>
+
+    <button
+      class="secondary-button"
+      onclick="resetDemoData()">
+
+      Reset Demo Data
+
+    </button>
+
+  </div>
+
+
+  <div class="info-card">
+
+    <h3>Export</h3>
+
+    <button
+      class="secondary-button"
+      onclick="exportCSV()">
+
+      Export Mothers and Visit Data as CSV
+
+    </button>
+
+  </div>
+
+
+  <div class="info-card">
+
+    <h3>Prototype Disclaimer</h3>
+
+    <p style="color: var(--muted); font-size: 13px; line-height: 1.5;">
+
+      Risk classifications in this demonstration are not clinical advice.
+      A production version should use clinically validated pathways and
+      official programme protocols.
+
+    </p>
+
+  </div>
+
+</main>
+
+
+
+<!-- ======================================================
+     BOTTOM NAVIGATION
+     ====================================================== -->
+
+<nav class="bottom-nav">
+
+  <button
+    class="nav-button active"
+    data-screen="dashboard"
+    onclick="showScreen('dashboard')">
+
+    <span>⌂</span>
+
+    <span data-i18n="home">
+      Home
+    </span>
+
+  </button>
+
+
+  <button
+    class="nav-button"
+    data-screen="mothersScreen"
+    onclick="showScreen('mothersScreen')">
+
+    <span>◉</span>
+
+    <span data-i18n="mothers">
+      Mothers
+    </span>
+
+  </button>
+
+
+  <button
+    class="nav-button"
+    data-screen="settingsScreen"
+    onclick="showScreen('settingsScreen')">
+
+    <span>⚙</span>
+
+    <span data-i18n="settings">
+      Settings
+    </span>
+
+  </button>
+
+</nav>
+
+
+
+<!-- ======================================================
+     REGISTRATION MODAL
+     ====================================================== -->
+
+<div
+  id="registrationModal"
+  class="modal-overlay">
+
+  <div class="modal">
+
+    <button
+      class="back-button"
+      onclick="closeRegistration()">
+
+      ← Close
+
+    </button>
+
+
+    <h2 data-i18n="registerMother">
+      Register New Mother
+    </h2>
+
+
+    <div class="form-group">
+
+      <label data-i18n="motherName">
+        Mother's Name
+      </label>
+
+      <input
+        id="newMotherName"
+        type="text"
+        placeholder="Enter full name">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label data-i18n="phoneNumber">
+        Phone Number
+      </label>
+
+      <input
+        id="newMotherPhone"
+        type="tel"
+        placeholder="Optional">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label data-i18n="deliveryDate">
+        Delivery Date
+      </label>
+
+      <input
+        id="newDeliveryDate"
+        type="date">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label data-i18n="deliveryType">
+        Delivery Type
+      </label>
+
+      <select id="newDeliveryType">
+
+        <option value="Normal Delivery">
+          Normal Delivery
+        </option>
+
+        <option value="C-section">
+          C-section
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label data-i18n="hospital">
+        Hospital / Facility
+      </label>
+
+      <input
+        id="newHospital"
+        type="text"
+        placeholder="Facility name">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label data-i18n="village">
+        Village / Area
+      </label>
+
+      <input
+        id="newVillage"
+        type="text"
+        placeholder="Village or locality">
+
+    </div>
+
+
+    <button
+      class="primary-button"
+      onclick="registerMother()"
+      data-i18n="saveMother">
+
+      Save Mother
+
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<!-- ======================================================
+     TOAST
+     ====================================================== -->
+
+<div
+  id="toast"
+  class="toast">
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+const STORAGE_KEY = "lifecourse_postpartum_mothers_v1";
+
+let activeFilter = "all";
+let selectedMotherId = null;
+let currentLanguage = "en";
+
+
+const VISIT_SCHEDULE = [
+  1,
+  3,
+  7,
+  14,
+  28,
+  42
+];
+
+
+const dangerSymptoms = [
+
+  {
+    id: "heavyBleeding",
+    title: "Heavy vaginal bleeding",
+    description: "Bleeding reported as unusually heavy"
+  },
+
+  {
+    id: "fever",
+    title: "Fever",
+    description: "Mother reports fever or high temperature"
+  },
+
+  {
+    id: "severeHeadache",
+    title: "Severe headache",
+    description: "Persistent or severe headache"
+  },
+
+  {
+    id: "blurredVision",
+    title: "Blurred vision",
+    description: "New visual disturbance"
+  },
+
+  {
+    id: "breathlessness",
+    title: "Breathlessness",
+    description: "Difficulty breathing or shortness of breath"
+  },
+
+  {
+    id: "abdominalPain",
+    title: "Severe abdominal pain",
+    description: "Severe or worsening abdominal pain"
+  }
+
+];
+
+
+const woundSymptoms = [
+
+  {
+    id: "woundPain",
+    title: "Increasing wound pain",
+    description: "Pain worsening around surgical wound"
+  },
+
+  {
+    id: "woundRedness",
+    title: "Redness or swelling",
+    description: "Redness, warmth or swelling observed"
+  },
+
+  {
+    id: "woundDischarge",
+    title: "Discharge from wound",
+    description: "Fluid or discharge observed"
+  }
+
+];
+
+
+const mentalSymptoms = [
+
+  {
+    id: "persistentSadness",
+    title: "Feeling persistently sad",
+    description: "Persistent low mood or sadness"
+  },
+
+  {
+    id: "extremeAnxiety",
+    title: "Extreme anxiety",
+    description: "Severe worry or anxiety affecting daily life"
+  },
+
+  {
+    id: "difficultyCaring",
+    title: "Difficulty caring for self or baby",
+    description: "Functional concern requiring follow-up"
+  }
+
+];
+
+
+/* =========================================================
+   TRANSLATIONS
+   ========================================================= */
+
+const translations = {
+
+  en: {
+
+    postpartumCare: "Postpartum Care",
+
+    goodMorning: "Good morning",
+
+    dashboardSubtitle:
+      "Postpartum mothers needing your attention",
+
+    urgent: "URGENT",
+
+    needAttention: "Need attention",
+
+    today: "TODAY",
+
+    followUps: "Follow-ups",
+
+    overdue: "OVERDUE",
+
+    visits: "Visits",
+
+    searchPlaceholder:
+      "Search mother by name or ID",
+
+    mothers: "Mothers",
+
+    registerMother:
+      "+ Register New Mother",
+
+    backToDashboard:
+      "Dashboard",
+
+    backToMother:
+      "Mother Profile",
+
+    assessment:
+      "Postpartum Assessment",
+
+    assessmentSubtitle:
+      "Record today's follow-up visit",
+
+    vitals:
+      "Vitals",
+
+    bloodPressure:
+      "Blood Pressure",
+
+    temperature:
+      "Temperature",
+
+    dangerSigns:
+      "Danger Signs",
+
+    dangerSignsSubtitle:
+      "Select symptoms reported or observed.",
+
+    woundCare:
+      "C-section / Wound Care",
+
+    mentalWellbeing:
+      "Mother's Wellbeing",
+
+    generalNotes:
+      "General Notes",
+
+    completeAssessment:
+      "Complete Assessment",
+
+    allMothers:
+      "All Mothers",
+
+    allMothersSubtitle:
+      "Registered postpartum follow-up records",
+
+    settings:
+      "Settings",
+
+    home:
+      "Home",
+
+    motherName:
+      "Mother's Name",
+
+    phoneNumber:
+      "Phone Number",
+
+    deliveryDate:
+      "Delivery Date",
+
+    deliveryType:
+      "Delivery Type",
+
+    hospital:
+      "Hospital / Facility",
+
+    village:
+      "Village / Area",
+
+    saveMother:
+      "Save Mother"
+
+  },
+
+
+  ta: {
+
+    postpartumCare:
+      "பிரசவத்திற்குப் பிந்தைய பராமரிப்பு",
+
+    goodMorning:
+      "வணக்கம்",
+
+    dashboardSubtitle:
+      "உங்கள் கவனம் தேவைப்படும் தாய்மார்கள்",
+
+    urgent:
+      "அவசரம்",
+
+    needAttention:
+      "கவனம் தேவை",
+
+    today:
+      "இன்று",
+
+    followUps:
+      "தொடர்பு வருகைகள்",
+
+    overdue:
+      "தாமதம்",
+
+    visits:
+      "வருகைகள்",
+
+    searchPlaceholder:
+      "பெயர் அல்லது ID மூலம் தேடவும்",
+
+    mothers:
+      "தாய்மார்கள்",
+
+    registerMother:
+      "+ புதிய தாயை பதிவு செய்யவும்",
+
+    backToDashboard:
+      "டாஷ்போர்டு",
+
+    backToMother:
+      "தாய் விவரம்",
+
+    assessment:
+      "பிரசவத்திற்குப் பிந்தைய மதிப்பீடு",
+
+    assessmentSubtitle:
+      "இன்றைய வருகையை பதிவு செய்யவும்",
+
+    vitals:
+      "உடல் அளவீடுகள்",
+
+    bloodPressure:
+      "இரத்த அழுத்தம்",
+
+    temperature:
+      "உடல் வெப்பநிலை",
+
+    dangerSigns:
+      "ஆபத்து அறிகுறிகள்",
+
+    dangerSignsSubtitle:
+      "காணப்பட்ட அல்லது தெரிவிக்கப்பட்ட அறிகுறிகளை தேர்வு செய்யவும்.",
+
+    woundCare:
+      "C-section / காயம் பராமரிப்பு",
+
+    mentalWellbeing:
+      "தாயின் மனநலம்",
+
+    generalNotes:
+      "குறிப்புகள்",
+
+    completeAssessment:
+      "மதிப்பீட்டை முடிக்கவும்",
+
+    allMothers:
+      "அனைத்து தாய்மார்கள்",
+
+    allMothersSubtitle:
+      "பதிவு செய்யப்பட்ட பின்தொடர்பு பதிவுகள்",
+
+    settings:
+      "அமைப்புகள்",
+
+    home:
+      "முகப்பு",
+
+    motherName:
+      "தாயின் பெயர்",
+
+    phoneNumber:
+      "தொலைபேசி எண்",
+
+    deliveryDate:
+      "பிரசவ தேதி",
+
+    deliveryType:
+      "பிரசவ வகை",
+
+    hospital:
+      "மருத்துவமனை / மையம்",
+
+    village:
+      "கிராமம் / பகுதி",
+
+    saveMother:
+      "தாயை சேமிக்கவும்"
+
+  }
+
+};
+
+
+/* =========================================================
+   DEMO DATA
+   ========================================================= */
+
+function daysAgo(days) {
+
+  const date = new Date();
+
+  date.setDate(
+    date.getDate() - days
+  );
+
+  return date
+    .toISOString()
+    .split("T")[0];
+
+}
+
+
+function createDemoData() {
+
+  return [
+
+    {
+
+      id: "M001",
+
+      name: "R Kavitha",
+
+      phone: "9876543210",
+
+      deliveryDate: daysAgo(7),
+
+      deliveryType: "C-section",
+
+      hospital:
+        "Government Hospital",
+
+      village:
+        "Pallavaram",
+
+      visits: [
+
+        {
+          date: daysAgo(6),
+          day: 1,
+          risk: "stable",
+          symptoms: [],
+          notes:
+            "Routine follow-up completed."
+        },
+
+        {
+          date: daysAgo(4),
+          day: 3,
+          risk: "stable",
+          symptoms: [],
+          notes:
+            "Mother recovering."
+        }
+
+      ],
+
+      manualRisk: "urgent",
+
+      createdAt:
+        new Date().toISOString()
+
+    },
+
+
+    {
+
+      id: "M002",
+
+      name: "S Meena",
+
+      phone: "9876543211",
+
+      deliveryDate: daysAgo(14),
+
+      deliveryType: "Normal Delivery",
+
+      hospital:
+        "Primary Health Centre",
+
+      village:
+        "Chromepet",
+
+      visits: [
+
+        {
+          date: daysAgo(13),
+          day: 1,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        },
+
+        {
+          date: daysAgo(11),
+          day: 3,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        },
+
+        {
+          date: daysAgo(7),
+          day: 7,
+          risk: "followup",
+          symptoms: ["persistentSadness"],
+          notes:
+            "Needs closer wellbeing follow-up."
+        }
+
+      ],
+
+      manualRisk: "followup",
+
+      createdAt:
+        new Date().toISOString()
+
+    },
+
+
+    {
+
+      id: "M003",
+
+      name: "P Vidhya",
+
+      phone: "9876543212",
+
+      deliveryDate: daysAgo(28),
+
+      deliveryType: "Normal Delivery",
+
+      hospital:
+        "Government Hospital",
+
+      village:
+        "Tambaram",
+
+      visits: [
+
+        {
+          date: daysAgo(27),
+          day: 1,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        },
+
+        {
+          date: daysAgo(25),
+          day: 3,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        },
+
+        {
+          date: daysAgo(21),
+          day: 7,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        },
+
+        {
+          date: daysAgo(14),
+          day: 14,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        }
+
+      ],
+
+      manualRisk: "stable",
+
+      createdAt:
+        new Date().toISOString()
+
+    },
+
+
+    {
+
+      id: "M004",
+
+      name: "A Lakshmi",
+
+      phone: "9876543213",
+
+      deliveryDate: daysAgo(3),
+
+      deliveryType: "C-section",
+
+      hospital:
+        "Government Hospital",
+
+      village:
+        "Pallavaram",
+
+      visits: [
+
+        {
+          date: daysAgo(2),
+          day: 1,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        }
+
+      ],
+
+      manualRisk: "stable",
+
+      createdAt:
+        new Date().toISOString()
+
+    },
+
+
+    {
+
+      id: "M005",
+
+      name: "K Priya",
+
+      phone: "9876543214",
+
+      deliveryDate: daysAgo(18),
+
+      deliveryType: "Normal Delivery",
+
+      hospital:
+        "Primary Health Centre",
+
+      village:
+        "Chennai",
+
+      visits: [
+
+        {
+          date: daysAgo(17),
+          day: 1,
+          risk: "stable",
+          symptoms: [],
+          notes: ""
+        }
+
+      ],
+
+      manualRisk: "stable",
+
+      createdAt:
+        new Date().toISOString()
+
+    }
+
+  ];
+
+}
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+function loadMothers() {
+
+  const stored =
+    localStorage.getItem(STORAGE_KEY);
+
+  if (!stored) {
+
+    const demo =
+      createDemoData();
+
+    saveMothers(demo);
+
+    return demo;
+
+  }
+
+  try {
+
+    return JSON.parse(stored);
+
+  }
+
+  catch (error) {
+
+    const demo =
+      createDemoData();
+
+    saveMothers(demo);
+
+    return demo;
+
+  }
+
+}
+
+
+function saveMothers(mothers) {
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(mothers)
+  );
+
+}
+
+
+let mothers = loadMothers();
+
+
+/* =========================================================
+   DATE HELPERS
+   ========================================================= */
+
+function getPostpartumDay(deliveryDate) {
+
+  const start =
+    new Date(deliveryDate);
+
+  start.setHours(0,0,0,0);
+
+  const today =
+    new Date();
+
+  today.setHours(0,0,0,0);
+
+  const difference =
+    today - start;
+
+  return Math.max(
+    0,
+    Math.floor(
+      difference /
+      (1000 * 60 * 60 * 24)
+    )
+  );
+
+}
+
+
+function formatDate(dateString) {
+
+  if (!dateString) return "-";
+
+  const date =
+    new Date(dateString);
+
+  return date.toLocaleDateString(
+    currentLanguage === "ta"
+      ? "ta-IN"
+      : "en-IN",
+    {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }
+  );
+
+}
+
+
+function formatToday() {
+
+  return new Date()
+    .toLocaleDateString(
+      currentLanguage === "ta"
+        ? "ta-IN"
+        : "en-IN",
+      {
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+      }
+    );
+
+}
+
+
+/* =========================================================
+   VISIT STATUS
+   ========================================================= */
+
+function getCompletedVisitDays(mother) {
+
+  return mother.visits
+    .map(visit => visit.day);
+
+}
+
+
+function getNextScheduledDay(mother) {
+
+  const completed =
+    getCompletedVisitDays(mother);
+
+  return VISIT_SCHEDULE.find(
+    day => !completed.includes(day)
+  ) || null;
+
+}
+
+
+function getVisitStatus(mother) {
+
+  const postpartumDay =
+    getPostpartumDay(
+      mother.deliveryDate
+    );
+
+  const nextDay =
+    getNextScheduledDay(mother);
+
+  if (!nextDay) {
+
+    return "completed";
+
+  }
+
+  if (postpartumDay > nextDay) {
+
+    return "overdue";
+
+  }
+
+  if (postpartumDay === nextDay) {
+
+    return "today";
+
+  }
+
+  return "upcoming";
+
+}
+
+
+/* =========================================================
+   RISK
+   ========================================================= */
+
+function getCurrentRisk(mother) {
+
+  if (
+    mother.manualRisk === "urgent"
+  ) {
+
+    return "urgent";
+
+  }
+
+  const visits =
+    mother.visits || [];
+
+  if (visits.length === 0) {
+
+    return mother.manualRisk ||
+      "stable";
+
+  }
+
+  const latest =
+    visits[visits.length - 1];
+
+  return latest.risk ||
+    mother.manualRisk ||
+    "stable";
+
+}
+
+
+function getRiskLabel(risk) {
+
+  const labels = {
+
+    urgent:
+      currentLanguage === "ta"
+        ? "அவசரம்"
+        : "URGENT",
+
+    followup:
+      currentLanguage === "ta"
+        ? "பின்தொடர்பு"
+        : "FOLLOW-UP",
+
+    stable:
+      currentLanguage === "ta"
+        ? "நிலையான"
+        : "STABLE"
+
+  };
+
+  return labels[risk] ||
+    labels.stable;
+
+}
+
+
+function getRiskClass(risk) {
+
+  if (risk === "urgent") {
+
+    return "risk-red";
+
+  }
+
+  if (risk === "followup") {
+
+    return "risk-yellow";
+
+  }
+
+  return "risk-green";
+
+}
+
+
+/* =========================================================
+   RENDER MOTHER LIST
+   ========================================================= */
+
+function renderMotherList() {
+
+  const list =
+    document.getElementById(
+      "motherList"
+    );
+
+  const query =
+    document
+      .getElementById(
+        "searchInput"
+      )
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  let filtered =
+    [...mothers];
+
+
+  if (query) {
+
+    filtered =
+      filtered.filter(mother =>
+
+        mother.name
+          .toLowerCase()
+          .includes(query)
+
+        ||
+
+        mother.id
+          .toLowerCase()
+          .includes(query)
+
+      );
+
+  }
+
+
+  filtered =
+    filtered.filter(mother => {
+
+      const risk =
+        getCurrentRisk(mother);
+
+      const status =
+        getVisitStatus(mother);
+
+
+      if (
+        activeFilter === "all"
+      ) return true;
+
+
+      if (
+        activeFilter === "urgent"
+      ) {
+
+        return risk === "urgent";
+
+      }
+
+
+      if (
+        activeFilter === "stable"
+      ) {
+
+        return risk === "stable";
+
+      }
+
+
+      if (
+        activeFilter === "today"
+      ) {
+
+        return status === "today";
+
+      }
+
+
+      if (
+        activeFilter === "overdue"
+      ) {
+
+        return status === "overdue";
+
+      }
+
+
+      return true;
+
+    });
+
+
+  filtered.sort((a, b) => {
+
+    const riskOrder = {
+      urgent: 1,
+      followup: 2,
+      stable: 3
+    };
+
+    return (
+      riskOrder[
+        getCurrentRisk(a)
+      ]
+      -
+      riskOrder[
+        getCurrentRisk(b)
+      ]
+    );
+
+  });
+
+
+  document
+    .getElementById(
+      "listCount"
+    )
+    .textContent =
+      `${filtered.length} records`;
+
+
+  if (
+    filtered.length === 0
+  ) {
+
+    list.innerHTML = `
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          ✓
+        </div>
+
+        <strong>
+          No mothers found
+        </strong>
+
+        <p>
+          Try another search or filter.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    filtered
+      .map(mother =>
+        renderMotherCard(mother)
+      )
+      .join("");
+
+}
+
+
+function renderMotherCard(mother) {
+
+  const postpartumDay =
+    getPostpartumDay(
+      mother.deliveryDate
+    );
+
+  const risk =
+    getCurrentRisk(mother);
+
+  const visitStatus =
+    getVisitStatus(mother);
+
+  const nextDay =
+    getNextScheduledDay(mother);
+
+
+  let statusText =
+    `Day ${postpartumDay} postpartum`;
+
+
+  if (
+    visitStatus === "today"
+  ) {
+
+    statusText +=
+      " • Follow-up due today";
+
+  }
+
+  if (
+    visitStatus === "overdue"
+  ) {
+
+    statusText +=
+      " • Follow-up overdue";
+
+  }
+
+  if (
+    nextDay &&
+    visitStatus === "upcoming"
+  ) {
+
+    statusText +=
+      ` • Next visit Day ${nextDay}`;
+
+  }
+
+
+  const initials =
+    mother.name
+      .split(" ")
+      .slice(0,2)
+      .map(
+        word =>
+          word[0]
+      )
+      .join("")
+      .toUpperCase();
+
+
+  return `
+
+    <button
+      class="mother-card"
+      onclick="openMother('${mother.id}')">
+
+      <div class="avatar">
+
+        ${initials}
+
+      </div>
+
+
+      <div class="mother-details">
+
+        <h4>
+          ${escapeHTML(mother.name)}
+        </h4>
+
+        <p>
+          ${statusText}
+        </p>
+
+        <small>
+          ${escapeHTML(mother.deliveryType)}
+          •
+          ${escapeHTML(mother.village || "No location")}
+        </small>
+
+      </div>
+
+
+      <div
+        class="risk-badge ${getRiskClass(risk)}">
+
+        ${getRiskLabel(risk)}
+
+      </div>
+
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   DASHBOARD COUNTS
+   ========================================================= */
+
+function updateDashboard() {
+
+  const urgent =
+    mothers.filter(
+      mother =>
+        getCurrentRisk(mother)
+        === "urgent"
+    ).length;
+
+
+  const today =
+    mothers.filter(
+      mother =>
+        getVisitStatus(mother)
+        === "today"
+    ).length;
+
+
+  const overdue =
+    mothers.filter(
+      mother =>
+        getVisitStatus(mother)
+        === "overdue"
+    ).length;
+
+
+  document
+    .getElementById(
+      "urgentCount"
+    )
+    .textContent =
+      urgent;
+
+
+  document
+    .getElementById(
+      "todayCount"
+    )
+    .textContent =
+      today;
+
+
+  document
+    .getElementById(
+      "overdueCount"
+    )
+    .textContent =
+      overdue;
+
+
+  document
+    .getElementById(
+      "todayDate"
+    )
+    .textContent =
+      formatToday();
+
+
+  renderMotherList();
+
+  renderAllMothers();
+
+}
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+function setFilter(filter) {
+
+  activeFilter = filter;
+
+  document
+    .querySelectorAll(
+      ".filter-button"
+    )
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.filter === filter
+      );
+
+    });
+
+
+  renderMotherList();
+
+  showScreen("dashboard");
+
+}
+
+
+/* =========================================================
+   SCREEN NAVIGATION
+   ========================================================= */
+
+function showScreen(screenId) {
+
+  document
+    .querySelectorAll(
+      ".screen"
+    )
+    .forEach(screen => {
+
+      screen.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  const target =
+    document.getElementById(
+      screenId
+    );
+
+
+  if (target) {
+
+    target.classList.add(
+      "active"
+    );
+
+  }
+
+
+  document
+    .querySelectorAll(
+      ".nav-button"
+    )
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.screen === screenId
+      );
+
+    });
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+function openMother(id) {
+
+  selectedMotherId = id;
+
+  const mother =
+    mothers.find(
+      item =>
+        item.id === id
+    );
+
+  if (!mother) return;
+
+
+  const content =
+    document.getElementById(
+      "profileContent"
+    );
+
+
+  const postpartumDay =
+    getPostpartumDay(
+      mother.deliveryDate
+    );
+
+
+  const initials =
+    mother.name
+      .split(" ")
+      .slice(0,2)
+      .map(
+        word => word[0]
+      )
+      .join("")
+      .toUpperCase();
+
+
+  const risk =
+    getCurrentRisk(mother);
+
+
+  content.innerHTML = `
+
+    <div class="profile-hero">
+
+      <div class="profile-top">
+
+        <div class="profile-avatar">
+
+          ${initials}
+
+        </div>
+
+
+        <div class="profile-info">
+
+          <h2>
+            ${escapeHTML(mother.name)}
+          </h2>
+
+          <p>
+            Mother ID: ${mother.id}
+          </p>
+
+          <p>
+            ${escapeHTML(mother.village || "-")}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="day-status">
+
+        <strong>
+          Day ${postpartumDay}
+        </strong>
+
+        <span>
+          postpartum
+        </span>
+
+      </div>
+
+
+      <div
+        style="margin-top: 12px;">
+
+        <span
+          class="risk-badge ${getRiskClass(risk)}">
+
+          ${getRiskLabel(risk)}
+
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="info-card">
+
+      <h3>
+        Delivery Information
+      </h3>
+
+
+      <div class="info-row">
+
+        <span>
+          Delivery type
+        </span>
+
+        <strong>
+          ${escapeHTML(mother.deliveryType)}
+        </strong>
+
+      </div>
+
+
+      <div class="info-row">
+
+        <span>
+          Delivery date
+        </span>
+
+        <strong>
+          ${formatDate(mother.deliveryDate)}
+        </strong>
+
+      </div>
+
+
+      <div class="info-row">
+
+        <span>
+          Hospital
+        </span>
+
+        <strong>
+          ${escapeHTML(mother.hospital || "-")}
+        </strong>
+
+      </div>
+
+
+      <div class="info-row">
+
+        <span>
+          Phone
+        </span>
+
+        <strong>
+          ${escapeHTML(mother.phone || "-")}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="info-card">
+
+      <h3>
+        Postpartum Follow-up
+      </h3>
+
+
+      ${renderTimeline(mother)}
+
+    </div>
+
+
+
+    <button
+      class="primary-button"
+      onclick="startAssessment()">
+
+      Start Follow-up Visit
+
+    </button>
+
+
+    <button
+      class="secondary-button"
+      onclick="showVisitHistory()">
+
+      View Visit History
+
+    </button>
+
+  `;
+
+
+  showScreen(
+    "profileScreen"
+  );
+
+}
+
+
+function renderTimeline(mother) {
+
+  const completedDays =
+    getCompletedVisitDays(
+      mother
+    );
+
+
+  const postpartumDay =
+    getPostpartumDay(
+      mother.deliveryDate
+    );
+
+
+  return `
+
+    <div class="timeline">
+
+      ${VISIT_SCHEDULE
+        .map(day => {
+
+          let status =
+            "";
+
+          let label =
+            "Upcoming";
+
+
+          if (
+            completedDays.includes(day)
+          ) {
+
+            status =
+              "completed";
+
+            label =
+              "Completed";
+
+          }
+
+          else if (
+            postpartumDay === day
+          ) {
+
+            status =
+              "current";
+
+            label =
+              "Due today";
+
+          }
+
+          else if (
+            postpartumDay > day
+          ) {
+
+            status =
+              "overdue";
+
+            label =
+              "Overdue";
+
+          }
+
+
+          return `
+
+            <div
+              class="timeline-item ${status}">
+
+              <div
+                class="timeline-dot">
+
+                ${
+                  status === "completed"
+                    ? "✓"
+                    : day
+                }
+
+              </div>
+
+
+              <div
+                class="timeline-content">
+
+                <div>
+
+                  <strong>
+                    Day ${day}
+                  </strong>
+
+                  <p>
+                    ${label}
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        })
+        .join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   VISIT HISTORY
+   ========================================================= */
+
+function showVisitHistory() {
+
+  const mother =
+    mothers.find(
+      item =>
+        item.id === selectedMotherId
+    );
+
+  if (!mother) return;
+
+
+  const visits =
+    [...mother.visits]
+      .reverse();
+
+
+  const content =
+    document.getElementById(
+      "profileContent"
+    );
+
+
+  content.innerHTML = `
+
+    <div class="page-title">
+
+      <h2>
+        Visit History
+      </h2>
+
+      <p>
+        ${escapeHTML(mother.name)}
+      </p>
+
+    </div>
+
+
+    ${
+      visits.length
+        ? visits.map(visit => `
+
+          <div class="info-card">
+
+            <div
+              class="section-heading"
+              style="margin-top:0;">
+
+              <h3>
+                Day ${visit.day}
+              </h3>
+
+              <span
+                class="risk-badge ${getRiskClass(visit.risk)}">
+
+                ${getRiskLabel(visit.risk)}
+
+              </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+              <span>
+                Visit date
+              </span>
+
+              <strong>
+                ${formatDate(visit.date)}
+              </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+              <span>
+                Symptoms
+              </span>
+
+              <strong>
+                ${
+                  visit.symptoms &&
+                  visit.symptoms.length
+                    ? visit.symptoms.length
+                    : "None recorded"
+                }
+              </strong>
+
+            </div>
+
+
+            <div
+              style="
+                margin-top:12px;
+                color:var(--muted);
+                font-size:13px;
+                line-height:1.5;">
+
+              ${
+                escapeHTML(
+                  visit.notes ||
+                  "No notes recorded."
+                )
+              }
+
+            </div>
+
+          </div>
+
+        `).join("")
+
+        :
+
+        `
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              📝
+            </div>
+
+            <strong>
+              No visits recorded
+            </strong>
+
+          </div>
+
+        `
+    }
+
+
+    <button
+      class="secondary-button"
+      onclick="openMother('${mother.id}')">
+
+      Back to Mother Profile
+
+    </button>
+
+  `;
+
+}
+
+
+function returnToProfile() {
+
+  if (selectedMotherId) {
+
+    openMother(
+      selectedMotherId
+    );
+
+  }
+
+  else {
+
+    showScreen(
+      "dashboard"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   ASSESSMENT
+   ========================================================= */
+
+function startAssessment() {
+
+  renderSymptoms();
+
+  document
+    .getElementById(
+      "visitBP"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "visitTemperature"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "visitNotes"
+    )
+    .value = "";
+
+
+  showScreen(
+    "assessmentScreen"
+  );
+
+}
+
+
+function renderSymptoms() {
+
+  renderSymptomGroup(
+    "dangerSymptomList",
+    dangerSymptoms,
+    "danger"
+  );
+
+  renderSymptomGroup(
+    "woundSymptomList",
+    woundSymptoms,
+    "wound"
+  );
+
+  renderSymptomGroup(
+    "mentalSymptomList",
+    mentalSymptoms,
+    "mental"
+  );
+
+}
+
+
+function renderSymptomGroup(
+  containerId,
+  symptoms,
+  group
+) {
+
+  const container =
+    document.getElementById(
+      containerId
+    );
+
+
+  container.innerHTML =
+    symptoms
+      .map(symptom => `
+
+        <div class="symptom-row">
+
+          <div class="symptom-text">
+
+            <strong>
+              ${symptom.title}
+            </strong>
+
+            <small>
+              ${symptom.description}
+            </small>
+
+          </div>
+
+
+          <label class="toggle">
+
+            <input
+              type="checkbox"
+              value="${symptom.id}"
+              data-group="${group}">
+
+            <span></span>
+
+          </label>
+
+        </div>
+
+      `)
+      .join("");
+
+}
+
+
+/* =========================================================
+   RISK CALCULATION - DEMO ONLY
+   ========================================================= */
+
+function completeAssessment() {
+
+  const mother =
+    mothers.find(
+      item =>
+        item.id === selectedMotherId
+    );
+
+  if (!mother) return;
+
+
+  const checked =
+    Array.from(
+      document.querySelectorAll(
+        'input[type="checkbox"]:checked'
+      )
+    );
+
+
+  const symptoms =
+    checked.map(
+      item => item.value
+    );
+
+
+  const dangerSelected =
+    checked.some(
+      item =>
+        item.dataset.group === "danger"
+    );
+
+
+  const woundSelected =
+    checked.some(
+      item =>
+        item.dataset.group === "wound"
+    );
+
+
+  const mentalSelected =
+    checked.some(
+      item =>
+        item.dataset.group === "mental"
+    );
+
+
+  let risk =
+    "stable";
+
+
+  /*
+    DEMONSTRATION ONLY.
+
+    Production logic must be replaced with
+    clinically validated decision support.
+  */
+
+  if (
+    dangerSelected
+  ) {
+
+    risk =
+      "urgent";
+
+  }
+
+  else if (
+    woundSelected ||
+    mentalSelected
+  ) {
+
+    risk =
+      "followup";
+
+  }
+
+
+  const nextDay =
+    getNextScheduledDay(
+      mother
+    );
+
+
+  const postpartumDay =
+    getPostpartumDay(
+      mother.deliveryDate
+    );
+
+
+  const recordedDay =
+    nextDay ||
+    postpartumDay;
+
+
+  const visit = {
+
+    date:
+      new Date()
+        .toISOString()
+        .split("T")[0],
+
+    day:
+      recordedDay,
+
+    risk,
+
+    symptoms,
+
+    bp:
+      document
+        .getElementById(
+          "visitBP"
+        )
+        .value,
+
+    temperature:
+      document
+        .getElementById(
+          "visitTemperature"
+        )
+        .value,
+
+    notes:
+      document
+        .getElementById(
+          "visitNotes"
+        )
+        .value
+
+  };
+
+
+  mother.visits.push(
+    visit
+  );
+
+
+  mother.manualRisk =
+    risk;
+
+
+  saveMothers(
+    mothers
+  );
+
+
+  updateDashboard();
+
+  renderResult(
+    mother,
+    visit
+  );
+
+}
+
+
+/* =========================================================
+   RESULT SCREEN
+   ========================================================= */
+
+function renderResult(
+  mother,
+  visit
+) {
+
+  let resultClass =
+    "green";
+
+  let icon =
+    "✓";
+
+  let title =
+    "Mother appears stable";
+
+  let message =
+    "No selected danger signs were recorded in this demonstration assessment. Continue follow-up according to the approved care pathway.";
+
+
+  if (
+    visit.risk === "urgent"
+  ) {
+
+    resultClass =
+      "red";
+
+    icon =
+      "!";
+
+    title =
+      "Urgent attention required";
+
+    message =
+      "One or more danger signs were recorded. Follow the approved clinical referral and escalation pathway.";
+
+  }
+
+
+  if (
+    visit.risk === "followup"
+  ) {
+
+    resultClass =
+      "yellow";
+
+    icon =
+      "•";
+
+    title =
+      "Closer follow-up required";
+
+    message =
+      "A concern was recorded that requires follow-up according to the approved care pathway.";
+
+  }
+
+
+  document
+    .getElementById(
+      "resultContent"
+    )
+    .innerHTML = `
+
+      <div
+        class="result-hero ${resultClass}">
+
+        <div
+          class="result-icon">
+
+          ${icon}
+
+        </div>
+
+
+        <h2>
+          ${title}
+        </h2>
+
+
+        <p>
+          ${message}
+        </p>
+
+      </div>
+
+
+      <div
+        class="info-card result-details">
+
+        <h3>
+          Visit Recorded
+        </h3>
+
+
+        <div class="info-row">
+
+          <span>
+            Mother
+          </span>
+
+          <strong>
+            ${escapeHTML(mother.name)}
+          </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span>
+            Visit
+          </span>
+
+          <strong>
+            Day ${visit.day}
+          </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span>
+            Risk
+          </span>
+
+          <strong>
+            ${getRiskLabel(visit.risk)}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="primary-button"
+        onclick="openMother('${mother.id}')">
+
+        Return to Mother Profile
+
+      </button>
+
+
+      <button
+        class="secondary-button"
+        onclick="showScreen('dashboard')">
+
+        Return to Dashboard
+
+      </button>
+
+    `;
+
+
+  showScreen(
+    "resultScreen"
+  );
+
+}
+
+
+/* =========================================================
+   REGISTRATION
+   ========================================================= */
+
+function openRegistration() {
+
+  document
+    .getElementById(
+      "registrationModal"
+    )
+    .classList.add(
+      "show"
+    );
+
+
+  document
+    .getElementById(
+      "newMotherName"
+    )
+    .focus();
+
+}
+
+
+function closeRegistration() {
+
+  document
+    .getElementById(
+      "registrationModal"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+function registerMother() {
+
+  const name =
+    document
+      .getElementById(
+        "newMotherName"
+      )
+      .value
+      .trim();
+
+
+  const deliveryDate =
+    document
+      .getElementById(
+        "newDeliveryDate"
+      )
+      .value;
+
+
+  if (
+    !name ||
+    !deliveryDate
+  ) {
+
+    showToast(
+      "Please enter mother's name and delivery date."
+    );
+
+    return;
+
+  }
+
+
+  const nextNumber =
+    mothers.length + 1;
+
+
+  const mother = {
+
+    id:
+      "M" +
+      String(
+        nextNumber
+      ).padStart(3, "0"),
+
+    name,
+
+    phone:
+      document
+        .getElementById(
+          "newMotherPhone"
+        )
+        .value
+        .trim(),
+
+    deliveryDate,
+
+    deliveryType:
+      document
+        .getElementById(
+          "newDeliveryType"
+        )
+        .value,
+
+    hospital:
+      document
+        .getElementById(
+          "newHospital"
+        )
+        .value
+        .trim(),
+
+    village:
+      document
+        .getElementById(
+          "newVillage"
+        )
+        .value
+        .trim(),
+
+    visits: [],
+
+    manualRisk:
+      "stable",
+
+    createdAt:
+      new Date()
+        .toISOString()
+
+  };
+
+
+  mothers.push(
+    mother
+  );
+
+
+  saveMothers(
+    mothers
+  );
+
+
+  closeRegistration();
+
+  updateDashboard();
+
+  openMother(
+    mother.id
+  );
+
+
+  document
+    .getElementById(
+      "newMotherName"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "newMotherPhone"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "newDeliveryDate"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "newHospital"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "newVillage"
+    )
+    .value = "";
+
+}
+
+
+/* =========================================================
+   ALL MOTHERS
+   ========================================================= */
+
+function renderAllMothers() {
+
+  const list =
+    document.getElementById(
+      "allMotherList"
+    );
+
+
+  list.innerHTML =
+    mothers
+      .sort(
+        (a,b) =>
+          new Date(b.createdAt)
+          -
+          new Date(a.createdAt)
+      )
+      .map(
+        mother =>
+          renderMotherCard(
+            mother
+          )
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   CSV EXPORT
+   ========================================================= */
+
+function exportCSV() {
+
+  const rows = [
+
+    [
+      "Mother ID",
+      "Name",
+      "Phone",
+      "Delivery Date",
+      "Delivery Type",
+      "Hospital",
+      "Village",
+      "Current Postpartum Day",
+      "Current Risk",
+      "Visits Recorded"
+    ]
+
+  ];
+
+
+  mothers.forEach(mother => {
+
+    rows.push([
+
+      mother.id,
+
+      mother.name,
+
+      mother.phone,
+
+      mother.deliveryDate,
+
+      mother.deliveryType,
+
+      mother.hospital,
+
+      mother.village,
+
+      getPostpartumDay(
+        mother.deliveryDate
+      ),
+
+      getCurrentRisk(
+        mother
+      ),
+
+      mother.visits.length
+
+    ]);
+
+  });
+
+
+  const csv =
+    rows
+      .map(row =>
+        row
+          .map(value => {
+
+            const text =
+              String(
+                value ?? ""
+              )
+              .replace(
+                /"/g,
+                '""'
+              );
+
+            return `"${text}"`;
+
+          })
+          .join(",")
+      )
+      .join("\n");
+
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href =
+    url;
+
+
+  link.download =
+    `lifecourse-postpartum-${new Date()
+      .toISOString()
+      .split("T")[0]}.csv`;
+
+
+  document.body.appendChild(
+    link
+  );
+
+
+  link.click();
+
+
+  document.body.removeChild(
+    link
+  );
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  showToast(
+    "CSV exported successfully."
+  );
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+function toggleLanguage() {
+
+  currentLanguage =
+    currentLanguage === "en"
+      ? "ta"
+      : "en";
+
+
+  document
+    .getElementById(
+      "languageButton"
+    )
+    .textContent =
+      currentLanguage === "en"
+        ? "தமிழ்"
+        : "EN";
+
+
+  applyTranslations();
+
+  updateDashboard();
+
+  if (
+    selectedMotherId &&
+    document
+      .getElementById(
+        "profileScreen"
+      )
+      .classList.contains(
+        "active"
+      )
+  ) {
+
+    openMother(
+      selectedMotherId
+    );
+
+  }
+
+}
+
+
+function applyTranslations() {
+
+  const dictionary =
+    translations[
+      currentLanguage
+    ];
+
+
+  document
+    .querySelectorAll(
+      "[data-i18n]"
+    )
+    .forEach(element => {
+
+      const key =
+        element.dataset.i18n;
+
+      if (
+        dictionary[key]
+      ) {
+
+        element.textContent =
+          dictionary[key];
+
+      }
+
+    });
+
+
+  document
+    .querySelectorAll(
+      "[data-i18n-placeholder]"
+    )
+    .forEach(element => {
+
+      const key =
+        element.dataset
+          .i18nPlaceholder;
+
+      if (
+        dictionary[key]
+      ) {
+
+        element.placeholder =
+          dictionary[key];
+
+      }
+
+    });
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+function resetDemoData() {
+
+  const confirmed =
+    confirm(
+      "Reset all local prototype data?"
+    );
+
+
+  if (!confirmed) return;
+
+
+  mothers =
+    createDemoData();
+
+
+  saveMothers(
+    mothers
+  );
+
+
+  selectedMotherId =
+    null;
+
+
+  updateDashboard();
+
+  showScreen(
+    "dashboard"
+  );
+
+
+  showToast(
+    "Demo data reset."
+  );
+
+}
+
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+
+function showToast(message) {
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  setTimeout(() => {
+
+    toast.classList.remove(
+      "show"
+    );
+
+  }, 2800);
+
+}
+
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    applyTranslations();
+
+    updateDashboard();
+
+  }
+);
+
+
+</script>
+
+</div>
 
 </body>
-
 </html>
+```
