@@ -1,3504 +1,3642 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Health Behavior Science Framework
-</title>
+<title>Health Behavior Science</title>
 
 <meta name="description"
-content="An integrated framework combining health behavior theories, behavioral science, health psychology and behavior design.">
-
+content="An integrated health behavior science framework connecting awareness, motivation, capability, opportunity, action, habits and health outcomes.">
 
 <style>
 
-/* =========================================================
-   GLOBAL DESIGN SYSTEM
-========================================================= */
-
-:root{
-
+:root {
   --bg:#f7f8fa;
-
   --surface:#ffffff;
-
   --text:#17202a;
-
   --muted:#68707c;
-
   --line:#e4e7eb;
-
   --primary:#263b55;
-
   --secondary:#5b6f86;
-
   --soft:#eef3f8;
-
   --accent:#9a6b35;
-
   --dark:#111820;
-
+  --green:#496b5a;
   --radius:18px;
-
-  --shadow:
-    0 10px 35px rgba(20,30,40,.07);
-
+  --shadow:0 10px 35px rgba(20,30,40,.07);
 }
 
-
-*{
+* {
   box-sizing:border-box;
 }
 
-
-html{
+html {
   scroll-behavior:smooth;
 }
 
-
-body{
-
+body {
   margin:0;
-
   font-family:
     Inter,
+    ui-sans-serif,
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
   background:var(--bg);
-
   color:var(--text);
-
   line-height:1.6;
-
 }
 
+a {
+  color:inherit;
+}
 
-button{
+button {
   font-family:inherit;
 }
 
-
-.container{
-
+.container {
   width:min(1180px,92%);
-
   margin:auto;
-
 }
 
-
-.eyebrow{
-
-  text-transform:uppercase;
-
-  letter-spacing:2px;
-
-  font-size:12px;
-
-  font-weight:800;
-
-  color:var(--accent);
-
+.section {
+  padding:90px 0;
 }
 
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-nav{
-
-  position:sticky;
-
-  top:0;
-
-  z-index:100;
-
-  background:
-    rgba(255,255,255,.94);
-
-  backdrop-filter:blur(14px);
-
-  border-bottom:
-    1px solid var(--line);
-
-}
-
-
-.nav-inner{
-
-  height:66px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-}
-
-
-.logo{
-
-  font-weight:800;
-
-  letter-spacing:-.4px;
-
-}
-
-
-.logo span{
-
-  color:var(--accent);
-
-}
-
-
-.nav-links{
-
-  display:flex;
-
-  gap:22px;
-
-  font-size:14px;
-
-  color:var(--muted);
-
-}
-
-
-.nav-links a{
-
-  text-decoration:none;
-
-  color:inherit;
-
-}
-
-
-.nav-links a:hover{
-
-  color:var(--text);
-
-}
-
-
-/* =========================================================
-   HERO
-========================================================= */
-
-.hero{
-
-  padding:
-    90px 0 65px;
-
-  background:
-
-    radial-gradient(
-      circle at 80% 20%,
-      #e7edf4 0,
-      transparent 35%
-    ),
-
-    linear-gradient(
-      180deg,
-      #fff,
-      #f7f8fa
-    );
-
-}
-
-
-.hero h1{
-
-  max-width:900px;
-
-  font-size:
-    clamp(40px,6vw,76px);
-
-  line-height:1.02;
-
-  letter-spacing:-3px;
-
-  margin:18px 0;
-
-}
-
-
-.hero p{
-
-  max-width:760px;
-
-  font-size:19px;
-
-  color:var(--muted);
-
-}
-
-
-.hero-equation{
-
-  margin-top:35px;
-
-  padding:22px;
-
-  border:
-    1px solid var(--line);
-
-  background:#fff;
-
-  border-radius:16px;
-
-  font-weight:700;
-
-  font-size:18px;
-
-  box-shadow:var(--shadow);
-
-}
-
-
-/* =========================================================
-   SECTIONS
-========================================================= */
-
-section{
-
-  padding:75px 0;
-
-}
-
-
-.section-header{
-
+.section-heading {
   max-width:800px;
-
-  margin-bottom:35px;
-
+  margin:0 auto 50px;
+  text-align:center;
 }
 
-
-.section-header h2{
-
-  font-size:38px;
-
-  letter-spacing:-1.5px;
-
-  margin:8px 0;
-
-}
-
-
-.section-header p{
-
-  color:var(--muted);
-
-}
-
-
-/* =========================================================
-   BOOK SECTION
-========================================================= */
-
-.books-section{
-
-  background:#ffffff;
-
-}
-
-
-.books-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  gap:18px;
-
-}
-
-
-.book-card{
-
-  background:#fff;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:18px;
-
-  overflow:hidden;
-
-  box-shadow:var(--shadow);
-
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease;
-
-  cursor:pointer;
-
-}
-
-
-.book-card:hover{
-
-  transform:
-    translateY(-5px);
-
-  box-shadow:
-    0 18px 45px
-    rgba(20,30,40,.12);
-
-}
-
-
-.book-cover{
-
-  height:270px;
-
-  background:#edf0f3;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  overflow:hidden;
-
-}
-
-
-.book-cover img{
-
-  width:100%;
-
-  height:100%;
-
-  object-fit:cover;
-
-}
-
-
-.book-info{
-
-  padding:18px;
-
-}
-
-
-.book-info h3{
-
-  font-size:17px;
-
-  line-height:1.25;
-
-  margin:
-    0 0 6px;
-
-}
-
-
-.book-author{
-
-  font-size:13px;
-
-  color:var(--accent);
-
-  font-weight:700;
-
-  margin-bottom:9px;
-
-}
-
-
-.book-description{
-
-  font-size:13px;
-
-  line-height:1.45;
-
-  color:var(--muted);
-
-  margin:0;
-
-}
-
-
-.book-more{
-
-  margin-top:13px;
-
-  font-size:12px;
-
-  font-weight:800;
-
-  color:var(--primary);
-
-}
-
-
-/* =========================================================
-   BOOK MODAL
-========================================================= */
-
-.book-modal{
-
-  display:none;
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:1100;
-
-  background:
-    rgba(10,16,22,.78);
-
-  backdrop-filter:
-    blur(8px);
-
-  padding:20px;
-
-  overflow-y:auto;
-
-}
-
-
-.book-modal.active{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-}
-
-
-.book-modal-content{
-
-  width:min(800px,100%);
-
-  background:#fff;
-
-  border-radius:24px;
-
-  overflow:hidden;
-
-  box-shadow:
-    0 30px 100px
-    rgba(0,0,0,.35);
-
-  position:relative;
-
-}
-
-
-.book-modal-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    280px 1fr;
-
-}
-
-
-.book-modal-cover{
-
-  background:#eef1f4;
-
-  min-height:430px;
-
-}
-
-
-.book-modal-cover img{
-
-  width:100%;
-
-  height:100%;
-
-  object-fit:cover;
-
-}
-
-
-.book-modal-info{
-
-  padding:40px;
-
-}
-
-
-.book-modal-info h2{
-
-  font-size:34px;
-
-  line-height:1.1;
-
-  letter-spacing:-1px;
-
-  margin:
-    8px 0 8px;
-
-}
-
-
-.book-modal-author{
-
-  color:var(--accent);
-
-  font-weight:800;
-
-}
-
-
-.book-modal-description{
-
-  margin-top:25px;
-
-  color:var(--muted);
-
-}
-
-
-.book-modal-why{
-
-  margin-top:25px;
-
-  padding:20px;
-
-  background:var(--soft);
-
-  border-radius:13px;
-
-}
-
-
-.book-modal-why strong{
-
-  display:block;
-
-  margin-bottom:6px;
-
-}
-
-
-.close-book{
-
-  position:absolute;
-
-  right:18px;
-
-  top:18px;
-
-  width:40px;
-
-  height:40px;
-
-  border:none;
-
-  border-radius:50%;
-
-  background:#eef1f4;
-
-  font-size:22px;
-
-  cursor:pointer;
-
-  z-index:2;
-
-}
-
-
-/* =========================================================
-   CORE FLOW
-========================================================= */
-
-.flow{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  gap:10px;
-
-}
-
-
-.flow-step{
-
-  padding:22px 16px;
-
-  min-height:135px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:15px;
-
-  background:#fff;
-
-  box-shadow:var(--shadow);
-
-}
-
-
-.flow-step strong{
-
-  display:block;
-
-  font-size:15px;
-
-  margin-bottom:7px;
-
-}
-
-
-.flow-step span{
-
-  font-size:13px;
-
-  color:var(--muted);
-
-}
-
-
-.flow-number{
-
-  font-size:12px;
-
-  font-weight:800;
-
-  color:var(--accent);
-
-}
-
-
-/* =========================================================
-   AWARENESS MATRIX
-========================================================= */
-
-.matrix{
-
-  display:grid;
-
-  grid-template-columns:
-    150px 1fr 1fr;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:18px;
-
-  overflow:hidden;
-
-  background:#fff;
-
-}
-
-
-.matrix > div{
-
-  padding:25px;
-
-  border-right:
-    1px solid var(--line);
-
-  border-bottom:
-    1px solid var(--line);
-
-}
-
-
-.matrix .head{
-
-  background:var(--soft);
-
-  font-weight:800;
-
-}
-
-
-.matrix-title{
-
-  font-weight:800;
-
-}
-
-
-.matrix p{
-
-  color:var(--muted);
-
-  margin-bottom:0;
-
-}
-
-
-/* =========================================================
-   THEORY CARDS
-========================================================= */
-
-.theories{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:18px;
-
-}
-
-
-.card{
-
-  background:#fff;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:var(--radius);
-
-  padding:25px;
-
-  box-shadow:var(--shadow);
-
-  transition:.2s ease;
-
-}
-
-
-.card:hover{
-
-  transform:
-    translateY(-3px);
-
-  box-shadow:
-    0 15px 45px
-    rgba(20,30,40,.1);
-
-}
-
-
-.card-tag{
-
+.eyebrow {
   display:inline-block;
-
-  font-size:11px;
-
-  font-weight:800;
-
-  text-transform:uppercase;
-
-  letter-spacing:1px;
-
-  color:var(--accent);
-
-  background:#f5eee5;
-
-  padding:5px 8px;
-
-  border-radius:7px;
-
-}
-
-
-.card h3{
-
-  margin:13px 0 8px;
-
-  font-size:22px;
-
-}
-
-
-.card p{
-
-  color:var(--muted);
-
-  font-size:14px;
-
-}
-
-
-.formula{
-
-  margin-top:18px;
-
-  padding:13px;
-
-  border-radius:10px;
-
-  background:var(--soft);
-
-  font-size:13px;
-
-  font-weight:700;
-
-}
-
-
-.learn-btn{
-
-  margin-top:18px;
-
-  background:var(--primary);
-
-  color:white;
-
-  width:100%;
-
-  border:none;
-
-  border-radius:10px;
-
-  padding:13px;
-
-  font-weight:800;
-
-  cursor:pointer;
-
-}
-
-
-/* =========================================================
-   THEORY MODAL
-========================================================= */
-
-.modal{
-
-  display:none;
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:1000;
-
-  background:
-    rgba(12,18,25,.72);
-
-  backdrop-filter:blur(7px);
-
-  padding:25px;
-
-  overflow-y:auto;
-
-}
-
-
-.modal.active{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-}
-
-
-.modal-content{
-
-  width:min(850px,100%);
-
-  max-height:90vh;
-
-  overflow-y:auto;
-
-  background:#fff;
-
-  border-radius:24px;
-
-  box-shadow:
-    0 30px 100px
-    rgba(0,0,0,.3);
-
-  position:relative;
-
-}
-
-
-.modal-header{
-
-  padding:
-    32px 35px 25px;
-
-  border-bottom:
-    1px solid var(--line);
-
-  background:
-    linear-gradient(
-      135deg,
-      #fff,
-      #f4f7fa
-    );
-
-}
-
-
-.modal-header h2{
-
-  margin:8px 0;
-
-  font-size:36px;
-
-  letter-spacing:-1.5px;
-
-}
-
-
-.modal-header p{
-
-  color:var(--muted);
-
-}
-
-
-.close{
-
-  position:absolute;
-
-  right:20px;
-
-  top:18px;
-
-  width:40px;
-
-  height:40px;
-
-  border-radius:50%;
-
-  padding:0;
-
-  margin:0;
-
-  border:none;
-
-  background:#eef1f4;
-
-  font-size:22px;
-
-  cursor:pointer;
-
-}
-
-
-.modal-body{
-
-  padding:
-    30px 35px 40px;
-
-}
-
-
-.detail-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:18px;
-
-  margin:20px 0;
-
-}
-
-
-.detail-box{
-
-  padding:20px;
-
-  background:#f7f9fb;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:14px;
-
-}
-
-
-.detail-box h4{
-
-  margin:
-    0 0 8px;
-
-  color:var(--primary);
-
-}
-
-
-.detail-box p{
-
-  margin:0;
-
-  color:var(--muted);
-
-  font-size:14px;
-
-}
-
-
-.example-box{
-
-  margin-top:25px;
-
-  padding:25px;
-
-  background:#f5eee5;
-
-  border-left:
-    5px solid var(--accent);
-
-  border-radius:12px;
-
-}
-
-
-.example-box h3{
-
-  margin-top:0;
-
-}
-
-
-.key-idea{
-
-  margin-top:25px;
-
-  padding:22px;
-
-  background:var(--primary);
-
-  color:#fff;
-
-  border-radius:14px;
-
-}
-
-
-.key-idea strong{
-
-  display:block;
-
-  margin-bottom:5px;
-
-}
-
-
-/* =========================================================
-   COM-B
-========================================================= */
-
-.comb{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:18px;
-
-}
-
-
-.comb-card{
-
-  padding:32px;
-
-  background:#fff;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:18px;
-
-}
-
-
-.comb-card h3{
-
-  font-size:28px;
-
-  margin:0 0 8px;
-
-}
-
-
-.comb-card p{
-
-  color:var(--muted);
-
-}
-
-
-/* =========================================================
-   DIAGNOSTIC
-========================================================= */
-
-.diagnostic{
-
-  background:#17202a;
-
-  color:#fff;
-
-}
-
-
-.diagnostic .section-header p{
-
-  color:#b9c2cd;
-
-}
-
-
-.questions{
-
-  display:grid;
-
-  gap:15px;
-
-}
-
-
-.question{
-
-  padding:22px;
-
-  border:
-    1px solid rgba(255,255,255,.13);
-
-  background:
-    rgba(255,255,255,.05);
-
-  border-radius:14px;
-
-}
-
-
-.question label{
-
-  display:block;
-
-  font-weight:700;
-
   margin-bottom:10px;
-
-}
-
-
-.question select{
-
-  width:100%;
-
-  padding:12px;
-
-  border-radius:9px;
-
-  border:0;
-
-  font:inherit;
-
-}
-
-
-.result{
-
-  margin-top:25px;
-
-  padding:25px;
-
-  border-radius:15px;
-
-  background:#fff;
-
-  color:var(--text);
-
-  display:none;
-
-}
-
-
-/* =========================================================
-   HABIT LOOP
-========================================================= */
-
-.loop{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  flex-wrap:wrap;
-
-  gap:12px;
-
-}
-
-
-.loop-item{
-
-  padding:20px 25px;
-
-  border-radius:50px;
-
-  background:#fff;
-
-  border:
-    1px solid var(--line);
-
-  font-weight:800;
-
-}
-
-
-.arrow{
-
-  color:var(--accent);
-
+  font-size:11px;
+  letter-spacing:.14em;
   font-weight:900;
-
+  color:var(--accent);
 }
 
+.section-heading h2 {
+  margin:0 0 14px;
+  font-size:clamp(30px,4vw,46px);
+  line-height:1.12;
+  letter-spacing:-.03em;
+}
 
-/* =========================================================
-   PRINCIPLES
-========================================================= */
+.section-heading p {
+  margin:0;
+  color:var(--muted);
+  font-size:16px;
+}
 
-.principles{
+/* =========================
+   NAVIGATION
+========================= */
 
+.navbar {
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+
+.nav-inner {
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+}
+
+.brand {
+  font-weight:900;
+  color:var(--primary);
+  letter-spacing:-.03em;
+  font-size:18px;
+  white-space:nowrap;
+}
+
+.nav-links {
+  display:flex;
+  gap:24px;
+  align-items:center;
+  overflow-x:auto;
+}
+
+.nav-links a {
+  text-decoration:none;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+.nav-links a:hover {
+  color:var(--primary);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  min-height:720px;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(154,107,53,.10),transparent 30%),
+    linear-gradient(135deg,#f7f8fa 0%,#eef3f8 100%);
+}
+
+.hero-grid {
   display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:15px;
-
+  grid-template-columns:1.1fr .9fr;
+  gap:70px;
+  align-items:center;
 }
 
+.hero h1 {
+  margin:0 0 25px;
+  font-size:clamp(45px,6vw,76px);
+  line-height:.98;
+  letter-spacing:-.055em;
+}
 
-.principle{
+.hero h1 span {
+  color:var(--accent);
+}
 
-  padding:22px;
+.hero p {
+  color:var(--muted);
+  font-size:18px;
+  max-width:680px;
+  line-height:1.7;
+}
 
-  border-left:
-    4px solid var(--accent);
+.hero-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:30px;
+}
 
-  background:#fff;
+.btn {
+  border:0;
+  padding:13px 20px;
+  border-radius:12px;
+  cursor:pointer;
+  text-decoration:none;
+  font-weight:800;
+  font-size:13px;
+}
 
-  border-radius:10px;
+.btn-primary {
+  background:var(--primary);
+  color:white;
+}
 
+.btn-secondary {
+  background:white;
+  border:1px solid var(--line);
+  color:var(--primary);
+}
+
+.hero-visual {
+  position:relative;
+}
+
+.behavior-orbit {
+  width:min(430px,90vw);
+  height:430px;
+  margin:auto;
+  border-radius:50%;
+  border:1px solid #d9e0e8;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.45);
+}
+
+.orbit-ring {
+  position:absolute;
+  border:1px dashed #ccd5df;
+  border-radius:50%;
+}
+
+.ring-1 {
+  width:330px;
+  height:330px;
+}
+
+.ring-2 {
+  width:230px;
+  height:230px;
+}
+
+.orbit-center {
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  background:var(--primary);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  font-size:14px;
+  font-weight:900;
+  box-shadow:0 15px 40px rgba(38,59,85,.22);
+}
+
+.orbit-node {
+  position:absolute;
+  padding:9px 13px;
+  border-radius:30px;
+  background:white;
+  border:1px solid var(--line);
   box-shadow:var(--shadow);
-
+  font-size:11px;
+  font-weight:800;
+  color:var(--primary);
 }
 
+.node-1 { top:10px; left:50%; transform:translateX(-50%); }
+.node-2 { right:5px; top:115px; }
+.node-3 { right:20px; bottom:85px; }
+.node-4 { bottom:10px; left:50%; transform:translateX(-50%); }
+.node-5 { left:20px; bottom:85px; }
+.node-6 { left:5px; top:115px; }
 
-.principle strong{
+/* =========================
+   JOURNEY
+========================= */
 
+.journey {
+  background:white;
+}
+
+.journey-track {
+  display:grid;
+  grid-template-columns:repeat(9,1fr);
+  gap:8px;
+}
+
+.journey-step {
+  text-align:center;
+  position:relative;
+}
+
+.journey-step:not(:last-child)::after {
+  content:"→";
+  position:absolute;
+  right:-12px;
+  top:25px;
+  color:#aab3be;
+}
+
+.journey-icon {
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  margin:auto auto 12px;
+  background:var(--soft);
+  color:var(--primary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+
+.journey-step h4 {
+  margin:0 0 5px;
+  font-size:12px;
+}
+
+.journey-step p {
+  margin:0;
+  font-size:10px;
+  color:var(--muted);
+}
+
+/* =========================
+   AWARENESS MATRIX
+========================= */
+
+.matrix-wrap {
+  max-width:850px;
+  margin:auto;
+}
+
+.matrix {
+  display:grid;
+  grid-template-columns:110px 1fr 1fr;
+  grid-template-rows:80px 180px 180px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  background:white;
+}
+
+.matrix > div {
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:22px;
+}
+
+.matrix .axis {
+  background:#f1f4f7;
+  font-weight:900;
+  font-size:12px;
+  color:var(--primary);
+}
+
+.matrix .cell {
+  transition:.2s ease;
+}
+
+.matrix .cell:hover {
+  background:#f8fafc;
+}
+
+.cell strong {
   display:block;
-
-  margin-bottom:5px;
-
+  margin-bottom:7px;
+  color:var(--primary);
 }
 
+.cell span {
+  color:var(--muted);
+  font-size:13px;
+}
 
-/* =========================================================
+/* =========================
+   BOOKS
+========================= */
+
+.books-section {
+  background:#ffffff;
+}
+
+.books-grid {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:18px;
+}
+
+.book-card {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.2s ease;
+  box-shadow:0 4px 15px rgba(20,30,40,.03);
+}
+
+.book-card:hover {
+  transform:translateY(-5px);
+  box-shadow:var(--shadow);
+}
+
+.book-cover {
+  height:250px;
+  background:#edf1f5;
+  overflow:hidden;
+}
+
+.book-cover img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.book-info {
+  padding:18px;
+}
+
+.book-info h3 {
+  font-size:15px;
+  line-height:1.3;
+  margin:0 0 6px;
+}
+
+.book-author {
+  color:var(--accent);
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.book-info p {
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.5;
+  margin:0;
+}
+
+.book-explore {
+  margin-top:13px;
+  display:block;
+  color:var(--primary);
+  font-size:11px;
+  font-weight:900;
+}
+
+/* =========================
+   CASE STUDIES
+========================= */
+
+.cases-section {
+  background:#f7f8fa;
+}
+
+.case-intro {
+  max-width:850px;
+  margin:0 auto 45px;
+  padding:22px 26px;
+  background:#eef3f8;
+  border:1px solid #e1e7ee;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  color:#394655;
+}
+
+.case-intro-icon {
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  flex-shrink:0;
+}
+
+.cases-grid {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:18px;
+}
+
+.case-card {
+  position:relative;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+  min-height:390px;
+  display:flex;
+  flex-direction:column;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.case-card:hover {
+  transform:translateY(-5px);
+  box-shadow:var(--shadow);
+  border-color:#c8d2dc;
+}
+
+.case-number {
+  font-size:12px;
+  font-weight:800;
+  color:var(--accent);
+  margin-bottom:18px;
+}
+
+.case-country {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.09em;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.case-card h3 {
+  font-size:21px;
+  line-height:1.2;
+  margin:0 0 12px;
+}
+
+.case-problem {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+  min-height:68px;
+}
+
+.case-principle {
+  margin-top:15px;
+  padding-top:15px;
+  border-top:1px solid #e8ebef;
+}
+
+.case-principle span {
+  display:block;
+  font-size:9px;
+  letter-spacing:.1em;
+  font-weight:800;
+  color:#8a929d;
+  margin-bottom:6px;
+}
+
+.case-principle strong {
+  display:block;
+  font-size:13px;
+  line-height:1.4;
+  color:var(--primary);
+}
+
+.case-result {
+  margin-top:auto;
+  padding:15px;
+  border-radius:12px;
+  background:#f7f8fa;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.case-result b {
+  font-size:21px;
+  color:var(--primary);
+}
+
+.case-result span {
+  font-size:11px;
+  line-height:1.4;
+  color:var(--muted);
+}
+
+.case-link {
+  margin-top:16px;
+  border:0;
+  background:transparent;
+  padding:0;
+  text-align:left;
+  color:var(--accent);
+  font-weight:800;
+  cursor:pointer;
+  font-size:13px;
+}
+
+/* =========================
+   THEORY CARDS
+========================= */
+
+.theories-section {
+  background:white;
+}
+
+.theory-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.theory-card {
+  padding:28px;
+  border:1px solid var(--line);
+  background:white;
+  border-radius:18px;
+  transition:.2s ease;
+}
+
+.theory-card:hover {
+  transform:translateY(-4px);
+  box-shadow:var(--shadow);
+}
+
+.theory-number {
+  font-size:11px;
+  color:var(--accent);
+  font-weight:900;
+}
+
+.theory-card h3 {
+  margin:10px 0;
+  font-size:21px;
+}
+
+.theory-card p {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+.theory-tags {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:15px 0;
+}
+
+.tag {
+  background:var(--soft);
+  color:var(--primary);
+  border-radius:30px;
+  padding:5px 8px;
+  font-size:9px;
+  font-weight:800;
+}
+
+.explore-btn {
+  border:0;
+  background:transparent;
+  color:var(--accent);
+  font-weight:900;
+  cursor:pointer;
+  padding:0;
+  font-size:12px;
+}
+
+/* =========================
+   COM-B
+========================= */
+
+.comb-section {
+  background:#eef3f8;
+}
+
+.comb-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  max-width:950px;
+  margin:auto;
+}
+
+.comb-card {
+  background:white;
+  border-radius:20px;
+  padding:32px;
+  border:1px solid #dfe5eb;
+}
+
+.comb-letter {
+  font-size:52px;
+  font-weight:900;
+  color:var(--accent);
+  line-height:1;
+}
+
+.comb-card h3 {
+  margin:12px 0;
+}
+
+.comb-card p {
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* =========================
+   DIAGNOSTIC
+========================= */
+
+.diagnostic-section {
+  background:white;
+}
+
+.diagnostic-box {
+  max-width:850px;
+  margin:auto;
+  background:#f7f8fa;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:35px;
+}
+
+.question {
+  padding:20px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.question:last-child {
+  border-bottom:0;
+}
+
+.question h4 {
+  margin:0 0 13px;
+}
+
+.option-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.option {
+  border:1px solid #d9dee5;
+  background:white;
+  padding:9px 13px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.option.selected {
+  background:var(--primary);
+  color:white;
+  border-color:var(--primary);
+}
+
+.diagnose-btn {
+  margin-top:25px;
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  background:var(--primary);
+  color:white;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.result-box {
+  display:none;
+  margin-top:25px;
+  padding:22px;
+  border-radius:15px;
+  background:#eef3f8;
+}
+
+.result-box h3 {
+  margin-top:0;
+}
+
+/* =========================
+   HABIT LOOP
+========================= */
+
+.habit-section {
+  background:#f7f8fa;
+}
+
+.habit-loop {
+  max-width:800px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.habit-card {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:25px;
+  text-align:center;
+}
+
+.habit-icon {
+  font-size:30px;
+  margin-bottom:12px;
+}
+
+.habit-card h3 {
+  font-size:17px;
+  margin:0 0 8px;
+}
+
+.habit-card p {
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* =========================
+   PRINCIPLES
+========================= */
+
+.principles-section {
+  background:white;
+}
+
+.principles-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.principle {
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:18px;
+}
+
+.principle strong {
+  display:block;
+  margin-bottom:8px;
+  color:var(--primary);
+}
+
+.principle span {
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================
+   INTEGRATED MODEL
+========================= */
+
+.integrated-section {
+  background:var(--dark);
+  color:white;
+}
+
+.integrated-section .section-heading p {
+  color:#aab4c0;
+}
+
+.integrated-flow {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.flow-node {
+  padding:13px 17px;
+  border:1px solid #33404e;
+  background:#18212b;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.flow-arrow {
+  color:#8d99a7;
+}
+
+/* =========================
    FOOTER
-========================================================= */
+========================= */
 
-footer{
-
-  padding:50px 0;
-
-  background:#111820;
-
-  color:#c4cbd3;
-
+footer {
+  padding:40px 0;
+  background:#0d1319;
+  color:#8d99a7;
+  text-align:center;
+  font-size:11px;
 }
 
+/* =========================
+   MODALS
+========================= */
 
-footer strong{
-
-  color:#fff;
-
+.modal {
+  position:fixed;
+  inset:0;
+  background:rgba(10,16,22,.72);
+  backdrop-filter:blur(7px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  z-index:3000;
 }
 
+.modal.active {
+  display:flex;
+}
 
-/* =========================================================
-   MOBILE
-========================================================= */
+.modal-content {
+  width:min(900px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:24px;
+  padding:40px;
+  position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+}
 
-@media(max-width:1000px){
+.modal-close {
+  position:absolute;
+  right:20px;
+  top:15px;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:0;
+  background:#f1f3f5;
+  font-size:25px;
+  cursor:pointer;
+}
 
-  .books-grid{
+.modal-header {
+  padding-right:40px;
+  margin-bottom:30px;
+}
 
-    grid-template-columns:
-      repeat(3,1fr);
+.modal-header h2 {
+  margin:7px 0 10px;
+  font-size:34px;
+}
 
+.modal-header p {
+  color:var(--muted);
+}
+
+.detail-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.detail {
+  background:#f7f8fa;
+  border:1px solid #e5e8ec;
+  border-radius:14px;
+  padding:20px;
+}
+
+.detail-label {
+  display:block;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.1em;
+  color:#8a929d;
+  margin-bottom:7px;
+}
+
+.detail p {
+  margin:0;
+  font-size:13px;
+  line-height:1.65;
+  color:#414b57;
+}
+
+/* Book modal */
+
+.book-modal-layout {
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:30px;
+}
+
+.book-modal-cover {
+  width:100%;
+  border-radius:12px;
+  box-shadow:var(--shadow);
+}
+
+.book-modal-content h2 {
+  margin:5px 0 5px;
+}
+
+.book-modal-author {
+  color:var(--accent);
+  font-weight:800;
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+.book-modal-content p {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
+}
+
+/* Case modal */
+
+.case-modal-content {
+  max-width:900px;
+}
+
+.case-modal-header {
+  padding-right:30px;
+  margin-bottom:30px;
+}
+
+.case-modal-header h2 {
+  margin:8px 0 10px;
+  font-size:34px;
+  line-height:1.15;
+}
+
+.case-modal-header p {
+  color:var(--muted);
+  font-size:16px;
+}
+
+.case-modal-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.case-detail {
+  padding:20px;
+  background:#f7f8fa;
+  border:1px solid #e5e8ec;
+  border-radius:14px;
+}
+
+.case-detail p {
+  margin:8px 0 0;
+  color:#414b57;
+  line-height:1.65;
+  font-size:14px;
+}
+
+.insight-box {
+  background:#eef3f8;
+  border-color:#d9e1e9;
+}
+
+.insight-box p {
+  color:var(--primary);
+  font-weight:600;
+}
+
+.case-source {
+  margin-top:25px;
+  padding-top:20px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.case-source span {
+  font-size:10px;
+  color:#8a929d;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:800;
+}
+
+.case-source a {
+  color:var(--accent);
+  font-weight:800;
+  text-decoration:none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px) {
+
+  .books-grid {
+    grid-template-columns:repeat(3,1fr);
   }
 
-}
+  .cases-grid {
+    grid-template-columns:repeat(3,1fr);
+  }
 
+  .journey-track {
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+  }
 
-@media(max-width:900px){
-
-  .nav-links{
-
+  .journey-step:not(:last-child)::after {
     display:none;
-
-  }
-
-
-  .flow{
-
-    grid-template-columns:1fr;
-
-  }
-
-
-  .theories,
-  .comb{
-
-    grid-template-columns:
-      1fr 1fr;
-
-  }
-
-
-  .principles{
-
-    grid-template-columns:
-      1fr 1fr;
-
-  }
-
-
-  .matrix{
-
-    grid-template-columns:1fr;
-
-  }
-
-
-  .matrix > div{
-
-    border-right:0;
-
-  }
-
-
-  .book-modal-grid{
-
-    grid-template-columns:1fr;
-
-  }
-
-
-  .book-modal-cover{
-
-    height:320px;
-
-    min-height:0;
-
   }
 
 }
 
+@media(max-width:900px) {
 
-@media(max-width:600px){
-
-  .hero{
-
-    padding:
-      65px 0 45px;
-
-  }
-
-
-  .hero h1{
-
-    letter-spacing:-2px;
-
-  }
-
-
-  section{
-
-    padding:55px 0;
-
-  }
-
-
-  .theories,
-  .comb,
-  .principles,
-  .books-grid{
-
+  .hero-grid {
     grid-template-columns:1fr;
-
+    text-align:center;
   }
 
-
-  .section-header h2{
-
-    font-size:30px;
-
+  .hero p {
+    margin-left:auto;
+    margin-right:auto;
   }
 
+  .hero-actions {
+    justify-content:center;
+  }
 
-  .detail-grid{
+  .theory-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
 
+  .principles-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:700px) {
+
+  .nav-inner {
+    align-items:flex-start;
+    flex-direction:column;
+    padding:12px 0;
+  }
+
+  .nav-links {
+    width:100%;
+    padding-bottom:5px;
+  }
+
+  .section {
+    padding:65px 0;
+  }
+
+  .books-grid,
+  .cases-grid,
+  .theory-grid,
+  .comb-grid,
+  .principles-grid {
     grid-template-columns:1fr;
-
   }
 
-
-  .modal{
-
-    padding:10px;
-
+  .matrix {
+    grid-template-columns:70px 1fr 1fr;
+    grid-template-rows:70px 170px 170px;
   }
 
-
-  .modal-content{
-
-    max-height:95vh;
-
+  .matrix > div {
+    padding:13px;
   }
 
-
-  .modal-header,
-  .modal-body{
-
-    padding:
-      25px 20px;
-
+  .matrix .cell {
+    font-size:11px;
   }
 
+  .book-modal-layout {
+    grid-template-columns:1fr;
+  }
 
-  .book-modal-info{
+  .book-modal-cover {
+    max-width:180px;
+  }
 
-    padding:25px;
+  .detail-grid,
+  .case-modal-grid {
+    grid-template-columns:1fr;
+  }
 
+  .habit-loop {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .modal-content {
+    padding:28px 20px;
+  }
+
+}
+
+@media(max-width:480px) {
+
+  .habit-loop {
+    grid-template-columns:1fr;
+  }
+
+  .behavior-orbit {
+    width:330px;
+    height:330px;
+  }
+
+  .ring-1 {
+    width:250px;
+    height:250px;
+  }
+
+  .ring-2 {
+    width:180px;
+    height:180px;
+  }
+
+  .orbit-center {
+    width:100px;
+    height:100px;
+    font-size:11px;
   }
 
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
+<!-- =========================
      NAVIGATION
-===================================================== -->
+========================= -->
 
-<nav>
+<nav class="navbar">
 
-<div class="container nav-inner">
+  <div class="container nav-inner">
 
-<div class="logo">
+    <div class="brand">
+      Health Behavior Science
+    </div>
 
-Health<span>Behavior</span> Science
+    <div class="nav-links">
+      <a href="#framework">Framework</a>
+      <a href="#books">Books</a>
+      <a href="#cases">Case Studies</a>
+      <a href="#theories">Theories</a>
+      <a href="#comb">COM-B</a>
+      <a href="#diagnostic">Diagnostic</a>
+      <a href="#principles">Principles</a>
+    </div>
 
-</div>
-
-
-<div class="nav-links">
-
-<a href="#framework">
-Framework
-</a>
-
-<a href="#books">
-Books
-</a>
-
-<a href="#theories">
-Theories
-</a>
-
-<a href="#diagnostic">
-Diagnostic
-</a>
-
-<a href="#principles">
-Principles
-</a>
-
-</div>
-
-</div>
+  </div>
 
 </nav>
 
 
-<!-- =====================================================
+<!-- =========================
      HERO
-===================================================== -->
+========================= -->
 
-<header class="hero">
+<section class="hero">
 
-<div class="container">
+  <div class="container hero-grid">
 
-<div class="eyebrow">
-Integrated Behavioral Health Framework
-</div>
+    <div>
 
+      <span class="eyebrow">
+        AN INTEGRATED BEHAVIOR SCIENCE FRAMEWORK
+      </span>
 
-<h1>
+      <h1>
+        Health changes when
+        <span>behavior changes.</span>
+      </h1>
 
-From human need to
-sustainable health behavior.
+      <p>
+        A practical synthesis of health behavior theories that explains
+        how people move from awareness to motivation, capability,
+        opportunity, action, habits and ultimately better health outcomes.
+      </p>
 
-</h1>
+      <div class="hero-actions">
 
+        <a class="btn btn-primary" href="#framework">
+          Explore Framework
+        </a>
 
-<p>
+        <a class="btn btn-secondary" href="#cases">
+          View Case Studies
+        </a>
 
-A practical synthesis of health psychology,
-behavioral science and behavior-change theories
-for understanding why people adopt, resist,
-maintain or abandon health behaviors.
+      </div>
 
-</p>
+    </div>
 
 
-<div class="hero-equation">
+    <div class="hero-visual">
 
-Awareness → Perception → Motivation →
-Capability + Opportunity → Intention →
-Action → Reinforcement → Habit →
-Identity → Outcome
+      <div class="behavior-orbit">
 
-</div>
+        <div class="orbit-ring ring-1"></div>
+        <div class="orbit-ring ring-2"></div>
 
-</div>
+        <div class="orbit-center">
+          HUMAN<br>
+          BEHAVIOUR
+        </div>
 
-</header>
+        <div class="orbit-node node-1">Awareness</div>
+        <div class="orbit-node node-2">Motivation</div>
+        <div class="orbit-node node-3">Capability</div>
+        <div class="orbit-node node-4">Action</div>
+        <div class="orbit-node node-5">Habit</div>
+        <div class="orbit-node node-6">Environment</div>
 
+      </div>
 
-<!-- =====================================================
-     BOOKS
-===================================================== -->
+    </div>
 
-<section id="books" class="books-section">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="eyebrow">
-01 / Recommended Reading
-</div>
-
-<h2>
-10 Books for Understanding Human Health Behavior
-</h2>
-
-<p>
-
-A cross-disciplinary reading list covering
-health behavior theory, psychology, decision-making,
-habit formation, motivation and behavior design.
-
-</p>
-
-</div>
-
-
-<div class="books-grid">
-
-
-<!-- BOOK 1 -->
-
-<div class="book-card"
-onclick="openBook('glanz')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9781394211319-L.jpg"
-alt="Health Behavior Theory Research and Practice book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Health Behavior: Theory, Research, and Practice
-</h3>
-
-<div class="book-author">
-Karen Glanz, Barbara K. Rimer & K. Viswanath
-</div>
-
-<p class="book-description">
-
-A foundational reference connecting health behavior
-theories with research and intervention practice.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 2 -->
-
-<div class="book-card"
-onclick="openBook('psychology')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780078035137-L.jpg"
-alt="Health Psychology book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Health Psychology
-</h3>
-
-<div class="book-author">
-Shelley E. Taylor
-</div>
-
-<p class="book-description">
-
-Explores how psychological processes,
-social factors and behavior interact with health and illness.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 3 -->
-
-<div class="book-card"
-onclick="openBook('predicting')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780335236053-L.jpg"
-alt="Predicting and Changing Health Behaviour book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Predicting and Changing Health Behaviour
-</h3>
-
-<div class="book-author">
-Mark Conner & Paul Norman
-</div>
-
-<p class="book-description">
-
-Focuses on social-cognition models used to
-predict and change health-related behaviors.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 4 -->
-
-<div class="book-card"
-onclick="openBook('thinking')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780141033570-L.jpg"
-alt="Thinking Fast and Slow book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Thinking, Fast and Slow
-</h3>
-
-<div class="book-author">
-Daniel Kahneman
-</div>
-
-<p class="book-description">
-
-Explores intuitive and deliberate thinking,
-judgment, biases and human decision-making.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 5 -->
-
-<div class="book-card"
-onclick="openBook('nudge')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780141999937-L.jpg"
-alt="Nudge book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Nudge
-</h3>
-
-<div class="book-author">
-Richard H. Thaler & Cass R. Sunstein
-</div>
-
-<p class="book-description">
-
-Examines how choice environments and defaults
-can influence decisions while preserving choice.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 6 -->
-
-<div class="book-card"
-onclick="openBook('habit')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg"
-alt="The Power of Habit book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-The Power of Habit
-</h3>
-
-<div class="book-author">
-Charles Duhigg
-</div>
-
-<p class="book-description">
-
-Explores the science of habits and how
-cue-routine-reward patterns influence behavior.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 7 -->
-
-<div class="book-card"
-onclick="openBook('atomic')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg"
-alt="Atomic Habits book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Atomic Habits
-</h3>
-
-<div class="book-author">
-James Clear
-</div>
-
-<p class="book-description">
-
-A practical framework for designing small,
-repeatable behaviors and changing environmental cues.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 8 -->
-
-<div class="book-card"
-onclick="openBook('tiny')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780358003328-L.jpg"
-alt="Tiny Habits book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Tiny Habits
-</h3>
-
-<div class="book-author">
-BJ Fogg
-</div>
-
-<p class="book-description">
-
-Introduces a behavior-design approach based on
-making behaviors small, easy and anchored to existing routines.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 9 -->
-
-<div class="book-card"
-onclick="openBook('social')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780136033060-L.jpg"
-alt="Social Foundations of Thought and Action book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Social Foundations of Thought and Action
-</h3>
-
-<div class="book-author">
-Albert Bandura
-</div>
-
-<p class="book-description">
-
-A foundational work underlying Social Cognitive
-Theory and self-efficacy research.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-<!-- BOOK 10 -->
-
-<div class="book-card"
-onclick="openBook('switch')">
-
-<div class="book-cover">
-
-<img
-src="https://covers.openlibrary.org/b/isbn/9780385528757-L.jpg"
-alt="Switch book cover"
-loading="lazy"
->
-
-</div>
-
-
-<div class="book-info">
-
-<h3>
-Switch
-</h3>
-
-<div class="book-author">
-Chip Heath & Dan Heath
-</div>
-
-<p class="book-description">
-
-Explores practical behavior-change through
-motivation, direction and environmental design.
-
-</p>
-
-<div class="book-more">
-Explore →
-</div>
-
-</div>
-
-</div>
-
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
 
-<!-- =====================================================
-     BOOK MODAL
-===================================================== -->
-
-<div
-id="bookModal"
-class="book-modal"
->
-
-<div class="book-modal-content">
-
-<button
-class="close-book"
-onclick="closeBook()"
->
-×
-</button>
-
-
-<div class="book-modal-grid">
-
-
-<div class="book-modal-cover">
-
-<img
-id="bookModalImage"
-src=""
-alt=""
->
-
-</div>
-
-
-<div class="book-modal-info">
-
-<div
-id="bookModalTag"
-class="eyebrow"
->
-Behavior Science
-</div>
-
-
-<h2
-id="bookModalTitle"
->
-</h2>
-
-
-<div
-id="bookModalAuthor"
-class="book-modal-author"
->
-</div>
-
-
-<p
-id="bookModalDescription"
-class="book-modal-description"
->
-</p>
-
-
-<div class="book-modal-why">
-
-<strong>
-Why it belongs in this framework
-</strong>
-
-<span
-id="bookModalWhy"
->
-</span>
-
-</div>
-
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     CORE FRAMEWORK
-===================================================== -->
-
-<section id="framework">
-
-<div class="container">
-
-<div class="section-header">
-
-<div class="eyebrow">
-02 / Core Model
-</div>
-
-<h2>
-The Health Behavior Journey
-</h2>
-
-<p>
-
-Health behavior is not simply a knowledge problem.
-It emerges from the interaction between the person,
-their motivation, their capabilities and their environment.
-
-</p>
-
-</div>
-
-
-<div class="flow">
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-01
-</div>
-
-<strong>
-Awareness
-</strong>
-
-<span>
-Does the person recognize the issue?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-02
-</div>
-
-<strong>
-Perception
-</strong>
-
-<span>
-How serious and personally relevant is it?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-03
-</div>
-
-<strong>
-Motivation
-</strong>
-
-<span>
-Why should the person change?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-04
-</div>
-
-<strong>
-Capability
-</strong>
-
-<span>
-Can the person actually perform the behavior?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-05
-</div>
-
-<strong>
-Opportunity
-</strong>
-
-<span>
-Does the environment enable it?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-06
-</div>
-
-<strong>
-Intention
-</strong>
-
-<span>
-Does the person plan to act?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-07
-</div>
-
-<strong>
-Action
-</strong>
-
-<span>
-Does behavior actually occur?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-08
-</div>
-
-<strong>
-Reinforcement
-</strong>
-
-<span>
-Does the behavior feel worth repeating?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-09
-</div>
-
-<strong>
-Habit
-</strong>
-
-<span>
-Does repetition reduce conscious effort?
-</span>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-number">
-10
-</div>
-
-<strong>
-Outcome
-</strong>
-
-<span>
-Does behavior improve health?
-</span>
-
-</div>
-
-
-</div>
-
-</div>
+<!-- =========================
+     FRAMEWORK
+========================= -->
+
+<section id="framework" class="section journey">
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <span class="eyebrow">
+        THE BEHAVIOR JOURNEY
+      </span>
+
+      <h2>
+        From human state to health outcome
+      </h2>
+
+      <p>
+        Health behaviour is not a single decision.
+        It is a system of perceptions, motivations, capabilities,
+        environments, actions and feedback.
+      </p>
+
+    </div>
+
+
+    <div class="journey-track">
+
+      <div class="journey-step">
+        <div class="journey-icon">01</div>
+        <h4>State</h4>
+        <p>Current health and context</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">02</div>
+        <h4>Awareness</h4>
+        <p>Recognising the problem</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">03</div>
+        <h4>Motivation</h4>
+        <p>Why should I act?</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">04</div>
+        <h4>Capability</h4>
+        <p>Can I do it?</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">05</div>
+        <h4>Opportunity</h4>
+        <p>Does my environment allow it?</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">06</div>
+        <h4>Action</h4>
+        <p>Actual behaviour</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">07</div>
+        <h4>Reinforcement</h4>
+        <p>Feedback and reward</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">08</div>
+        <h4>Habit</h4>
+        <p>Automatic repetition</p>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-icon">09</div>
+        <h4>Outcome</h4>
+        <p>Health improvement</p>
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      AWARENESS MATRIX
-===================================================== -->
+========================= -->
 
-<section>
+<section class="section">
 
-<div class="container">
+  <div class="container">
 
-<div class="section-header">
+    <div class="section-heading">
 
-<div class="eyebrow">
-03 / Human Need
-</div>
+      <span class="eyebrow">
+        BEHAVIOUR DIAGNOSIS
+      </span>
 
-<h2>
-Awareness × Expression
-</h2>
+      <h2>
+        Awareness × Expression
+      </h2>
 
-<p>
+      <p>
+        Knowing a problem exists does not automatically mean
+        the person is ready or willing to act.
+      </p>
 
-Not every health need that exists becomes an expressed demand.
-
-</p>
-
-</div>
-
-
-<div class="matrix">
+    </div>
 
 
-<div></div>
+    <div class="matrix-wrap">
+
+      <div class="matrix">
+
+        <div class="axis"></div>
+
+        <div class="axis">
+          LATENT
+        </div>
+
+        <div class="axis">
+          APPARENT / EXPRESSED
+        </div>
 
 
-<div class="head">
-Latent
-</div>
+        <div class="axis">
+          UNAWARE
+        </div>
+
+        <div class="cell">
+          <strong>Unaware + Latent</strong>
+          <span>
+            The person does not recognise the problem
+            and does not actively express a need.
+          </span>
+        </div>
+
+        <div class="cell">
+          <strong>Unaware + Apparent</strong>
+          <span>
+            The behaviour or health problem is visible
+            to others even though the person may not recognise it.
+          </span>
+        </div>
 
 
-<div class="head">
-Apparent / Expressed
-</div>
+        <div class="axis">
+          AWARE
+        </div>
 
+        <div class="cell">
+          <strong>Aware + Latent</strong>
+          <span>
+            The person knows the problem exists but
+            does not yet translate awareness into action.
+          </span>
+        </div>
 
-<div class="matrix-title">
-Unaware
-</div>
+        <div class="cell">
+          <strong>Aware + Apparent</strong>
+          <span>
+            The problem is recognised and the need
+            for change is clearly expressed.
+          </span>
+        </div>
 
+      </div>
 
-<div>
+    </div>
 
-<strong>
-Unaware + Latent
-</strong>
-
-<p>
-The person does not recognize the problem or need.
-</p>
-
-</div>
-
-
-<div>
-
-<strong>
-Unaware + Apparent
-</strong>
-
-<p>
-The problem is observable, but its meaning or cause is not recognized.
-</p>
-
-</div>
-
-
-<div class="matrix-title">
-Aware
-</div>
-
-
-<div>
-
-<strong>
-Aware + Latent
-</strong>
-
-<p>
-The person knows about the issue but has not activated behavior.
-</p>
-
-</div>
-
-
-<div>
-
-<strong>
-Aware + Apparent
-</strong>
-
-<p>
-The person recognizes the problem and actively expresses a need or intent.
-</p>
-
-</div>
-
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
 
-<!-- =====================================================
-     MAJOR THEORIES
-===================================================== -->
+<!-- =========================
+     BOOKS
+========================= -->
 
-<section id="theories">
+<section id="books" class="section books-section">
 
-<div class="container">
+  <div class="container">
 
-<div class="section-header">
+    <div class="section-heading">
 
-<div class="eyebrow">
-04 / Theory Stack
-</div>
+      <span class="eyebrow">
+        RECOMMENDED READING
+      </span>
 
-<h2>
-Major Health Behavior Theories
-</h2>
+      <h2>
+        10 books to understand human behaviour
+      </h2>
 
-<p>
+      <p>
+        A cross-disciplinary reading list covering health psychology,
+        behaviour change, decision science, habits, motivation and social learning.
+      </p>
 
-Click any theory to explore its constructs,
-mechanism, health example, intervention implications
-and limitations.
+    </div>
 
-</p>
 
-</div>
+    <div class="books-grid">
 
 
-<div class="theories">
+      <article class="book-card"
+        onclick="openBook('glanz')">
 
+        <div class="book-cover">
 
-<div class="card">
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9781118628980-L.jpg"
+            alt="Health Behavior Theory Research and Practice">
 
-<span class="card-tag">
-Risk perception
-</span>
+        </div>
 
-<h3>
-Health Belief Model
-</h3>
+        <div class="book-info">
 
-<p>
-Explains how beliefs about health threats,
-benefits and barriers influence action.
-</p>
+          <h3>
+            Health Behavior: Theory, Research, and Practice
+          </h3>
 
-<div class="formula">
-Susceptibility + Severity + Benefits − Barriers + Cue → Action
-</div>
+          <div class="book-author">
+            Glanz, Rimer & Viswanath
+          </div>
 
-<button
-class="learn-btn"
-onclick="openTheory('hbm')"
->
-Explore theory
-</button>
+          <p>
+            A foundational reference connecting major health behaviour
+            theories with intervention design and evaluation.
+          </p>
 
-</div>
+          <span class="book-explore">
+            Explore →
+          </span>
 
+        </div>
 
-<div class="card">
+      </article>
 
-<span class="card-tag">
-Intention
-</span>
 
-<h3>
-Theory of Planned Behavior
-</h3>
+      <article class="book-card"
+        onclick="openBook('taylor')">
 
-<p>
-Explains behavior through attitudes,
-social norms, perceived control and intention.
-</p>
+        <div class="book-cover">
 
-<div class="formula">
-Attitude + Norms + Control → Intention → Behavior
-</div>
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9781259870474-L.jpg"
+            alt="Health Psychology">
 
-<button
-class="learn-btn"
-onclick="openTheory('tpb')"
->
-Explore theory
-</button>
+        </div>
 
-</div>
+        <div class="book-info">
 
+          <h3>
+            Health Psychology
+          </h3>
 
-<div class="card">
+          <div class="book-author">
+            Shelley E. Taylor
+          </div>
 
-<span class="card-tag">
-Behavior system
-</span>
+          <p>
+            Explores how psychological processes influence health,
+            illness, coping and health-related behaviour.
+          </p>
 
-<h3>
-COM-B
-</h3>
+          <span class="book-explore">
+            Explore →
+          </span>
 
-<p>
-Explains behavior through capability,
-opportunity and motivation.
-</p>
+        </div>
 
-<div class="formula">
-Capability + Opportunity + Motivation → Behavior
-</div>
+      </article>
 
-<button
-class="learn-btn"
-onclick="openTheory('comb')"
->
-Explore theory
-</button>
 
-</div>
+      <article class="book-card"
+        onclick="openBook('conner')">
 
+        <div class="book-cover">
 
-<div class="card">
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780335243194-L.jpg"
+            alt="Predicting and Changing Health Behaviour">
 
-<span class="card-tag">
-Learning
-</span>
+        </div>
 
-<h3>
-Social Cognitive Theory
-</h3>
+        <div class="book-info">
 
-<p>
-Explains reciprocal relationships between
-people, behavior and environment.
-</p>
+          <h3>
+            Predicting and Changing Health Behaviour
+          </h3>
 
-<div class="formula">
-Person ↔ Behavior ↔ Environment
-</div>
+          <div class="book-author">
+            Mark Conner & Paul Norman
+          </div>
 
-<button
-class="learn-btn"
-onclick="openTheory('sct')"
->
-Explore theory
-</button>
+          <p>
+            A detailed bridge between behavioural theory,
+            prediction and practical intervention design.
+          </p>
 
-</div>
+          <span class="book-explore">
+            Explore →
+          </span>
 
+        </div>
 
-<div class="card">
+      </article>
 
-<span class="card-tag">
-Autonomy
-</span>
 
-<h3>
-Self-Determination Theory
-</h3>
+      <article class="book-card"
+        onclick="openBook('kahneman')">
 
-<p>
-Explains motivation through autonomy,
-competence and relatedness.
-</p>
+        <div class="book-cover">
 
-<div class="formula">
-Autonomy + Competence + Relatedness
-</div>
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg"
+            alt="Thinking Fast and Slow">
 
-<button
-class="learn-btn"
-onclick="openTheory('sdt')"
->
-Explore theory
-</button>
+        </div>
 
-</div>
+        <div class="book-info">
 
+          <h3>
+            Thinking, Fast and Slow
+          </h3>
 
-<div class="card">
+          <div class="book-author">
+            Daniel Kahneman
+          </div>
 
-<span class="card-tag">
-Readiness
-</span>
+          <p>
+            A foundation for understanding intuitive and deliberate
+            decision-making, biases and cognitive shortcuts.
+          </p>
 
-<h3>
-Transtheoretical Model
-</h3>
+          <span class="book-explore">
+            Explore →
+          </span>
 
-<p>
-Explains behavior change through stages
-of readiness.
-</p>
+        </div>
 
-<div class="formula">
-Readiness → Appropriate Intervention
-</div>
+      </article>
 
-<button
-class="learn-btn"
-onclick="openTheory('ttm')"
->
-Explore theory
-</button>
 
-</div>
+      <article class="book-card"
+        onclick="openBook('nudge')">
 
+        <div class="book-cover">
 
-<div class="card">
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780143137009-L.jpg"
+            alt="Nudge">
 
-<span class="card-tag">
-Action design
-</span>
+        </div>
 
-<h3>
-Fogg Behavior Model
-</h3>
+        <div class="book-info">
 
-<p>
-Explains behavior through motivation,
-ability and prompts.
-</p>
+          <h3>
+            Nudge
+          </h3>
 
-<div class="formula">
-Motivation × Ability × Prompt → Behavior
-</div>
+          <div class="book-author">
+            Richard Thaler & Cass Sunstein
+          </div>
 
-<button
-class="learn-btn"
-onclick="openTheory('fogg')"
->
-Explore theory
-</button>
+          <p>
+            Introduces choice architecture and how environments
+            can influence decisions without removing choice.
+          </p>
 
-</div>
+          <span class="book-explore">
+            Explore →
+          </span>
 
+        </div>
 
-<div class="card">
+      </article>
 
-<span class="card-tag">
-Habit
-</span>
 
-<h3>
-Habit Loop
-</h3>
+      <article class="book-card"
+        onclick="openBook('duhigg')">
 
-<p>
-Explains how repeated behavior can
-become increasingly automatic.
-</p>
+        <div class="book-cover">
 
-<div class="formula">
-Cue → Routine → Reward → Repetition
-</div>
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg"
+            alt="The Power of Habit">
 
-<button
-class="learn-btn"
-onclick="openTheory('habit')"
->
-Explore theory
-</button>
+        </div>
 
-</div>
+        <div class="book-info">
 
+          <h3>
+            The Power of Habit
+          </h3>
 
-<div class="card">
+          <div class="book-author">
+            Charles Duhigg
+          </div>
 
-<span class="card-tag">
-Environment
-</span>
+          <p>
+            Popularises the cue-routine-reward model and explains
+            how habits become automatic.
+          </p>
 
-<h3>
-Choice Architecture
-</h3>
+          <span class="book-explore">
+            Explore →
+          </span>
 
-<p>
-Explains how defaults, friction, salience
-and environment influence decisions.
-</p>
+        </div>
 
-<div class="formula">
-Environment → Choice → Behavior
-</div>
+      </article>
 
-<button
-class="learn-btn"
-onclick="openTheory('choice')"
->
-Explore theory
-</button>
 
-</div>
+      <article class="book-card"
+        onclick="openBook('atomic')">
 
+        <div class="book-cover">
 
-</div>
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg"
+            alt="Atomic Habits">
 
-</div>
+        </div>
+
+        <div class="book-info">
+
+          <h3>
+            Atomic Habits
+          </h3>
+
+          <div class="book-author">
+            James Clear
+          </div>
+
+          <p>
+            Practical framework for designing small repeated behaviours
+            and building systems around identity and environment.
+          </p>
+
+          <span class="book-explore">
+            Explore →
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <article class="book-card"
+        onclick="openBook('tiny')">
+
+        <div class="book-cover">
+
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780358434728-L.jpg"
+            alt="Tiny Habits">
+
+        </div>
+
+        <div class="book-info">
+
+          <h3>
+            Tiny Habits
+          </h3>
+
+          <div class="book-author">
+            BJ Fogg
+          </div>
+
+          <p>
+            Behaviour design approach based on motivation, ability
+            and prompts occurring together.
+          </p>
+
+          <span class="book-explore">
+            Explore →
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <article class="book-card"
+        onclick="openBook('bandura')">
+
+        <div class="book-cover">
+
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780138156145-L.jpg"
+            alt="Social Foundations of Thought and Action">
+
+        </div>
+
+        <div class="book-info">
+
+          <h3>
+            Social Foundations of Thought and Action
+          </h3>
+
+          <div class="book-author">
+            Albert Bandura
+          </div>
+
+          <p>
+            The theoretical foundation of social cognitive theory,
+            self-efficacy and reciprocal person-environment interaction.
+          </p>
+
+          <span class="book-explore">
+            Explore →
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <article class="book-card"
+        onclick="openBook('switch')">
+
+        <div class="book-cover">
+
+          <img
+            src="https://covers.openlibrary.org/b/isbn/9780385528757-L.jpg"
+            alt="Switch">
+
+        </div>
+
+        <div class="book-info">
+
+          <h3>
+            Switch
+          </h3>
+
+          <div class="book-author">
+            Chip Heath & Dan Heath
+          </div>
+
+          <p>
+            A practical model for changing behaviour by aligning
+            rational thinking, emotion and environment.
+          </p>
+
+          <span class="book-explore">
+            Explore →
+          </span>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =====================================================
-     THEORY MODAL
-===================================================== -->
+<!-- =========================
+     CASE STUDIES
+========================= -->
 
-<div
-id="theoryModal"
-class="modal"
->
+<section id="cases" class="section cases-section">
 
-<div class="modal-content">
+  <div class="container">
 
-<button
-class="close"
-onclick="closeTheory()"
->
-×
-</button>
+    <div class="section-heading">
 
+      <span class="eyebrow">
+        EVIDENCE IN PRACTICE
+      </span>
 
-<div class="modal-header">
+      <h2>
+        Case Studies: When Behaviour Changes Health
+      </h2>
 
-<div
-id="modalTag"
-class="eyebrow"
->
-</div>
+      <p>
+        Real-world interventions where understanding human behaviour —
+        rather than information alone — was central to solving a health problem.
+      </p>
+
+    </div>
 
 
-<h2
-id="modalTitle"
->
-</h2>
+    <div class="case-intro">
+
+      <div class="case-intro-icon">
+        🧠
+      </div>
+
+      <div>
+        <strong>The key question:</strong>
+        What behaviour had to change, what prevented it,
+        and which behavioural mechanism made the change possible?
+      </div>
+
+    </div>
 
 
-<p
-id="modalIntro"
->
-</p>
-
-</div>
+    <div class="cases-grid">
 
 
-<div class="modal-body">
+      <article class="case-card"
+        onclick="openCase('superamma')">
+
+        <div class="case-number">01</div>
+
+        <div class="case-country">
+          🇮🇳 INDIA · ANDHRA PRADESH
+        </div>
+
+        <h3>
+          SuperAmma
+        </h3>
+
+        <p class="case-problem">
+          Increasing handwashing with soap in rural communities.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Emotion + Social Norms + Identity
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>37%</b>
+
+          <span>
+            handwashing with soap at key events
+            at 6 months in intervention villages
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
 
 
-<div class="detail-grid">
+      <article class="case-card"
+        onclick="openCase('keralaHypertension')">
+
+        <div class="case-number">02</div>
+
+        <div class="case-country">
+          🇮🇳 INDIA · KERALA
+        </div>
+
+        <h3>
+          Women’s SHGs & Hypertension
+        </h3>
+
+        <p class="case-problem">
+          Improving hypertension management, adherence
+          and dietary behaviour.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Peer Support + Community Capability
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>−1.10g</b>
+
+          <span>
+            net reduction in daily per-capita salt consumption
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
 
 
-<div class="detail-box">
+      <article class="case-card"
+        onclick="openCase('howrahSmokeFree')">
 
-<h4>
-What does it explain?
-</h4>
+        <div class="case-number">03</div>
 
-<p id="modalExplains">
-</p>
+        <div class="case-country">
+          🇮🇳 INDIA · HOWRAH
+        </div>
 
-</div>
+        <h3>
+          Smoke-Free Howrah
+        </h3>
 
+        <p class="case-problem">
+          Turning smoke-free public-place regulations
+          into everyday behaviour.
+        </p>
 
-<div class="detail-box">
+        <div class="case-principle">
 
-<h4>
-Core constructs
-</h4>
+          <span>BEHAVIOUR PRINCIPLE</span>
 
-<p id="modalConstructs">
-</p>
+          <strong>
+            Environment + Enforcement + Social Norm
+          </strong>
 
-</div>
+        </div>
 
+        <div class="case-result">
 
-<div class="detail-box">
+          <b>2010–14</b>
 
-<h4>
-How does it work?
-</h4>
+          <span>
+            multi-year city-wide implementation combining
+            enforcement and community action
+          </span>
 
-<p id="modalMechanism">
-</p>
+        </div>
 
-</div>
+        <button class="case-link">
+          Explore case →
+        </button>
 
-
-<div class="detail-box">
-
-<h4>
-When is it useful?
-</h4>
-
-<p id="modalUseful">
-</p>
-
-</div>
+      </article>
 
 
-</div>
+      <article class="case-card"
+        onclick="openCase('punjabTobacco')">
+
+        <div class="case-number">04</div>
+
+        <div class="case-country">
+          🇮🇳 INDIA · PUNJAB
+        </div>
+
+        <h3>
+          Culturally Tailored Tobacco Cessation
+        </h3>
+
+        <p class="case-problem">
+          Tobacco dependence combined with social
+          and cultural barriers.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Cultural Identity + Individualisation
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>PERSON-CENTRED</b>
+
+          <span>
+            intervention adapted to religious
+            and social context
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
 
 
-<div class="example-box">
+      <article class="case-card"
+        onclick="openCase('chandigarhSchool')">
 
-<h3>
-Health example
-</h3>
+        <div class="case-number">05</div>
 
-<p id="modalExample">
-</p>
+        <div class="case-country">
+          🇮🇳 INDIA · CHANDIGARH
+        </div>
 
-</div>
+        <h3>
+          School-Based NCD Prevention
+        </h3>
+
+        <p class="case-problem">
+          Unhealthy diet, low physical activity and
+          emerging NCD risk among adolescents.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Social Environment + Repetition
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>+18g</b>
+
+          <span>
+            increase in daily fruit consumption
+            among adolescents
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
 
 
-<div class="key-idea">
+      <article class="case-card"
+        onclick="openCase('dpp')">
 
-<strong>
-Intervention implication
-</strong>
+        <div class="case-number">06</div>
 
-<span id="modalIntervention">
-</span>
+        <div class="case-country">
+          🇺🇸 USA
+        </div>
 
-</div>
+        <h3>
+          Diabetes Prevention Program
+        </h3>
+
+        <p class="case-problem">
+          Preventing progression from high diabetes
+          risk to type 2 diabetes.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Self-Regulation + Capability + Coaching
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>58%</b>
+
+          <span>
+            lower incidence of diabetes with
+            intensive lifestyle intervention
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
 
 
-<div
-class="detail-box"
-style="margin-top:20px;"
->
+      <article class="case-card"
+        onclick="openCase('finlandDps')">
 
-<h4>
-Important limitation
-</h4>
+        <div class="case-number">07</div>
 
-<p id="modalLimitation">
-</p>
+        <div class="case-country">
+          🇫🇮 FINLAND
+        </div>
 
-</div>
+        <h3>
+          Finnish Diabetes Prevention Study
+        </h3>
+
+        <p class="case-problem">
+          Preventing type 2 diabetes among adults
+          with impaired glucose tolerance.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Goal Setting + Feedback + Coaching
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>58%</b>
+
+          <span>
+            lower diabetes incidence over
+            the study period
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
 
 
-</div>
+      <article class="case-card"
+        onclick="openCase('saltReduction')">
 
-</div>
+        <div class="case-number">08</div>
 
-</div>
+        <div class="case-country">
+          🌍 MULTI-COUNTRY EVIDENCE
+        </div>
+
+        <h3>
+          Behavioural Salt Reduction
+        </h3>
+
+        <p class="case-problem">
+          Reducing excessive dietary sodium exposure.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Choice Architecture + Substitution
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>61 TRIALS</b>
+
+          <span>
+            systematic review of behavioural
+            sodium-reduction interventions
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
 
 
-<!-- =====================================================
+      <article class="case-card"
+        onclick="openCase('hivAdherence')">
+
+        <div class="case-number">09</div>
+
+        <div class="case-country">
+          🌍 HIV CARE
+        </div>
+
+        <h3>
+          Self-Regulation for ART Adherence
+        </h3>
+
+        <p class="case-problem">
+          Maintaining consistent antiretroviral
+          therapy adherence.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Self-Monitoring + Planning + Feedback
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>90%+</b>
+
+          <span>
+            adherence target used as a key outcome
+            in the intervention
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
+
+
+      <article class="case-card"
+        onclick="openCase('howBehaviorWorks')">
+
+        <div class="case-number">10</div>
+
+        <div class="case-country">
+          🌍 CROSS-DOMAIN
+        </div>
+
+        <h3>
+          From Information to Behaviour
+        </h3>
+
+        <p class="case-problem">
+          Health campaigns that increase knowledge
+          without equivalent behavioural change.
+        </p>
+
+        <div class="case-principle">
+
+          <span>BEHAVIOUR PRINCIPLE</span>
+
+          <strong>
+            Capability + Opportunity + Motivation
+          </strong>
+
+        </div>
+
+        <div class="case-result">
+
+          <b>CORE LESSON</b>
+
+          <span>
+            design the behaviour and environment,
+            not just the message
+          </span>
+
+        </div>
+
+        <button class="case-link">
+          Explore case →
+        </button>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     THEORIES
+========================= -->
+
+<section id="theories" class="section theories-section">
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <span class="eyebrow">
+        MAJOR HEALTH BEHAVIOR THEORIES
+      </span>
+
+      <h2>
+        Nine lenses for understanding behaviour
+      </h2>
+
+      <p>
+        Each theory explains a different part of the behaviour system.
+        Together they provide a richer intervention-design toolkit.
+      </p>
+
+    </div>
+
+
+    <div class="theory-grid">
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          01
+        </div>
+
+        <h3>
+          Health Belief Model
+        </h3>
+
+        <p>
+          Explains how perceived susceptibility, severity,
+          benefits, barriers, self-efficacy and cues influence action.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Risk</span>
+          <span class="tag">Benefits</span>
+          <span class="tag">Barriers</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('hbm')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          02
+        </div>
+
+        <h3>
+          Theory of Planned Behavior
+        </h3>
+
+        <p>
+          Behaviour is influenced through attitudes,
+          subjective norms and perceived behavioural control.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Attitude</span>
+          <span class="tag">Norms</span>
+          <span class="tag">Intention</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('tpb')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          03
+        </div>
+
+        <h3>
+          COM-B
+        </h3>
+
+        <p>
+          Behaviour emerges from the interaction of
+          capability, opportunity and motivation.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Capability</span>
+          <span class="tag">Opportunity</span>
+          <span class="tag">Motivation</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('comb')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          04
+        </div>
+
+        <h3>
+          Social Cognitive Theory
+        </h3>
+
+        <p>
+          Behaviour is shaped by reciprocal interaction between
+          person, behaviour and environment.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Self-Efficacy</span>
+          <span class="tag">Modelling</span>
+          <span class="tag">Environment</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('sct')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          05
+        </div>
+
+        <h3>
+          Self-Determination Theory
+        </h3>
+
+        <p>
+          Sustainable motivation is supported by autonomy,
+          competence and relatedness.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Autonomy</span>
+          <span class="tag">Competence</span>
+          <span class="tag">Relatedness</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('sdt')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          06
+        </div>
+
+        <h3>
+          Transtheoretical Model
+        </h3>
+
+        <p>
+          Behaviour change unfolds through stages from
+          precontemplation to maintenance.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Stages</span>
+          <span class="tag">Readiness</span>
+          <span class="tag">Maintenance</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('ttm')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          07
+        </div>
+
+        <h3>
+          Fogg Behavior Model
+        </h3>
+
+        <p>
+          Behaviour occurs when motivation, ability and
+          a prompt converge at the same moment.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Motivation</span>
+          <span class="tag">Ability</span>
+          <span class="tag">Prompt</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('fogg')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          08
+        </div>
+
+        <h3>
+          Habit Science
+        </h3>
+
+        <p>
+          Repeated behaviour becomes increasingly automatic
+          when linked to stable cues and reinforcement.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Cue</span>
+          <span class="tag">Routine</span>
+          <span class="tag">Reward</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('habit')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+      <article class="theory-card">
+
+        <div class="theory-number">
+          09
+        </div>
+
+        <h3>
+          Choice Architecture
+        </h3>
+
+        <p>
+          Behaviour can be influenced by changing the environment,
+          defaults, friction, salience and available choices.
+        </p>
+
+        <div class="theory-tags">
+          <span class="tag">Defaults</span>
+          <span class="tag">Friction</span>
+          <span class="tag">Context</span>
+        </div>
+
+        <button class="explore-btn"
+          onclick="openTheory('choice')">
+          Explore theory →
+        </button>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
      COM-B
-===================================================== -->
+========================= -->
 
-<section>
+<section id="comb" class="section comb-section">
 
-<div class="container">
+  <div class="container">
 
-<div class="section-header">
+    <div class="section-heading">
 
-<div class="eyebrow">
-05 / Behavioral Diagnosis
-</div>
+      <span class="eyebrow">
+        BEHAVIOUR DIAGNOSTIC ENGINE
+      </span>
 
-<h2>
-COM-B Diagnostic Model
-</h2>
+      <h2>
+        COM-B
+      </h2>
 
-<p>
+      <p>
+        Before designing an intervention, diagnose what is actually
+        preventing the behaviour.
+      </p>
 
-When a desired health behavior is not happening,
-diagnose the missing component before designing
-an intervention.
-
-</p>
-
-</div>
+    </div>
 
 
-<div class="comb">
+    <div class="comb-grid">
 
 
-<div class="comb-card">
+      <div class="comb-card">
 
-<h3>
-C
-</h3>
+        <div class="comb-letter">
+          C
+        </div>
 
-<h4>
-Capability
-</h4>
+        <h3>
+          Capability
+        </h3>
 
-<p>
+        <p>
+          Does the person have the physical and psychological
+          capability, knowledge and skills required?
+        </p>
 
-Does the person have the knowledge,
-skills, physical capacity and psychological
-ability to perform the behavior?
-
-</p>
-
-<strong>
-Intervention examples:
-</strong>
-
-<p>
-Education · Training · Skill building · Planning
-</p>
-
-</div>
+      </div>
 
 
-<div class="comb-card">
+      <div class="comb-card">
 
-<h3>
-O
-</h3>
+        <div class="comb-letter">
+          O
+        </div>
 
-<h4>
-Opportunity
-</h4>
+        <h3>
+          Opportunity
+        </h3>
 
-<p>
+        <p>
+          Does the physical and social environment make the
+          behaviour possible, accessible and socially supported?
+        </p>
 
-Does the physical and social environment make
-the behavior possible and accessible?
-
-</p>
-
-<strong>
-Intervention examples:
-</strong>
-
-<p>
-Access · Convenience · Infrastructure · Social support
-</p>
-
-</div>
+      </div>
 
 
-<div class="comb-card">
+      <div class="comb-card">
 
-<h3>
-M
-</h3>
+        <div class="comb-letter">
+          M
+        </div>
 
-<h4>
-Motivation
-</h4>
+        <h3>
+          Motivation
+        </h3>
 
-<p>
+        <p>
+          Do automatic and reflective processes create enough
+          motivation to perform the behaviour?
+        </p>
 
-Does the person have sufficient reflective
-and automatic motivation?
-
-</p>
-
-<strong>
-Intervention examples:
-</strong>
-
-<p>
-Goals · Feedback · Rewards · Identity
-</p>
-
-</div>
+      </div>
 
 
-</div>
+    </div>
 
-</div>
+  </div>
 
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      DIAGNOSTIC
-===================================================== -->
+========================= -->
 
-<section
-class="diagnostic"
-id="diagnostic"
->
+<section id="diagnostic" class="section diagnostic-section">
 
-<div class="container">
+  <div class="container">
 
-<div class="section-header">
+    <div class="section-heading">
 
-<div class="eyebrow">
-06 / Interactive Tool
-</div>
+      <span class="eyebrow">
+        INTERACTIVE DIAGNOSTIC
+      </span>
 
-<h2>
-Health Behavior Diagnostic
-</h2>
+      <h2>
+        What is blocking the behaviour?
+      </h2>
 
-<p>
+      <p>
+        Use this quick diagnostic to identify the dominant behavioural barrier.
+      </p>
 
-Identify the likely behavioral constraint
-behind a health action that is not occurring.
-
-</p>
-
-</div>
+    </div>
 
 
-<div class="questions">
+    <div class="diagnostic-box">
 
 
-<div class="question">
+      <div class="question">
 
-<label>
-1. Does the person understand what they need to do?
-</label>
+        <h4>
+          1. Does the person know what to do?
+        </h4>
 
-<select id="q1">
+        <div class="option-row">
 
-<option value="0">
-Yes
-</option>
+          <button class="option"
+            onclick="selectOption(this,'q1','yes')">
+            Yes
+          </button>
 
-<option value="2">
-No
-</option>
+          <button class="option"
+            onclick="selectOption(this,'q1','no')">
+            No
+          </button>
 
-</select>
+        </div>
 
-</div>
-
-
-<div class="question">
-
-<label>
-2. Do they have the skills or ability to perform it?
-</label>
-
-<select id="q2">
-
-<option value="0">
-Yes
-</option>
-
-<option value="2">
-No
-</option>
-
-</select>
-
-</div>
+      </div>
 
 
-<div class="question">
+      <div class="question">
 
-<label>
-3. Is the behavior easily available in their environment?
-</label>
+        <h4>
+          2. Do they have the skills/resources?
+        </h4>
 
-<select id="q3">
+        <div class="option-row">
 
-<option value="0">
-Yes
-</option>
+          <button class="option"
+            onclick="selectOption(this,'q2','yes')">
+            Yes
+          </button>
 
-<option value="2">
-No
-</option>
+          <button class="option"
+            onclick="selectOption(this,'q2','no')">
+            No
+          </button>
 
-</select>
+        </div>
 
-</div>
-
-
-<div class="question">
-
-<label>
-4. Do they have enough motivation to act?
-</label>
-
-<select id="q4">
-
-<option value="0">
-Yes
-</option>
-
-<option value="2">
-No
-</option>
-
-</select>
-
-</div>
+      </div>
 
 
-<div class="question">
+      <div class="question">
 
-<label>
-5. Is there a clear trigger or prompt?
-</label>
+        <h4>
+          3. Does the environment support the behaviour?
+        </h4>
 
-<select id="q5">
+        <div class="option-row">
 
-<option value="0">
-Yes
-</option>
+          <button class="option"
+            onclick="selectOption(this,'q3','yes')">
+            Yes
+          </button>
 
-<option value="1">
-No
-</option>
+          <button class="option"
+            onclick="selectOption(this,'q3','no')">
+            No
+          </button>
 
-</select>
+        </div>
 
-</div>
-
-
-</div>
-
-
-<button
-onclick="diagnose()"
->
-Diagnose Behavior Barrier
-</button>
+      </div>
 
 
-<div
-id="result"
-class="result"
->
-</div>
+      <div class="question">
+
+        <h4>
+          4. Do they genuinely want to change?
+        </h4>
+
+        <div class="option-row">
+
+          <button class="option"
+            onclick="selectOption(this,'q4','yes')">
+            Yes
+          </button>
+
+          <button class="option"
+            onclick="selectOption(this,'q4','no')">
+            No
+          </button>
+
+        </div>
+
+      </div>
 
 
-</div>
+      <div class="question">
+
+        <h4>
+          5. Is there a reliable prompt or cue?
+        </h4>
+
+        <div class="option-row">
+
+          <button class="option"
+            onclick="selectOption(this,'q5','yes')">
+            Yes
+          </button>
+
+          <button class="option"
+            onclick="selectOption(this,'q5','no')">
+            No
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <button class="diagnose-btn"
+        onclick="diagnose()">
+
+        Diagnose Behaviour Barrier
+
+      </button>
+
+
+      <div id="diagnosticResult"
+        class="result-box">
+
+        <h3 id="resultTitle"></h3>
+
+        <p id="resultText"></p>
+
+      </div>
+
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =====================================================
-     HABIT
-===================================================== -->
+<!-- =========================
+     HABIT LOOP
+========================= -->
 
-<section>
+<section class="section habit-section">
 
-<div class="container">
+  <div class="container">
 
-<div class="section-header">
+    <div class="section-heading">
 
-<div class="eyebrow">
-07 / Habit Formation
-</div>
+      <span class="eyebrow">
+        HABIT SCIENCE
+      </span>
 
-<h2>
-From Action to Automaticity
-</h2>
+      <h2>
+        From deliberate action to automatic behaviour
+      </h2>
 
-<p>
+      <p>
+        Repetition becomes easier when behaviour is connected
+        to stable cues and meaningful reinforcement.
+      </p>
 
-Long-term health behavior requires more than motivation.
-Repeated behaviors become easier when context and
-reinforcement remain stable.
-
-</p>
-
-</div>
+    </div>
 
 
-<div class="loop">
+    <div class="habit-loop">
 
 
-<div class="loop-item">
-Cue
-</div>
+      <div class="habit-card">
 
-<div class="arrow">
-→
-</div>
+        <div class="habit-icon">
+          👁
+        </div>
 
-<div class="loop-item">
-Behavior
-</div>
+        <h3>
+          Cue
+        </h3>
 
-<div class="arrow">
-→
-</div>
+        <p>
+          Something in the environment signals that
+          the behaviour should happen.
+        </p>
 
-<div class="loop-item">
-Immediate Reward
-</div>
-
-<div class="arrow">
-→
-</div>
-
-<div class="loop-item">
-Repetition
-</div>
-
-<div class="arrow">
-→
-</div>
-
-<div class="loop-item">
-Automaticity
-</div>
+      </div>
 
 
-</div>
+      <div class="habit-card">
 
-</div>
+        <div class="habit-icon">
+          ⚡
+        </div>
+
+        <h3>
+          Action
+        </h3>
+
+        <p>
+          The individual performs the target behaviour.
+        </p>
+
+      </div>
+
+
+      <div class="habit-card">
+
+        <div class="habit-icon">
+          🎯
+        </div>
+
+        <h3>
+          Reward
+        </h3>
+
+        <p>
+          Immediate feedback reinforces the behaviour.
+        </p>
+
+      </div>
+
+
+      <div class="habit-card">
+
+        <div class="habit-icon">
+          🔁
+        </div>
+
+        <h3>
+          Repetition
+        </h3>
+
+        <p>
+          Repeated behaviour can gradually become more automatic.
+        </p>
+
+      </div>
+
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      PRINCIPLES
-===================================================== -->
+========================= -->
 
-<section id="principles">
+<section id="principles" class="section principles-section">
 
-<div class="container">
+  <div class="container">
 
-<div class="section-header">
+    <div class="section-heading">
 
-<div class="eyebrow">
-08 / Design Principles
-</div>
+      <span class="eyebrow">
+        BEHAVIOUR DESIGN
+      </span>
 
-<h2>
-What Health Behavior Design Should Optimize
-</h2>
+      <h2>
+        Principles for designing health behaviour
+      </h2>
 
-</div>
+      <p>
+        Move from telling people what they should do
+        toward designing conditions in which behaviour can happen.
+      </p>
 
-
-<div class="principles">
-
-
-<div class="principle">
-
-<strong>
-Reduce friction
-</strong>
-
-Make the desired action easier
-than the competing behavior.
-
-</div>
+    </div>
 
 
-<div class="principle">
-
-<strong>
-Create immediate value
-</strong>
-
-Don't rely only on distant
-health benefits.
-
-</div>
+    <div class="principles-grid">
 
 
-<div class="principle">
+      <div class="principle">
 
-<strong>
-Build self-efficacy
-</strong>
+        <strong>
+          Reduce friction
+        </strong>
 
-Create small achievable successes.
+        <span>
+          Make the desired behaviour easier,
+          shorter and more accessible.
+        </span>
 
-</div>
-
-
-<div class="principle">
-
-<strong>
-Design the environment
-</strong>
-
-Change context instead of relying
-entirely on willpower.
-
-</div>
+      </div>
 
 
-<div class="principle">
+      <div class="principle">
 
-<strong>
-Respect autonomy
-</strong>
+        <strong>
+          Make it visible
+        </strong>
 
-Support informed choices
-rather than coercion.
+        <span>
+          Use cues, salience and environmental
+          prompts at the moment of decision.
+        </span>
 
-</div>
-
-
-<div class="principle">
-
-<strong>
-Match readiness
-</strong>
-
-Different stages require
-different interventions.
-
-</div>
+      </div>
 
 
-<div class="principle">
+      <div class="principle">
 
-<strong>
-Use feedback
-</strong>
+        <strong>
+          Build capability
+        </strong>
 
-Make progress visible
-and understandable.
+        <span>
+          Teach skills and create confidence,
+          not just awareness.
+        </span>
 
-</div>
-
-
-<div class="principle">
-
-<strong>
-Design for maintenance
-</strong>
-
-The goal is sustained behavior,
-not a single action.
-
-</div>
+      </div>
 
 
-</div>
+      <div class="principle">
 
-</div>
+        <strong>
+          Use social proof
+        </strong>
+
+        <span>
+          People interpret behaviour partly through
+          what they see others doing.
+        </span>
+
+      </div>
+
+
+      <div class="principle">
+
+        <strong>
+          Design for identity
+        </strong>
+
+        <span>
+          Connect behaviour with the person's
+          sense of who they are.
+        </span>
+
+      </div>
+
+
+      <div class="principle">
+
+        <strong>
+          Create immediate feedback
+        </strong>
+
+        <span>
+          Help people see progress before
+          distant health outcomes arrive.
+        </span>
+
+      </div>
+
+
+      <div class="principle">
+
+        <strong>
+          Start small
+        </strong>
+
+        <span>
+          Reduce the initial behavioural barrier
+          so the first action becomes achievable.
+        </span>
+
+      </div>
+
+
+      <div class="principle">
+
+        <strong>
+          Design the environment
+        </strong>
+
+        <span>
+          Change defaults, availability and context
+          where behaviour actually occurs.
+        </span>
+
+      </div>
+
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =====================================================
-     FINAL MODEL
-===================================================== -->
+<!-- =========================
+     INTEGRATED MODEL
+========================= -->
 
-<section>
+<section class="section integrated-section">
 
-<div class="container">
+  <div class="container">
 
-<div class="section-header">
+    <div class="section-heading">
 
-<div class="eyebrow">
-09 / Integrated Model
-</div>
+      <span class="eyebrow">
+        INTEGRATED MODEL
+      </span>
 
-<h2>
-The Complete Health Behavior System
-</h2>
+      <h2>
+        The complete behaviour system
+      </h2>
 
-<p>
+      <p>
+        A synthesis of established theories for analysing and
+        designing health behaviour interventions.
+      </p>
 
-A person's health behavior emerges from an interaction
-between internal states and the surrounding environment.
-
-</p>
-
-</div>
+    </div>
 
 
-<div class="hero-equation">
+    <div class="integrated-flow">
 
-Human Need
+      <div class="flow-node">
+        Human State
+      </div>
 
-→ Awareness
+      <div class="flow-arrow">→</div>
 
-→ Perception
+      <div class="flow-node">
+        Awareness
+      </div>
 
-→ Motivation
+      <div class="flow-arrow">→</div>
 
-→ Capability
+      <div class="flow-node">
+        Perception
+      </div>
 
-+
+      <div class="flow-arrow">→</div>
 
-Opportunity
+      <div class="flow-node">
+        Motivation
+      </div>
 
-→ Intention
+      <div class="flow-arrow">→</div>
 
-→ Trigger
+      <div class="flow-node">
+        Capability
+      </div>
 
-→ Action
+      <div class="flow-arrow">→</div>
 
-→ Immediate Reinforcement
+      <div class="flow-node">
+        Opportunity
+      </div>
 
-→ Repetition
+      <div class="flow-arrow">→</div>
 
-→ Habit
+      <div class="flow-node">
+        Intention
+      </div>
 
-→ Identity
+      <div class="flow-arrow">→</div>
 
-→ Health Outcome
+      <div class="flow-node">
+        Prompt
+      </div>
 
-→ Feedback
+      <div class="flow-arrow">→</div>
 
-↺
+      <div class="flow-node">
+        Action
+      </div>
 
-</div>
+      <div class="flow-arrow">→</div>
 
-</div>
+      <div class="flow-node">
+        Reinforcement
+      </div>
+
+      <div class="flow-arrow">→</div>
+
+      <div class="flow-node">
+        Habit
+      </div>
+
+      <div class="flow-arrow">→</div>
+
+      <div class="flow-node">
+        Identity
+      </div>
+
+      <div class="flow-arrow">→</div>
+
+      <div class="flow-node">
+        Health Outcome
+      </div>
+
+      <div class="flow-arrow">↺</div>
+
+      <div class="flow-node">
+        Feedback
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
+     THEORY MODAL
+========================= -->
+
+<div id="theoryModal" class="modal">
+
+  <div class="modal-content">
+
+    <button class="modal-close"
+      onclick="closeTheory()">
+      ×
+    </button>
+
+
+    <div class="modal-header">
+
+      <span id="theoryModalTag"
+        class="eyebrow">
+      </span>
+
+      <h2 id="theoryModalTitle"></h2>
+
+      <p id="theoryModalIntro"></p>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+
+      <div class="detail">
+
+        <span class="detail-label">
+          WHAT DOES IT EXPLAIN?
+        </span>
+
+        <p id="theoryWhat"></p>
+
+      </div>
+
+
+      <div class="detail">
+
+        <span class="detail-label">
+          CORE CONSTRUCTS
+        </span>
+
+        <p id="theoryConstructs"></p>
+
+      </div>
+
+
+      <div class="detail">
+
+        <span class="detail-label">
+          HOW DOES IT WORK?
+        </span>
+
+        <p id="theoryHow"></p>
+
+      </div>
+
+
+      <div class="detail">
+
+        <span class="detail-label">
+          WHEN IS IT USEFUL?
+        </span>
+
+        <p id="theoryUseful"></p>
+
+      </div>
+
+
+      <div class="detail">
+
+        <span class="detail-label">
+          HEALTH EXAMPLE
+        </span>
+
+        <p id="theoryExample"></p>
+
+      </div>
+
+
+      <div class="detail">
+
+        <span class="detail-label">
+          INTERVENTION IMPLICATION
+        </span>
+
+        <p id="theoryImplication"></p>
+
+      </div>
+
+
+      <div class="detail">
+
+        <span class="detail-label">
+          IMPORTANT LIMITATION
+        </span>
+
+        <p id="theoryLimitation"></p>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     BOOK MODAL
+========================= -->
+
+<div id="bookModal" class="modal">
+
+  <div class="modal-content">
+
+    <button class="modal-close"
+      onclick="closeBook()">
+      ×
+    </button>
+
+
+    <div class="book-modal-layout">
+
+      <div>
+
+        <img id="bookModalImage"
+          class="book-modal-cover"
+          src=""
+          alt="Book cover">
+
+      </div>
+
+
+      <div class="book-modal-content">
+
+        <span id="bookModalTag"
+          class="eyebrow">
+        </span>
+
+        <h2 id="bookModalTitle"></h2>
+
+        <div id="bookModalAuthor"
+          class="book-modal-author">
+        </div>
+
+        <p id="bookModalDescription"></p>
+
+        <div class="detail"
+          style="margin-top:20px;">
+
+          <span class="detail-label">
+            WHY IT BELONGS IN THIS FRAMEWORK
+          </span>
+
+          <p id="bookModalWhy"></p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     CASE MODAL
+========================= -->
+
+<div id="caseModal" class="modal">
+
+  <div class="modal-content case-modal-content">
+
+    <button class="modal-close"
+      onclick="closeCase()">
+      ×
+    </button>
+
+
+    <div class="case-modal-header">
+
+      <span id="caseModalCountry"
+        class="eyebrow">
+      </span>
+
+      <h2 id="caseModalTitle"></h2>
+
+      <p id="caseModalProblem"></p>
+
+    </div>
+
+
+    <div class="case-modal-grid">
+
+
+      <div class="case-detail">
+
+        <span class="detail-label">
+          THE BEHAVIOURAL PROBLEM
+        </span>
+
+        <p id="caseModalBarrier"></p>
+
+      </div>
+
+
+      <div class="case-detail">
+
+        <span class="detail-label">
+          BEHAVIOUR-LED PRINCIPLE
+        </span>
+
+        <p id="caseModalPrinciple"></p>
+
+      </div>
+
+
+      <div class="case-detail">
+
+        <span class="detail-label">
+          WHAT THEY DID
+        </span>
+
+        <p id="caseModalIntervention"></p>
+
+      </div>
+
+
+      <div class="case-detail">
+
+        <span class="detail-label">
+          MEASURED OUTCOME
+        </span>
+
+        <p id="caseModalOutcome"></p>
+
+      </div>
+
+
+      <div class="case-detail">
+
+        <span class="detail-label">
+          THEORY CONNECTION
+        </span>
+
+        <p id="caseModalTheory"></p>
+
+      </div>
+
+
+      <div class="case-detail insight-box">
+
+        <span class="detail-label">
+          DESIGN LESSON
+        </span>
+
+        <p id="caseModalLesson"></p>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="case-source">
+
+      <span>
+        Evidence source
+      </span>
+
+      <a id="caseModalSource"
+        href="#"
+        target="_blank"
+        rel="noopener">
+        Read the research →
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
      FOOTER
-===================================================== -->
+========================= -->
 
 <footer>
 
-<div class="container">
+  <div class="container">
 
-<strong>
-Health Behavior Science Framework
-</strong>
+    Health Behavior Science ·
+    An integrated educational framework for understanding human behaviour.
 
-<p>
+    <br><br>
 
-An educational synthesis of established behavioral
-science models for health behavior analysis and
-intervention design.
+    This framework synthesizes established behavioural theories;
+    it is not itself a clinically validated diagnostic instrument.
 
-</p>
-
-<p>
-
-Use the framework as a reasoning tool rather than
-as a substitute for clinical assessment or validated
-behavioral measurement.
-
-</p>
-
-</div>
+  </div>
 
 </footer>
 
@@ -3512,300 +3650,116 @@ behavioral measurement.
 const books = {
 
   glanz: {
-
-    title:
-      "Health Behavior: Theory, Research, and Practice",
-
-    author:
-      "Karen Glanz, Barbara K. Rimer & K. Viswanath",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9781394211319-L.jpg",
-
+    tag:"FOUNDATIONAL HEALTH BEHAVIOR",
+    title:"Health Behavior: Theory, Research, and Practice",
+    author:"Karen Glanz, Barbara K. Rimer & K. Viswanath",
+    image:"https://covers.openlibrary.org/b/isbn/9781118628980-L.jpg",
     description:
-      "A major reference for understanding health behavior theories, research methods and practical intervention design.",
-
+      "A major reference work covering health behaviour theories, behavioural determinants, intervention development and evaluation.",
     why:
-      "This is the strongest foundation in the reading list for connecting theoretical models with real-world health promotion and intervention design."
-
+      "Provides the strongest foundation for connecting individual-level theories with real health intervention design."
   },
 
-
-  psychology: {
-
-    title:
-      "Health Psychology",
-
-    author:
-      "Shelley E. Taylor",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780078035137-L.jpg",
-
+  taylor: {
+    tag:"HEALTH PSYCHOLOGY",
+    title:"Health Psychology",
+    author:"Shelley E. Taylor",
+    image:"https://covers.openlibrary.org/b/isbn/9781259870474-L.jpg",
     description:
-      "Examines how psychological processes, social relationships and behavior interact with health, illness and healthcare.",
-
+      "Explores psychological, behavioural and social processes involved in health, illness, stress and coping.",
     why:
-      "It provides the broader psychological context needed to understand why people behave differently under similar health conditions."
-
+      "Helps connect behavioural mechanisms to the wider psychological experience of health and disease."
   },
 
-
-  predicting: {
-
-    title:
-      "Predicting and Changing Health Behaviour",
-
-    author:
-      "Mark Conner & Paul Norman",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780335236053-L.jpg",
-
+  conner: {
+    tag:"BEHAVIOR CHANGE",
+    title:"Predicting and Changing Health Behaviour",
+    author:"Mark Conner & Paul Norman",
+    image:"https://covers.openlibrary.org/b/isbn/9780335243194-L.jpg",
     description:
-      "Explores social-cognition models used to predict and change health-related behavior.",
-
+      "Examines theories used to understand and change health behaviours, including intention, motivation and self-regulation.",
     why:
-      "It connects models such as the Health Belief Model, Theory of Planned Behavior and related approaches to behavior prediction and intervention."
-
+      "Useful for moving from theoretical constructs toward measurable behaviour-change interventions."
   },
 
-
-  thinking: {
-
-    title:
-      "Thinking, Fast and Slow",
-
-    author:
-      "Daniel Kahneman",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780141033570-L.jpg",
-
+  kahneman: {
+    tag:"DECISION SCIENCE",
+    title:"Thinking, Fast and Slow",
+    author:"Daniel Kahneman",
+    image:"https://covers.openlibrary.org/b/isbn/9780374533557-L.jpg",
     description:
-      "Explores fast intuitive thinking, slower deliberate reasoning, judgment and systematic cognitive biases.",
-
+      "Explores intuitive and deliberate thinking and the cognitive biases that influence human judgement.",
     why:
-      "Health decisions are often made under uncertainty and cognitive constraints, making decision psychology an important layer of behavior design."
-
+      "Provides an important foundation for understanding why health decisions are not always rational or information-driven."
   },
-
 
   nudge: {
-
-    title:
-      "Nudge",
-
-    author:
-      "Richard H. Thaler & Cass R. Sunstein",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780141999937-L.jpg",
-
+    tag:"CHOICE ARCHITECTURE",
+    title:"Nudge",
+    author:"Richard H. Thaler & Cass R. Sunstein",
+    image:"https://covers.openlibrary.org/b/isbn/9780143137009-L.jpg",
     description:
-      "Examines how the design of decision environments can influence choices while retaining freedom of choice.",
-
+      "Introduces choice architecture and the ways environments can influence behaviour while preserving freedom of choice.",
     why:
-      "It adds the environmental and choice-architecture layer that individual-centered health behavior theories can sometimes underemphasize."
-
+      "Essential for understanding environmental opportunity, defaults, friction and context."
   },
 
-
-  habit: {
-
-    title:
-      "The Power of Habit",
-
-    author:
-      "Charles Duhigg",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg",
-
+  duhigg: {
+    tag:"HABIT SCIENCE",
+    title:"The Power of Habit",
+    author:"Charles Duhigg",
+    image:"https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg",
     description:
-      "Explores how habits develop through cues, routines and rewards and how behavioral patterns can change.",
-
+      "Explores the cue-routine-reward model and the role of repetition in automatic behaviour.",
     why:
-      "It provides an accessible bridge between behavioral theory and the everyday mechanisms behind repeated health behavior."
-
+      "Useful for understanding why repeated health behaviours can become increasingly automatic."
   },
-
 
   atomic: {
-
-    title:
-      "Atomic Habits",
-
-    author:
-      "James Clear",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
-
+    tag:"BEHAVIOR DESIGN",
+    title:"Atomic Habits",
+    author:"James Clear",
+    image:"https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
     description:
-      "Presents a practical approach to creating small behaviors, designing environments and building consistent routines.",
-
+      "A practical framework for building small repeated behaviours through systems, identity and environmental design.",
     why:
-      "It translates behavioral principles into practical mechanisms for making desired behaviors easier to repeat."
-
+      "Translates habit science into practical principles for designing everyday behaviour."
   },
-
 
   tiny: {
-
-    title:
-      "Tiny Habits",
-
-    author:
-      "BJ Fogg",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780358003328-L.jpg",
-
+    tag:"BEHAVIOR DESIGN",
+    title:"Tiny Habits",
+    author:"BJ Fogg",
+    image:"https://covers.openlibrary.org/b/isbn/9780358434728-L.jpg",
     description:
-      "Introduces a behavior-design approach based on making behaviors small, easy and connected to existing routines.",
-
+      "Presents a behaviour design method based around motivation, ability and prompts.",
     why:
-      "It is particularly relevant to the Fogg Behavior Model and to designing low-friction health interventions."
-
+      "Provides a highly practical bridge between behavioural theory and tiny actionable behaviours."
   },
 
-
-  social: {
-
-    title:
-      "Social Foundations of Thought and Action",
-
-    author:
-      "Albert Bandura",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780136033060-L.jpg",
-
+  bandura: {
+    tag:"SOCIAL COGNITIVE THEORY",
+    title:"Social Foundations of Thought and Action",
+    author:"Albert Bandura",
+    image:"https://covers.openlibrary.org/b/isbn/9780138156145-L.jpg",
     description:
-      "A foundational work explaining the cognitive, social and environmental processes underlying Social Cognitive Theory.",
-
+      "The foundational work behind social cognitive theory, reciprocal determinism and self-efficacy.",
     why:
-      "It provides the deeper theoretical foundation for self-efficacy, observational learning and reciprocal person-behavior-environment relationships."
-
+      "Provides the theoretical foundation for understanding confidence, modelling and person-environment interaction."
   },
-
 
   switch: {
-
-    title:
-      "Switch",
-
-    author:
-      "Chip Heath & Dan Heath",
-
-    image:
-      "https://covers.openlibrary.org/b/isbn/9780385528757-L.jpg",
-
+    tag:"CHANGE DESIGN",
+    title:"Switch",
+    author:"Chip Heath & Dan Heath",
+    image:"https://covers.openlibrary.org/b/isbn/9780385528757-L.jpg",
     description:
-      "Explores practical approaches to changing behavior by aligning motivation, direction and environmental conditions.",
-
+      "A practical framework for changing behaviour by aligning rational thinking, emotion and environmental structure.",
     why:
-      "It offers an accessible framework for translating behavioral principles into change strategies across people and organizations."
-
+      "Useful for translating behaviour science into accessible change strategies across organizations and communities."
   }
 
 };
-
-
-/* =========================================================
-   OPEN BOOK
-========================================================= */
-
-function openBook(id){
-
-  const book = books[id];
-
-  if(!book) return;
-
-
-  document.getElementById(
-    "bookModalTitle"
-  ).innerText =
-    book.title;
-
-
-  document.getElementById(
-    "bookModalAuthor"
-  ).innerText =
-    book.author;
-
-
-  document.getElementById(
-    "bookModalDescription"
-  ).innerText =
-    book.description;
-
-
-  document.getElementById(
-    "bookModalWhy"
-  ).innerText =
-    book.why;
-
-
-  document.getElementById(
-    "bookModalImage"
-  ).src =
-    book.image;
-
-
-  document.getElementById(
-    "bookModalImage"
-  ).alt =
-    book.title;
-
-
-  document.getElementById(
-    "bookModal"
-  ).classList.add("active");
-
-
-  document.body.style.overflow =
-    "hidden";
-
-}
-
-
-/* =========================================================
-   CLOSE BOOK
-========================================================= */
-
-function closeBook(){
-
-  document.getElementById(
-    "bookModal"
-  ).classList.remove("active");
-
-
-  document.body.style.overflow =
-    "";
-
-}
-
-
-/* =========================================================
-   CLOSE BOOK ON OUTSIDE CLICK
-========================================================= */
-
-document.getElementById(
-  "bookModal"
-).addEventListener(
-  "click",
-  function(event){
-
-    if(event.target === this){
-
-      closeBook();
-
-    }
-
-  }
-);
 
 
 /* =========================================================
@@ -3814,613 +3768,662 @@ document.getElementById(
 
 const theories = {
 
-hbm: {
-
-tag:"Health Belief Model",
-
-title:"Health Belief Model",
-
-intro:
-"The Health Belief Model explains health behavior primarily through how people perceive health threats, benefits, barriers and cues to action.",
-
-explains:
-"Why a person may take or avoid a preventive or health-related action based on what they believe about their personal risk and the consequences of the behavior.",
-
-constructs:
-"Perceived susceptibility, perceived severity, perceived benefits, perceived barriers, cues to action and self-efficacy.",
-
-mechanism:
-"A person is more likely to act when they believe they are susceptible to a meaningful health threat, believe the consequences are serious, believe the recommended action will help and perceive manageable barriers.",
-
-useful:
-"Preventive health, screening, vaccination, medication adherence, risk communication and early health-seeking behavior.",
-
-example:
-"Consider colorectal cancer screening. A person who believes they are personally at risk, understands the seriousness of the disease, believes screening can detect disease early and sees the screening process as manageable may be more inclined to arrange screening.",
-
-intervention:
-"Increase accurate risk understanding, communicate meaningful benefits, reduce perceived barriers and provide appropriate cues to action.",
-
-limitation:
-"The model emphasizes individual beliefs and can underrepresent social, cultural, economic and environmental influences."
-
-},
-
-
-tpb: {
-
-tag:"Intention",
-
-title:"Theory of Planned Behavior",
-
-intro:
-"The Theory of Planned Behavior proposes that behavioral intention is influenced by attitudes, subjective norms and perceived behavioral control.",
-
-explains:
-"Why people may form intentions to perform a behavior and how social expectations and perceived control influence those intentions.",
-
-constructs:
-"Attitude, subjective norm, perceived behavioral control, behavioral intention and behavior.",
-
-mechanism:
-"Positive attitudes, supportive norms and perceived control can strengthen intention, which can contribute to behavior.",
-
-useful:
-"Exercise, nutrition, preventive care, medication adherence and other intentional behaviors.",
-
-example:
-"A person wants to exercise three times a week, believes exercise will improve energy, has social support and believes exercise can fit their schedule.",
-
-intervention:
-"Improve attitudes, address relevant social norms and increase perceived behavioral control.",
-
-limitation:
-"Strong intention does not guarantee action because environmental barriers and competing habits can intervene."
-
-},
-
-
-comb: {
-
-tag:"Behavior System",
-
-title:"COM-B Model",
-
-intro:
-"COM-B explains behavior through the interaction of Capability, Opportunity and Motivation.",
-
-explains:
-"What needs to change when a desired behavior is not occurring.",
-
-constructs:
-"Capability, Opportunity and Motivation.",
-
-mechanism:
-"Behavior occurs when sufficient capability, opportunity and motivation come together.",
-
-useful:
-"Clinical adherence, public health programs, digital health, lifestyle change and behavior intervention design.",
-
-example:
-"A patient is advised to exercise at home but lacks physical ability, appropriate space and reinforcement. Education alone therefore may not solve the problem.",
-
-intervention:
-"Diagnose whether the primary constraint is capability, opportunity or motivation and design accordingly.",
-
-limitation:
-"COM-B is an organizing framework rather than a complete causal explanation for every behavior."
-
-},
-
-
-sct: {
-
-tag:"Learning",
-
-title:"Social Cognitive Theory",
-
-intro:
-"Social Cognitive Theory explains reciprocal interactions between personal factors, behavior and environment.",
-
-explains:
-"How people learn behaviors through experience, observation, feedback and social environments.",
-
-constructs:
-"Self-efficacy, observational learning, behavioral capability, expectations, reinforcement and goals.",
-
-mechanism:
-"People learn through direct experience and by observing others. Self-efficacy influences whether they initiate and persist.",
-
-useful:
-"Exercise, diabetes self-management, rehabilitation, nutrition and peer-support programs.",
-
-example:
-"A person with diabetes observes another patient successfully perform glucose monitoring, receives training and becomes more confident after repeated successful attempts.",
-
-intervention:
-"Use role models, demonstrations, guided practice, achievable goals and feedback.",
-
-limitation:
-"Many interacting constructs can make theory-based interventions difficult to isolate and evaluate."
-
-},
-
-
-sdt: {
-
-tag:"Motivation",
-
-title:"Self-Determination Theory",
-
-intro:
-"Self-Determination Theory focuses on the quality of motivation and the psychological needs for autonomy, competence and relatedness.",
-
-explains:
-"Why people may maintain behavior because they personally value it rather than because they feel pressured.",
-
-constructs:
-"Autonomy, competence and relatedness.",
-
-mechanism:
-"Meaningful choice, competence-building and social connection can support more internalized motivation.",
-
-useful:
-"Exercise, nutrition, rehabilitation, chronic disease management and sustained lifestyle change.",
-
-example:
-"Rather than imposing one exercise routine, a program lets someone choose an activity they enjoy, build competence and participate in supportive social settings.",
-
-intervention:
-"Support meaningful choice, competence and supportive relationships.",
-
-limitation:
-"Autonomous motivation does not eliminate structural constraints such as cost, access, time or disability."
-
-},
-
-
-ttm: {
-
-tag:"Readiness",
-
-title:"Transtheoretical Model",
-
-intro:
-"The Transtheoretical Model describes behavior change through stages of readiness.",
-
-explains:
-"Why the same intervention may not work equally well for people at different levels of readiness.",
-
-constructs:
-"Precontemplation, contemplation, preparation, action and maintenance.",
-
-mechanism:
-"Interventions can be matched to the person's readiness to change.",
-
-useful:
-"Smoking cessation, exercise, nutrition and other intentional behavior-change programs.",
-
-example:
-"Someone who has never considered changing their diet may need awareness and reflection, while someone preparing to change may need meal planning and practical support.",
-
-intervention:
-"Match communication and intervention strategies to readiness.",
-
-limitation:
-"Real behavior change is not necessarily linear; people can move between stages."
-
-},
-
-
-fogg: {
-
-tag:"Action Design",
-
-title:"Fogg Behavior Model",
-
-intro:
-"The Fogg Behavior Model proposes that behavior occurs when motivation, ability and a prompt converge.",
-
-explains:
-"Why motivated people may still fail to act when a behavior is too difficult or no effective prompt exists.",
-
-constructs:
-"Motivation, ability and prompt.",
-
-mechanism:
-"When motivation and ability are sufficient at the moment a prompt occurs, behavior becomes more likely.",
-
-useful:
-"Digital health, reminders, medication prompts, micro-behaviors and product design.",
-
-example:
-"A health app asks users to enter one blood-pressure reading instead of completing a long questionnaire and sends a reminder at a chosen time.",
-
-intervention:
-"Reduce effort and create well-timed prompts.",
-
-limitation:
-"Complex health behaviors also involve emotional, social and structural factors."
-
-},
-
-
-habit: {
-
-tag:"Habit",
-
-title:"Habit Loop",
-
-intro:
-"Habit science examines how repeated behaviors can become increasingly automatic when they occur in stable contexts.",
-
-explains:
-"Why behaviors that initially require conscious effort can eventually require less deliberate decision-making.",
-
-constructs:
-"Cues, context, repeated behavior, reinforcement and automaticity.",
-
-mechanism:
-"A stable cue repeatedly activates a behavior and reinforcement can help maintain repetition.",
-
-useful:
-"Medication routines, exercise, healthy eating, sleep and oral hygiene.",
-
-example:
-"A person places medication beside their toothbrush. Brushing becomes a reliable cue for taking the medication.",
-
-intervention:
-"Attach desired behaviors to stable existing cues and reduce friction.",
-
-limitation:
-"Habits can be disrupted by changing contexts, stress, illness and competing demands."
-
-},
-
-
-choice: {
-
-tag:"Environment",
-
-title:"Choice Architecture",
-
-intro:
-"Choice architecture examines how the structure of an environment influences decisions without necessarily removing freedom of choice.",
-
-explains:
-"How defaults, convenience, visibility, ordering and friction influence decisions.",
-
-constructs:
-"Defaults, salience, accessibility, convenience, friction and contextual cues.",
-
-mechanism:
-"Changing the environment can make some behaviors easier, more visible or more convenient.",
-
-useful:
-"Healthy food environments, hospitals, workplaces, digital products and public health systems.",
-
-example:
-"A workplace cafeteria makes balanced meals highly visible and easy to select while retaining other food choices.",
-
-intervention:
-"Make desired actions convenient, visible, accessible and easy.",
-
-limitation:
-"Choice architecture does not guarantee behavior change and should preserve meaningful choice."
-
-}
+  hbm: {
+    tag:"HEALTH BELIEF MODEL",
+    title:"Health Belief Model",
+    intro:
+      "A model explaining how perceptions of health risk and the expected value of action influence behaviour.",
+    what:
+      "Explains why a person may take or avoid a preventive health action.",
+    constructs:
+      "Perceived susceptibility, perceived severity, perceived benefits, perceived barriers, self-efficacy and cues to action.",
+    how:
+      "People are more likely to act when they perceive meaningful risk, believe the consequences matter, expect benefits from action and perceive manageable barriers.",
+    useful:
+      "Vaccination, screening, medication adherence, preventive behaviours and risk communication.",
+    example:
+      "A person may seek cancer screening when they perceive themselves as at risk, understand the seriousness of late detection and believe screening can meaningfully reduce risk.",
+    implication:
+      "Design interventions that address risk perception, benefits, barriers, confidence and timely cues.",
+    limitation:
+      "Perceptions do not fully capture social context, automatic behaviour or environmental constraints."
+  },
+
+  tpb: {
+    tag:"THEORY OF PLANNED BEHAVIOR",
+    title:"Theory of Planned Behavior",
+    intro:
+      "Explains behaviour through attitudes, subjective norms and perceived behavioural control.",
+    what:
+      "Explains how beliefs contribute to intention and subsequently behaviour.",
+    constructs:
+      "Attitudes, subjective norms, perceived behavioural control, intention and behaviour.",
+    how:
+      "Positive attitudes, supportive norms and perceived control can strengthen behavioural intention.",
+    useful:
+      "Exercise, diet, screening, medication and other intentional behaviours.",
+    example:
+      "A person may intend to exercise because they believe it is beneficial, important people support it and they believe they can realistically fit it into their schedule.",
+    implication:
+      "Change beliefs, social expectations and perceived control rather than relying only on information.",
+    limitation:
+      "Strong intentions do not always translate into behaviour because habits and environments can intervene."
+  },
+
+  comb: {
+    tag:"COM-B",
+    title:"COM-B Behaviour System",
+    intro:
+      "Behaviour occurs through interaction between capability, opportunity and motivation.",
+    what:
+      "Diagnoses why a target behaviour is or is not happening.",
+    constructs:
+      "Capability, opportunity, motivation and behaviour.",
+    how:
+      "A person needs sufficient capability and opportunity while motivation provides the processes that energize and direct behaviour.",
+    useful:
+      "Intervention diagnosis, healthcare services, public health and product behaviour design.",
+    example:
+      "If someone wants to exercise but lacks time and access to a safe place, the major intervention problem may be opportunity rather than motivation.",
+    implication:
+      "Diagnose the behavioural barrier before selecting the intervention.",
+    limitation:
+      "COM-B is a broad system rather than a detailed theory of every psychological mechanism."
+  },
+
+  sct: {
+    tag:"SOCIAL COGNITIVE THEORY",
+    title:"Social Cognitive Theory",
+    intro:
+      "Explains behaviour through reciprocal interaction between individuals, behaviour and environment.",
+    what:
+      "Explains learning, self-efficacy, modelling and behavioural regulation.",
+    constructs:
+      "Self-efficacy, observational learning, behavioural capability, reinforcement and reciprocal determinism.",
+    how:
+      "People learn from experience and observation while their behaviour also changes the environments in which they operate.",
+    useful:
+      "Exercise, rehabilitation, chronic disease self-management and community interventions.",
+    example:
+      "A patient becomes more confident exercising after observing peers perform the activity and successfully completing progressively harder exercises.",
+    implication:
+      "Use role models, guided practice, feedback and mastery experiences.",
+    limitation:
+      "Its broad scope can make precise intervention selection difficult without additional frameworks."
+  },
+
+  sdt: {
+    tag:"SELF-DETERMINATION THEORY",
+    title:"Self-Determination Theory",
+    intro:
+      "Explains how different qualities of motivation influence persistence and wellbeing.",
+    what:
+      "Explains why people engage in behaviours voluntarily and how motivation can become more internally regulated.",
+    constructs:
+      "Autonomy, competence, relatedness and intrinsic/extrinsic motivation.",
+    how:
+      "People are more likely to sustain behaviours when they experience autonomy, competence and meaningful social connection.",
+    useful:
+      "Exercise, lifestyle change, education, chronic disease management and long-term behaviour maintenance.",
+    example:
+      "A person is more likely to maintain exercise when they choose an activity they enjoy, feel capable of improving and experience supportive relationships.",
+    implication:
+      "Avoid purely controlling approaches and support autonomy, competence and connection.",
+    limitation:
+      "Motivation quality is only one part of behaviour; opportunity and capability still matter."
+  },
+
+  ttm: {
+    tag:"TRANSTHEORETICAL MODEL",
+    title:"Transtheoretical Model",
+    intro:
+      "Describes behaviour change as a progression through stages of readiness.",
+    what:
+      "Helps match intervention strategies to a person's current readiness to change.",
+    constructs:
+      "Precontemplation, contemplation, preparation, action and maintenance.",
+    how:
+      "Different interventions may be appropriate depending on whether someone is not considering change, preparing for it, actively changing or maintaining it.",
+    useful:
+      "Smoking cessation, physical activity, diet and addiction-related behaviour change.",
+    example:
+      "Someone who is not considering quitting smoking needs a different intervention from someone who has already selected a quit date.",
+    implication:
+      "Match the intervention to readiness rather than treating every person as equally ready.",
+    limitation:
+      "People may move non-linearly between stages and stage boundaries can be difficult to measure."
+  },
+
+  fogg: {
+    tag:"FOGG BEHAVIOR MODEL",
+    title:"Fogg Behavior Model",
+    intro:
+      "Behaviour occurs when motivation, ability and a prompt converge at the same moment.",
+    what:
+      "Provides a simple design model for triggering specific behaviours.",
+    constructs:
+      "Motivation, ability and prompt.",
+    how:
+      "A prompt is more likely to produce behaviour when the person has enough motivation and the behaviour is sufficiently easy.",
+    useful:
+      "Digital health products, habit formation and behaviour-design systems.",
+    example:
+      "A reminder to drink water is more likely to work when water is already available and the action is easy to perform.",
+    implication:
+      "Reduce behavioural difficulty and place prompts at the appropriate moment.",
+    limitation:
+      "Real-world behaviour is often influenced by more complex social and structural factors."
+  },
+
+  habit: {
+    tag:"HABIT SCIENCE",
+    title:"Habit Loop",
+    intro:
+      "Explains how repeated behaviours can become increasingly automatic through stable cues and reinforcement.",
+    what:
+      "Explains automaticity and the persistence of repeated behaviours.",
+    constructs:
+      "Cue, behaviour/routine, reward, repetition and automaticity.",
+    how:
+      "Repeatedly performing a behaviour in a stable context can strengthen associations between cues and actions.",
+    useful:
+      "Exercise routines, medication routines, eating behaviour and everyday health habits.",
+    example:
+      "Taking medication immediately after brushing teeth can use the existing routine as a stable cue.",
+    implication:
+      "Attach desired behaviours to reliable cues and reduce friction.",
+    limitation:
+      "Habit formation is not instantaneous and automaticity does not explain every repeated behaviour."
+  },
+
+  choice: {
+    tag:"CHOICE ARCHITECTURE",
+    title:"Choice Architecture",
+    intro:
+      "Explains how the structure of an environment can influence decisions.",
+    what:
+      "Explains how defaults, availability, salience and friction affect behaviour.",
+    constructs:
+      "Defaults, salience, convenience, friction, ordering and environmental context.",
+    how:
+      "People respond not only to information but also to how choices are presented and how easy each option is to select.",
+    useful:
+      "Nutrition environments, healthcare systems, digital products and public policy.",
+    example:
+      "Making healthier foods easier to see and access can alter food selection without requiring additional motivation.",
+    implication:
+      "Change the environment in which the behaviour occurs.",
+    limitation:
+      "Choice architecture does not eliminate individual agency or broader structural determinants."
+  }
 
 };
 
 
 /* =========================================================
-   THEORY MODAL
+   THEORY FUNCTIONS
 ========================================================= */
 
-function openTheory(id){
+function openTheory(id) {
 
-  const theory = theories[id];
+  const t = theories[id];
 
-  if(!theory) return;
+  if (!t) return;
 
+  document.getElementById("theoryModalTag").textContent = t.tag;
+  document.getElementById("theoryModalTitle").textContent = t.title;
+  document.getElementById("theoryModalIntro").textContent = t.intro;
 
-  document.getElementById(
-    "modalTag"
-  ).innerText =
-    theory.tag;
+  document.getElementById("theoryWhat").textContent = t.what;
+  document.getElementById("theoryConstructs").textContent = t.constructs;
+  document.getElementById("theoryHow").textContent = t.how;
+  document.getElementById("theoryUseful").textContent = t.useful;
+  document.getElementById("theoryExample").textContent = t.example;
+  document.getElementById("theoryImplication").textContent = t.implication;
+  document.getElementById("theoryLimitation").textContent = t.limitation;
 
+  document.getElementById("theoryModal").classList.add("active");
 
-  document.getElementById(
-    "modalTitle"
-  ).innerText =
-    theory.title;
-
-
-  document.getElementById(
-    "modalIntro"
-  ).innerText =
-    theory.intro;
-
-
-  document.getElementById(
-    "modalExplains"
-  ).innerText =
-    theory.explains;
+  document.body.style.overflow="hidden";
+}
 
 
-  document.getElementById(
-    "modalConstructs"
-  ).innerText =
-    theory.constructs;
+function closeTheory() {
 
+  document.getElementById("theoryModal").classList.remove("active");
 
-  document.getElementById(
-    "modalMechanism"
-  ).innerText =
-    theory.mechanism;
-
-
-  document.getElementById(
-    "modalUseful"
-  ).innerText =
-    theory.useful;
-
-
-  document.getElementById(
-    "modalExample"
-  ).innerText =
-    theory.example;
-
-
-  document.getElementById(
-    "modalIntervention"
-  ).innerText =
-    theory.intervention;
-
-
-  document.getElementById(
-    "modalLimitation"
-  ).innerText =
-    theory.limitation;
-
-
-  document.getElementById(
-    "theoryModal"
-  ).classList.add("active");
-
-
-  document.body.style.overflow =
-    "hidden";
+  document.body.style.overflow="";
 
 }
 
 
 /* =========================================================
-   CLOSE THEORY
+   BOOK FUNCTIONS
 ========================================================= */
 
-function closeTheory(){
+function openBook(id) {
 
-  document.getElementById(
-    "theoryModal"
-  ).classList.remove("active");
+  const b = books[id];
+
+  if (!b) return;
+
+  document.getElementById("bookModalTag").textContent = b.tag;
+  document.getElementById("bookModalTitle").textContent = b.title;
+  document.getElementById("bookModalAuthor").textContent = b.author;
+  document.getElementById("bookModalDescription").textContent = b.description;
+  document.getElementById("bookModalWhy").textContent = b.why;
+
+  document.getElementById("bookModalImage").src = b.image;
+
+  document.getElementById("bookModal").classList.add("active");
+
+  document.body.style.overflow="hidden";
+}
 
 
-  document.body.style.overflow =
-    "";
+function closeBook() {
+
+  document.getElementById("bookModal").classList.remove("active");
+
+  document.body.style.overflow="";
 
 }
 
 
 /* =========================================================
-   OUTSIDE MODAL CLICK
+   CASE STUDIES
 ========================================================= */
 
-document.getElementById(
-  "theoryModal"
-).addEventListener(
-  "click",
-  function(event){
+const caseStudies = {
 
-    if(event.target === this){
+  superamma: {
+    country:"🇮🇳 INDIA · ANDHRA PRADESH",
+    title:"SuperAmma",
+    problem:"Changing handwashing behaviour in rural communities.",
+    barrier:
+      "The problem was not simply lack of knowledge. Handwashing with soap was uncommon even when people understood hygiene. The intervention therefore targeted emotional, social and environmental drivers.",
+    principle:
+      "Use emotion, social identity and perceived norms to make the desired behaviour socially meaningful and personally rewarding.",
+    intervention:
+      "The programme used emotional storytelling, local role models, public pledges, school activities, report cards, stickers, public recognition and repeated cues.",
+    outcome:
+      "In the randomized trial, handwashing with soap at key events increased substantially in intervention villages over follow-up compared with control villages.",
+    theory:
+      "HBM + SCT + social norms + habit formation + prompts and reinforcement.",
+    lesson:
+      "If a behaviour is socially embedded, information alone is insufficient. Change the meaning of the behaviour, make it visible and create repeated opportunities to perform it.",
+    source:"https://doi.org/10.1016/S2214-109X(13)70160-8"
+  },
 
+  keralaHypertension: {
+    country:"🇮🇳 INDIA · KERALA",
+    title:"Women’s Self-Help Groups & Hypertension",
+    problem:"Improving hypertension management, medication adherence and dietary behaviour.",
+    barrier:
+      "Hypertension management requires repeated everyday behaviours such as taking medication, reducing salt, attending care and understanding blood pressure.",
+    principle:
+      "Convert individual behaviour change into a social-support system.",
+    intervention:
+      "Women’s self-help groups were used as a community platform for education, peer support and behaviour reinforcement around hypertension management.",
+    outcome:
+      "The intervention reported improved medication-adherence measures and a net reduction in daily per-capita salt consumption compared with controls.",
+    theory:
+      "SCT + COM-B + social support + collective efficacy.",
+    lesson:
+      "For chronic disease, the intervention does not have to live only inside a clinic. Existing social networks can become behaviour-change infrastructure.",
+    source:"https://pmc.ncbi.nlm.nih.gov/articles/PMC9670931/"
+  },
+
+  howrahSmokeFree: {
+    country:"🇮🇳 INDIA · HOWRAH",
+    title:"Smoke-Free Howrah",
+    problem:"Turning smoke-free public-place regulations into actual behaviour.",
+    barrier:
+      "Rules existed, but compliance was variable. The gap was between policy and everyday behaviour.",
+    principle:
+      "Change the environment and social expectation, not merely individual knowledge.",
+    intervention:
+      "District administration, police, local government and civil society worked together to expand enforcement across institutions and public and private workplaces.",
+    outcome:
+      "The programme demonstrated a city-level implementation approach combining regulation, enforcement and institutional participation.",
+    theory:
+      "COM-B Opportunity + Choice Architecture + social norms + environmental reinforcement.",
+    lesson:
+      "Sometimes the highest-leverage behaviour intervention is changing the environment in which the decision occurs.",
+    source:"https://www.who.int/news-room/feature-stories/detail/creating-a-smoke-free-city-in-howrah-india"
+  },
+
+  punjabTobacco: {
+    country:"🇮🇳 INDIA · PUNJAB",
+    title:"Culturally Tailored Tobacco Cessation",
+    problem:"Helping a tobacco user quit when social and cultural factors created barriers.",
+    barrier:
+      "The individual's tobacco use was embedded in social and cultural context, making a generic cessation message less appropriate.",
+    principle:
+      "Design the intervention around the person's social identity and lived context.",
+    intervention:
+      "A patient-centred behavioural approach adapted cessation support to the individual's religious and cultural context.",
+    outcome:
+      "The published case describes successful support for tobacco cessation using an individualized, culturally specific approach.",
+    theory:
+      "SCT + SDT + identity-based behaviour change + person-centred intervention.",
+    lesson:
+      "The same behaviour can have different psychological barriers in different social contexts.",
+    source:"https://pubmed.ncbi.nlm.nih.gov/32139447/"
+  },
+
+  chandigarhSchool: {
+    country:"🇮🇳 INDIA · CHANDIGARH",
+    title:"School-Based NCD Prevention",
+    problem:"Reducing behavioural risk factors for chronic disease among adolescents.",
+    barrier:
+      "Young people's behaviours are shaped by peers, parents, teachers, routines and physical environments.",
+    principle:
+      "Change the social ecosystem around the individual.",
+    intervention:
+      "The programme combined classroom education, physical-activity sessions and engagement with parents and teachers.",
+    outcome:
+      "The trial reported changes in dietary behaviour and physical activity among adolescents.",
+    theory:
+      "SCT + COM-B + social learning + environmental opportunity.",
+    lesson:
+      "When behaviour is embedded in a family and school ecosystem, targeting only the individual leaves major determinants untouched.",
+    source:"https://www.sciencedirect.com/"
+  },
+
+  dpp: {
+    country:"🇺🇸 USA",
+    title:"Diabetes Prevention Program",
+    problem:"Preventing or delaying type 2 diabetes in people at high risk.",
+    barrier:
+      "People needed to sustain multiple behaviours simultaneously, including weight control, dietary change and regular physical activity.",
+    principle:
+      "Build capability through structured behavioural coaching, self-monitoring and progressive goal achievement.",
+    intervention:
+      "Participants received an intensive lifestyle programme with individualized coaching, structured goals and continuing reinforcement.",
+    outcome:
+      "The lifestyle intervention reduced diabetes incidence by 58% compared with placebo over an average follow-up of about 2.8 years.",
+    theory:
+      "SCT + self-regulation + goal setting + COM-B + TTM.",
+    lesson:
+      "Complex health behaviour becomes more manageable when the desired outcome is decomposed into measurable behaviours with feedback and coaching.",
+    source:"https://www.nejm.org/doi/full/10.1056/NEJMoa012512"
+  },
+
+  finlandDps: {
+    country:"🇫🇮 FINLAND",
+    title:"Finnish Diabetes Prevention Study",
+    problem:"Preventing diabetes among adults with impaired glucose tolerance.",
+    barrier:
+      "Long-term lifestyle change required more than one-time health education.",
+    principle:
+      "Personalized goals + frequent feedback + repeated contact.",
+    intervention:
+      "The programme emphasized individualized dietary modification, physical activity, weight control and repeated counselling.",
+    outcome:
+      "At four years, diabetes incidence was 58% lower in the intervention group than in the control group.",
+    theory:
+      "SCT + self-regulation + goal setting + reinforcement.",
+    lesson:
+      "Sustainable behaviour change is a process rather than an event. Repeated feedback and support can connect motivation to action.",
+    source:"https://www.nejm.org/doi/full/10.1056/NEJM200105033441801"
+  },
+
+  saltReduction: {
+    country:"🌍 MULTI-COUNTRY EVIDENCE",
+    title:"Behavioural Salt Reduction",
+    problem:"Reducing excessive dietary sodium exposure.",
+    barrier:
+      "Salt consumption is often automatic and embedded in cooking, purchasing and food-preparation routines.",
+    principle:
+      "Make the healthier behaviour easier while changing the choice environment.",
+    intervention:
+      "Studies included behavioural counselling, dietary modification and substitution strategies.",
+    outcome:
+      "A systematic review of behavioural salt-reduction interventions found significant reductions in sodium intake across multiple intervention types.",
+    theory:
+      "Choice Architecture + COM-B + habit science + self-regulation.",
+    lesson:
+      "For automatic behaviours, changing the environment and available choices can be more powerful than repeatedly telling people what they should do.",
+    source:"https://pmc.ncbi.nlm.nih.gov/articles/PMC8907486/"
+  },
+
+  hivAdherence: {
+    country:"🌍 HIV CARE",
+    title:"Self-Regulation for ART Adherence",
+    problem:"Maintaining sustained adherence to antiretroviral therapy.",
+    barrier:
+      "Medication adherence is affected by routines, memory, motivation, self-efficacy and competing demands.",
+    principle:
+      "Strengthen self-regulation rather than relying exclusively on reminders.",
+    intervention:
+      "Phone-delivered adherence counselling focused on self-regulation and adherence support.",
+    outcome:
+      "The randomized trial reported improved likelihood of achieving high ART adherence during the first six months.",
+    theory:
+      "Self-regulation + SCT + implementation planning + feedback.",
+    lesson:
+      "A reminder can create a prompt, but behaviour support must also address planning, barriers and the person's ability to regulate behaviour.",
+    source:"https://pmc.ncbi.nlm.nih.gov/articles/PMC4981529/"
+  },
+
+  howBehaviorWorks: {
+    country:"🌍 CROSS-DOMAIN",
+    title:"From Information to Behaviour",
+    problem:"Why many health campaigns improve awareness without producing equivalent changes in behaviour.",
+    barrier:
+      "Knowing what to do is only one component of behaviour. Capability, opportunity, motivation, social context and environmental cues also influence action.",
+    principle:
+      "Design the behaviour system rather than designing only the message.",
+    intervention:
+      "Strong behaviour-led interventions combine information with capability building, environmental opportunity, motivation, prompts, social reinforcement and feedback.",
+    outcome:
+      "The cases represented in this library illustrate different ways interventions can move beyond information toward behavioural determinants.",
+    theory:
+      "COM-B + HBM + TPB + SCT + SDT + TTM + Fogg + Habit Science.",
+    lesson:
+      "The central design question changes from 'How do we educate people?' to 'What needs to change for this behaviour to happen reliably?'",
+    source:"https://www.ncbi.nlm.nih.gov/books/NBK222306/"
+  }
+
+};
+
+
+function openCase(id) {
+
+  const c = caseStudies[id];
+
+  if (!c) return;
+
+  document.getElementById("caseModalCountry").textContent=c.country;
+  document.getElementById("caseModalTitle").textContent=c.title;
+  document.getElementById("caseModalProblem").textContent=c.problem;
+
+  document.getElementById("caseModalBarrier").textContent=c.barrier;
+  document.getElementById("caseModalPrinciple").textContent=c.principle;
+  document.getElementById("caseModalIntervention").textContent=c.intervention;
+  document.getElementById("caseModalOutcome").textContent=c.outcome;
+  document.getElementById("caseModalTheory").textContent=c.theory;
+  document.getElementById("caseModalLesson").textContent=c.lesson;
+
+  document.getElementById("caseModalSource").href=c.source;
+
+  document.getElementById("caseModal").classList.add("active");
+
+  document.body.style.overflow="hidden";
+}
+
+
+function closeCase() {
+
+  document.getElementById("caseModal").classList.remove("active");
+
+  document.body.style.overflow="";
+
+}
+
+
+/* =========================================================
+   DIAGNOSTIC ENGINE
+========================================================= */
+
+const answers = {};
+
+function selectOption(button, question, value) {
+
+  const parent = button.parentElement;
+
+  parent.querySelectorAll(".option")
+    .forEach(el => el.classList.remove("selected"));
+
+  button.classList.add("selected");
+
+  answers[question]=value;
+}
+
+
+function diagnose() {
+
+  const result=document.getElementById("diagnosticResult");
+  const title=document.getElementById("resultTitle");
+  const text=document.getElementById("resultText");
+
+  if (
+    !answers.q1 ||
+    !answers.q2 ||
+    !answers.q3 ||
+    !answers.q4 ||
+    !answers.q5
+  ) {
+
+    result.style.display="block";
+
+    title.textContent="Complete the diagnostic";
+
+    text.textContent=
+      "Please answer all five questions before diagnosing the dominant behavioural barrier.";
+
+    return;
+  }
+
+
+  result.style.display="block";
+
+
+  if (answers.q2==="no") {
+
+    title.textContent="Capability may be the main barrier";
+
+    text.textContent=
+      "The person may need knowledge, skills, confidence, physical ability or practical training. Consider capability-building interventions.";
+
+    return;
+  }
+
+
+  if (answers.q3==="no") {
+
+    title.textContent="Opportunity may be the main barrier";
+
+    text.textContent=
+      "The environment may be preventing behaviour. Consider reducing friction, improving access, changing defaults or strengthening social support.";
+
+    return;
+  }
+
+
+  if (answers.q4==="no") {
+
+    title.textContent="Motivation may be the main barrier";
+
+    text.textContent=
+      "Explore values, perceived benefits, risk perception, identity, emotions and intrinsic motivation rather than simply providing more information.";
+
+    return;
+  }
+
+
+  if (answers.q5==="no") {
+
+    title.textContent="Prompt and context may be the main barrier";
+
+    text.textContent=
+      "The person may be capable and motivated but lack a reliable cue. Consider reminders, environmental prompts and habit anchoring.";
+
+    return;
+  }
+
+
+  if (answers.q1==="no") {
+
+    title.textContent="Awareness or knowledge may be the starting barrier";
+
+    text.textContent=
+      "First establish understanding of the problem and desired behaviour, but avoid assuming that education alone will produce sustained behaviour change.";
+
+    return;
+  }
+
+
+  title.textContent="The person appears behaviour-ready";
+
+  text.textContent=
+    "Capability, opportunity, motivation and prompting appear relatively supportive. Focus on making the behaviour easy, repeatable and reinforcing so it can become sustained.";
+
+}
+
+
+/* =========================================================
+   MODAL BACKDROP CLOSING
+========================================================= */
+
+document.getElementById("theoryModal")
+  .addEventListener("click",function(e){
+
+    if(e.target===this){
       closeTheory();
-
     }
 
-  }
-);
+  });
+
+
+document.getElementById("bookModal")
+  .addEventListener("click",function(e){
+
+    if(e.target===this){
+      closeBook();
+    }
+
+  });
+
+
+document.getElementById("caseModal")
+  .addEventListener("click",function(e){
+
+    if(e.target===this){
+      closeCase();
+    }
+
+  });
 
 
 /* =========================================================
    ESCAPE KEY
 ========================================================= */
 
-document.addEventListener(
-  "keydown",
-  function(event){
+document.addEventListener("keydown",function(e){
 
-    if(event.key === "Escape"){
+  if(e.key==="Escape"){
 
-      closeTheory();
-
-      closeBook();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   COM-B DIAGNOSTIC
-========================================================= */
-
-function diagnose(){
-
-  const values = [
-
-    Number(
-      document.getElementById("q1").value
-    ),
-
-    Number(
-      document.getElementById("q2").value
-    ),
-
-    Number(
-      document.getElementById("q3").value
-    ),
-
-    Number(
-      document.getElementById("q4").value
-    ),
-
-    Number(
-      document.getElementById("q5").value
-    )
-
-  ];
-
-
-  const result =
-    document.getElementById("result");
-
-
-  let message = "";
-
-
-  if(values[0] > 0){
-
-    message = `
-
-      <h3>
-      Primary barrier: Awareness / Capability
-      </h3>
-
-      <p>
-      The person may not understand the desired behavior clearly.
-      Focus on education, clarity, misconceptions and actionable
-      instructions.
-      </p>
-
-    `;
+    closeTheory();
+    closeBook();
+    closeCase();
 
   }
 
-
-  else if(values[1] > 0){
-
-    message = `
-
-      <h3>
-      Primary barrier: Capability
-      </h3>
-
-      <p>
-      The person may lack the skills, knowledge, planning ability
-      or physical capability required to perform the behavior.
-      </p>
-
-    `;
-
-  }
-
-
-  else if(values[2] > 0){
-
-    message = `
-
-      <h3>
-      Primary barrier: Opportunity
-      </h3>
-
-      <p>
-      The environment may be preventing action. Examine availability,
-      affordability, convenience, social support and physical access.
-      </p>
-
-    `;
-
-  }
-
-
-  else if(values[3] > 0){
-
-    message = `
-
-      <h3>
-      Primary barrier: Motivation
-      </h3>
-
-      <p>
-      The person understands the behavior and may be capable of doing
-      it, but the perceived value, relevance or reward may be insufficient.
-      </p>
-
-    `;
-
-  }
-
-
-  else if(values[4] > 0){
-
-    message = `
-
-      <h3>
-      Primary barrier: Prompt / Trigger
-      </h3>
-
-      <p>
-      The behavior may be possible and desirable but lacks a reliable
-      moment that activates the action.
-      </p>
-
-    `;
-
-  }
-
-
-  else{
-
-    message = `
-
-      <h3>
-      Behavior system appears enabled
-      </h3>
-
-      <p>
-      Awareness, capability, opportunity, motivation and prompting
-      appear present. The next challenge is reinforcement, repetition
-      and maintenance.
-      </p>
-
-    `;
-
-  }
-
-
-  result.innerHTML =
-    message;
-
-
-  result.style.display =
-    "block";
-
-
-  result.scrollIntoView({
-
-    behavior:"smooth",
-
-    block:"center"
-
-  });
-
-}
+});
 
 </script>
 
-
 </body>
-
 </html>
